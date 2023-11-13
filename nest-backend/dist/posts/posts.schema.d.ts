@@ -1,0 +1,12 @@
+import { Document } from 'mongoose';
+import * as mongoose from 'mongoose';
+export declare class Post extends Document {
+    title: string;
+    content: string;
+    webpage: mongoose.Types.ObjectId;
+}
+export declare const PostSchema: mongoose.Schema<Post, mongoose.Model<Post, any, any, any, Document<unknown, any, Post> & Post & {
+    _id: mongoose.Types.ObjectId;
+}, any>, {}, {}, {}, {}, mongoose.DefaultSchemaOptions, Post, Document<unknown, {}, Post> & Post & {
+    _id: mongoose.Types.ObjectId;
+}>;
