@@ -10,23 +10,16 @@
 </template>
 
 <script>
-import { ref, watchEffect } from 'vue';
+import { ref, onMounted, watchEffect } from 'vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
 
 export default {
   setup() {
     const posts = ref([]);
-    const accessToken = localStorage.getItem('accessToken'); // Retrieve the token from local storage
+    console.log("TEST");
+    const accessToken = localStorage.getItem('accessToken');
     const route = useRoute();
-
-    watchEffect(() => {
-      const webpageId = route.params.webpageId;
-
-      if (webpageId) {
-        fetchData(webpageId);
-      }
-    });
 
     const fetchData = async (webpageId) => {
       try {
@@ -35,7 +28,6 @@ export default {
             Authorization: `Bearer ${accessToken}`,
           },
         });
-        
         posts.value = response.data;
         console.log(posts);
       } catch (error) {
@@ -43,9 +35,29 @@ export default {
       }
     };
 
+    onMounted(() => {
+  const webpageId = route.params.webpageId;
+  console.log('webpageId onMounted:', webpageId);
+
+  if (webpageId) {
+    fetchData(webpageId);
+  }
+  });
+
+
+    watchEffect(() => {
+  const webpageId = route.params.webpageId;
+  console.log('webpageId watchEffect:', webpageId);
+
+  if (webpageId) {
+    fetchData(webpageId);
+  }
+});
+
     return {
       posts,
     };
   },
 };
+
 </script>

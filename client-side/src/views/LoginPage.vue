@@ -1,13 +1,15 @@
 <template>
+    <mainNavbar/>
     <div>
       <h2>Login</h2>
       <form @submit.prevent="login">
         <label for="email">Email:</label>
         <input type="email" v-model="email" required />
-        
+        <br>
+        <br>
         <label for="password">Password:</label>
         <input type="password" v-model="password" required />
-        
+        <br>
         <button type="submit">Login</button>
       </form>
     </div>
@@ -16,8 +18,12 @@
   <script>
   import { ref } from 'vue';
   import axios from 'axios';
+  import mainNavbar from '@/components/mainNavbar.vue';
   
   export default {
+    components: {
+        mainNavbar
+    },
     setup() {
       const email = ref('');
       const password = ref('');

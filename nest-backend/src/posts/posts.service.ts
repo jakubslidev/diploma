@@ -23,6 +23,7 @@ export class PostsService {
 
   async addPostToWebpage(webpageId: string, postData: Partial<Post>): Promise<Post> {
     const post = new this.postModel(postData);
+    console.log(post);
     post.webpage = new Types.ObjectId(webpageId); // Set the webpage ID for the post
     return await post.save();
   }

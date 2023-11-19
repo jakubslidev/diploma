@@ -49,7 +49,7 @@ let UsersService = class UsersService {
         if (!isPasswordValid) {
             throw new Error('Invalid password');
         }
-        const accessToken = jwt.sign({ _id: user._id, email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const accessToken = jwt.sign({ _id: user._id, email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: '4h' });
         return accessToken;
     }
 };

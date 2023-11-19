@@ -32,6 +32,7 @@ let PostsService = class PostsService {
     }
     async addPostToWebpage(webpageId, postData) {
         const post = new this.postModel(postData);
+        console.log(post);
         post.webpage = new mongoose_2.Types.ObjectId(webpageId);
         return await post.save();
     }
