@@ -19,8 +19,8 @@ let CategoryController = class CategoryController {
     constructor(categoryService) {
         this.categoryService = categoryService;
     }
-    async createCategory(categoryData) {
-        return this.categoryService.createCategory(categoryData);
+    async createCategory(categoryData, webpageId) {
+        return this.categoryService.createCategory(categoryData, webpageId);
     }
     async addSubcategory(id, body) {
         return this.categoryService.addSubcategory(id, body.name);
@@ -28,12 +28,16 @@ let CategoryController = class CategoryController {
     findAll() {
         return this.categoryService.findAll();
     }
+    findAllForPage(webpageId) {
+        return this.categoryService.findAllForPage(webpageId);
+    }
 };
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Query)('webpageId')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], CategoryController.prototype, "createCategory", null);
 __decorate([
@@ -50,6 +54,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], CategoryController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Get)('/webpage/:webpageId'),
+    __param(0, (0, common_1.Param)('webpageId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], CategoryController.prototype, "findAllForPage", null);
 CategoryController = __decorate([
     (0, common_1.Controller)('categories'),
     __metadata("design:paramtypes", [category_service_1.CategoryService])

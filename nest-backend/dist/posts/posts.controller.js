@@ -20,8 +20,8 @@ let PostsController = class PostsController {
     constructor(postsService) {
         this.postsService = postsService;
     }
-    addPostToWebpage(webpageId, postData) {
-        return this.postsService.addPostToWebpage(webpageId, postData);
+    addPostToWebpage(webpageId, postData, categoryId) {
+        return this.postsService.addPostToWebpage(webpageId, postData, categoryId);
     }
     findAll() {
         return this.postsService.findAll();
@@ -38,8 +38,9 @@ __decorate([
     (0, common_1.Post)(':webpageId/addPost'),
     __param(0, (0, common_1.Param)('webpageId')),
     __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.Query)('categoryId')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [String, Object, String]),
     __metadata("design:returntype", void 0)
 ], PostsController.prototype, "addPostToWebpage", null);
 __decorate([

@@ -5,6 +5,7 @@ import CreatePost from '../views/CreatePost.vue'
 import DisplayPost from '../views/DisplayPost.vue'
 import CategoryAdd from '../views/CategoryAdd.vue'
 import userRegistration from '../views/userRegistration.vue'
+import DisplayPosts from '../views/PostsBackOffice.vue'
 const routes = [
   {
     path: '/',
@@ -35,19 +36,24 @@ const routes = [
     component: DisplayPost,
   },
   {
-    path: '/categoryAdd',
-    name: 'CategoryAdd',
-    component: CategoryAdd,
-  },
-  {
     path: '/office/:webpageId',
     name: 'office',
     component: BackOffice,
   },
   {
-    path:'/office/:webpageId/addPost',
+    path:'/office/:webpageId/posts',
+    name:'postsDisplay',
+    component: DisplayPosts,
+  },
+  {
+    path:'/office/:webpageId/posts/addPost',
     name:'postCreation',
     component: CreatePost,
+  },
+  {
+    path: '/office/:webpageId/categories',
+    name: 'CategoryAdd',
+    component: CategoryAdd,
   },
 ]
 

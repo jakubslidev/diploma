@@ -1,6 +1,6 @@
 // posts/posts.controller.ts
 
-import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards, Query } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { Post as PostModel } from './posts.schema';
 import { AuthGuard } from '@nestjs/passport';
@@ -10,9 +10,9 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @UseGuards(AuthGuard('jwt'))
-  @Post(':webpageId/addPost') // Define a route parameter ':webpageId' and sub-route 'addPost'
-  addPostToWebpage(@Param('webpageId') webpageId: string, @Body() postData: Partial<PostModel>) {
-    return this.postsService.addPostToWebpage(webpageId, postData);
+  @Post(':webpageId/addPost') 
+  addPostToWebpage(@Param('webpageId') webpageId: string, @Body() postData: Partial<PostModel>, @Query('categoryId') categoryId: string) {
+    return this.postsService.addPostToWebpage(webpageId, postData, categoryId);
   }
 
   @Get()
@@ -25,7 +25,7 @@ export class PostsController {
     return this.postsService.findOne(id);
   }
 
-  @Get('/webpage/:webpageId') // New endpoint to retrieve posts for a specific webpage
+  @Get('/webpage/:webpageId') 
   findAllForWebpage(@Param('webpageId') webpageId: string) {
     return this.postsService.findAllForWebpage(webpageId);
   }

@@ -22,6 +22,10 @@ __decorate([
     (0, mongoose_1.Prop)({ type: [String], default: [] }),
     __metadata("design:type", Array)
 ], Category.prototype, "subcategories", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: mongoose_2.Schema.Types.ObjectId, ref: 'Webpage' }),
+    __metadata("design:type", Object)
+], Category.prototype, "webpage", void 0);
 Category = __decorate([
     (0, mongoose_1.Schema)()
 ], Category);

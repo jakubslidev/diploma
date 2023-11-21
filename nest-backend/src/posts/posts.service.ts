@@ -21,10 +21,11 @@ export class PostsService {
     return this.postModel.find({ webpage: new Types.ObjectId(webpageId) }).exec();
   }
 
-  async addPostToWebpage(webpageId: string, postData: Partial<Post>): Promise<Post> {
+  async addPostToWebpage(webpageId: string, postData: Partial<Post>, category: string): Promise<Post> {
     const post = new this.postModel(postData);
     console.log(post);
-    post.webpage = new Types.ObjectId(webpageId); // Set the webpage ID for the post
+    post.webpage = new Types.ObjectId(webpageId); 
+    console.log(post);
     return await post.save();
   }
 }

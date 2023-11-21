@@ -22,12 +22,14 @@
 /// <reference types="mongoose/types/validation" />
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
-import { Document } from 'mongoose';
+import { Document, Schema as MongooseSchema } from 'mongoose';
+import { Webpage } from '../webpages/webpages.schema';
 export declare class Category extends Document {
     name: string;
     subcategories: string[];
+    webpage: Webpage;
 }
-export declare const CategorySchema: import("mongoose").Schema<Category, import("mongoose").Model<Category, any, any, any, Document<unknown, any, Category> & Category & {
+export declare const CategorySchema: MongooseSchema<Category, import("mongoose").Model<Category, any, any, any, Document<unknown, any, Category> & Category & {
     _id: import("mongoose").Types.ObjectId;
 }, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, Category, Document<unknown, {}, Category> & Category & {
     _id: import("mongoose").Types.ObjectId;

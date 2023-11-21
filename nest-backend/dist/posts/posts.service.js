@@ -30,10 +30,11 @@ let PostsService = class PostsService {
     async findAllForWebpage(webpageId) {
         return this.postModel.find({ webpage: new mongoose_2.Types.ObjectId(webpageId) }).exec();
     }
-    async addPostToWebpage(webpageId, postData) {
+    async addPostToWebpage(webpageId, postData, category) {
         const post = new this.postModel(postData);
         console.log(post);
         post.webpage = new mongoose_2.Types.ObjectId(webpageId);
+        console.log(post);
         return await post.save();
     }
 };

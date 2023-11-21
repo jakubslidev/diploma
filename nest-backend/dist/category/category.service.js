@@ -29,12 +29,16 @@ let CategoryService = class CategoryService {
         category.subcategories.push(subcategoryName);
         return category.save();
     }
-    async createCategory(categoryData) {
-        const createdCategory = new this.categoryModel(categoryData);
+    async createCategory(categoryData, webpageId) {
+        const createdCategory = new this.categoryModel(Object.assign(Object.assign({}, categoryData), { webpage: webpageId }));
+        console.log(createdCategory);
         return createdCategory.save();
     }
     async findAll() {
         return this.categoryModel.find().exec();
+    }
+    async findAllForPage(webpageId) {
+        return this.categoryModel.find({ webpage: new mongoose_2.Types.ObjectId(webpageId) }).exec();
     }
 };
 CategoryService = __decorate([

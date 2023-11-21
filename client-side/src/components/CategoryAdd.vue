@@ -28,6 +28,7 @@
 <script>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { useRoute } from 'vue-router';
 
 export default {
   setup() {
@@ -35,10 +36,11 @@ export default {
     const subcategoryName = ref('');
     const selectedCategory = ref('');
     const categories = ref([]);
+    const route = useRoute(); // Access the route
 
     const addCategory = async () => {
       try {
-        await axios.post('http://localhost:3000/categories', {
+        await axios.post(`http://localhost:3000/categories?webpageId=${route.params.webpageId}`, {
           name: categoryName.value,
         });
 
@@ -55,7 +57,7 @@ export default {
 
     const addSubcategory = async () => {
       try {
-        await axios.post(`http://localhost:3000/categories/${selectedCategory.value}/subcategory`, {
+        await axios.post(`http://localhost:3000/categories/${selectedCategory.value}/subcategory?webpageId=${route.params.webpageId}`, {
           name: subcategoryName.value,
         });
 
@@ -69,9 +71,9 @@ export default {
 
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/categories');
+        const response = await axios.get(`http://localhost:3000/categories?webpageId=${route.params.webpageId}`);
         categories.value = response.data;
-        console.log(categories.value)
+        console.log(categories.value);
       } catch (error) {
         console.error(error);
         alert('Error fetching categories. Please try again.');
@@ -79,7 +81,7 @@ export default {
     };
 
     onMounted(async () => {
-      await fetchCategories(); // Fetch categories when component is mounted
+      await fetchCategories(); // Fetch categories when the component is mounted
     });
 
     return {

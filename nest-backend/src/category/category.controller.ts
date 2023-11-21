@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Param, Body } from '@nestjs/common';
+// category.controller.ts
+import { Controller, Get, Post, Param, Body, Query } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { Category } from './category.schema';
 
@@ -7,8 +8,8 @@ export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Post()
-  async createCategory(@Body() categoryData: Partial<Category>) {
-    return this.categoryService.createCategory(categoryData);
+  async createCategory(@Body() categoryData: Partial<Category>, @Query('webpageId') webpageId: string) {
+    return this.categoryService.createCategory(categoryData, webpageId);
   }
 
   @Post(':id/subcategory')
@@ -19,5 +20,10 @@ export class CategoryController {
   @Get()
   findAll() {
     return this.categoryService.findAll();
+  }
+
+  @Get('/webpage/:webpageId') // New endpoint to retrieve categories for a specific webpage
+  findAllForPage(@Param('webpageId') webpageId: string) {
+    return this.categoryService.findAllForPage(webpageId);
   }
 }

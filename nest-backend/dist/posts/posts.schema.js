@@ -27,6 +27,18 @@ __decorate([
     (0, mongoose_1.Prop)({ type: mongoose.Schema.Types.ObjectId, ref: 'Webpage' }),
     __metadata("design:type", mongoose.Types.ObjectId)
 ], Post.prototype, "webpage", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: false }),
+    __metadata("design:type", mongoose.Types.ObjectId)
+], Post.prototype, "category", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Post.prototype, "categoryName", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: [String], default: [] }),
+    __metadata("design:type", Array)
+], Post.prototype, "subcategories", void 0);
 Post = __decorate([
     (0, mongoose_1.Schema)()
 ], Post);

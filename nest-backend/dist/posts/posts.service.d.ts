@@ -6,5 +6,5 @@ export declare class PostsService {
     findAll(): Promise<Post[]>;
     findOne(id: string): Promise<Post | null>;
     findAllForWebpage(webpageId: string): Promise<Post[]>;
-    addPostToWebpage(webpageId: string, postData: Partial<Post>): Promise<Post>;
+    addPostToWebpage(webpageId: string, postData: Partial<Post>, category: string): Promise<Post>;
 }

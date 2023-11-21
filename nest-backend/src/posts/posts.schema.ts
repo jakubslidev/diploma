@@ -10,8 +10,20 @@ export class Post extends Document {
   @Prop()
   content: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Webpage' }) // Add this line for the reference
-  webpage: mongoose.Types.ObjectId; 
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Webpage' })
+  webpage: mongoose.Types.ObjectId;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: false }) // Reference to Category schema
+  category: mongoose.Types.ObjectId;
+
+  @Prop()
+  categoryName: string;
+  
+  // @Prop()
+  // category: string;
+
+  @Prop({ type: [String], default: [] }) // Array of strings (subcategories)
+  subcategories: string[];
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post);
