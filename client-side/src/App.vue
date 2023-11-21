@@ -1,10 +1,12 @@
 <template>
-  <router-view/>
+  <router-view />
 </template>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Mulish Light";
+  src: local("Mulish-Light"), url("./assets/fonts/Mulish-Light.ttf") format("truetype");
+  font-weight: 300; /* Use the correct font-weight (lighter) */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

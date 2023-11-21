@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import PagesListPage from '../views/PagesListPage.vue'
 import HomePage from '../views/HomePage.vue'
 import BackOffice from '../views/BackOffice'
 import CreatePost from '../views/CreatePost.vue'
@@ -8,8 +9,13 @@ import userRegistration from '../views/userRegistration.vue'
 import DisplayPosts from '../views/PostsBackOffice.vue'
 const routes = [
   {
-    path: '/',
+    path: '/pages',
     name: 'startupPage',
+    component: PagesListPage,
+  },
+  {
+    path: '/',
+    name: 'homePage',
     component: HomePage,
   },
   {
