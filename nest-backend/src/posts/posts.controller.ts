@@ -26,7 +26,11 @@ export class PostsController {
   }
 
   @Get('/webpage/:webpageId') 
-  findAllForWebpage(@Param('webpageId') webpageId: string) {
+  findAllForWebpageBackOffice(@Param('webpageId') webpageId: string) {
+    return this.postsService.findAllForWebpage(webpageId);
+  }
+  @Get('/view/webpage/:webpageId') 
+  findAllForWebpageView(@Param('webpageId') webpageId: string) {
     return this.postsService.findAllForWebpage(webpageId);
   }
 }

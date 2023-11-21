@@ -29,7 +29,10 @@ let PostsController = class PostsController {
     findOne(id) {
         return this.postsService.findOne(id);
     }
-    findAllForWebpage(webpageId) {
+    findAllForWebpageBackOffice(webpageId) {
+        return this.postsService.findAllForWebpage(webpageId);
+    }
+    findAllForWebpageView(webpageId) {
         return this.postsService.findAllForWebpage(webpageId);
     }
 };
@@ -62,7 +65,14 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
-], PostsController.prototype, "findAllForWebpage", null);
+], PostsController.prototype, "findAllForWebpageBackOffice", null);
+__decorate([
+    (0, common_1.Get)('/view/webpage/:webpageId'),
+    __param(0, (0, common_1.Param)('webpageId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], PostsController.prototype, "findAllForWebpageView", null);
 PostsController = __decorate([
     (0, common_1.Controller)('posts'),
     __metadata("design:paramtypes", [posts_service_1.PostsService])

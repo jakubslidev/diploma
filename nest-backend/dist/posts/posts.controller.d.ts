@@ -6,5 +6,6 @@ export declare class PostsController {
     addPostToWebpage(webpageId: string, postData: Partial<PostModel>, categoryId: string): Promise<PostModel>;
     findAll(): Promise<PostModel[]>;
     findOne(id: string): Promise<PostModel>;
-    findAllForWebpage(webpageId: string): Promise<PostModel[]>;
+    findAllForWebpageBackOffice(webpageId: string): Promise<PostModel[]>;
+    findAllForWebpageView(webpageId: string): Promise<PostModel[]>;
 }

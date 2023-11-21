@@ -7,6 +7,7 @@ import DisplayPost from '../views/DisplayPost.vue'
 import CategoryAdd from '../views/CategoryAdd.vue'
 import userRegistration from '../views/userRegistration.vue'
 import DisplayPosts from '../views/PostsBackOffice.vue'
+import PageView from '../views/PageView.vue'
 const routes = [
   {
     path: '/pages',
@@ -60,6 +61,11 @@ const routes = [
     path: '/office/:webpageId/categories',
     name: 'CategoryAdd',
     component: CategoryAdd,
+  },
+  {
+    path: '/view/:webpageId',
+    name: 'view',
+    component: PageView,
   },
 ]
 
