@@ -25,10 +25,12 @@ export class PostsController {
     return this.postsService.findOne(id);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get('/webpage/:webpageId') 
   findAllForWebpageBackOffice(@Param('webpageId') webpageId: string) {
     return this.postsService.findAllForWebpage(webpageId);
   }
+
   @Get('/view/webpage/:webpageId') 
   findAllForWebpageView(@Param('webpageId') webpageId: string) {
     return this.postsService.findAllForWebpage(webpageId);
