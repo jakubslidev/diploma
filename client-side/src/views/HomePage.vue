@@ -33,7 +33,7 @@ export default {
           i++;
           setTimeout(type, speed);
         } else {
-          const currentText = welcomeTitle.value.textContent || welcomeTitle.value.innerText;
+          const currentText = welcomeTitle.value.textContent;
           const newText = currentText.slice(0, -1);
           welcomeTitle.value.textContent = newText;
         }
