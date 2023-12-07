@@ -35,6 +35,12 @@ let PostsController = class PostsController {
     findAllForWebpageView(webpageId) {
         return this.postsService.findAllForWebpage(webpageId);
     }
+    updatePostStatus(id, status) {
+        return this.postsService.updatePostStatus(id, status);
+    }
+    deletePost(id) {
+        return this.postsService.deletePost(id);
+    }
 };
 __decorate([
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
@@ -74,6 +80,21 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], PostsController.prototype, "findAllForWebpageView", null);
+__decorate([
+    (0, common_1.Patch)(':id/updateStatus'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)('status')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", void 0)
+], PostsController.prototype, "updatePostStatus", null);
+__decorate([
+    (0, common_1.Delete)(':id/deleteSelected'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], PostsController.prototype, "deletePost", null);
 PostsController = __decorate([
     (0, common_1.Controller)('posts'),
     __metadata("design:paramtypes", [posts_service_1.PostsService])

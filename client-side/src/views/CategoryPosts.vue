@@ -1,7 +1,7 @@
 <template>
     <viewNavbar/>
     <div class="main-content">
-        <PostsListView/>
+        <CategoryPostsList/>
     </div>
 </template>
     
@@ -9,12 +9,12 @@
 
 
 <script>
-    import PostsListView from '@/components/PostsListView.vue';
+    import CategoryPostsList from '@/components/CategoryPostsList.vue';
     import viewNavbar from '@/components/viewNavbar.vue';
     
       export default {
         components: {
-            PostsListView,
+            CategoryPostsList,
             viewNavbar
         }
     }

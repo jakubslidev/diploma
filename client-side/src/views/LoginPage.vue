@@ -16,6 +16,7 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import mainNavbar from '@/components/mainNavbar.vue';
+import router from '@/router';
 
 export default {
   components: {
@@ -39,6 +40,7 @@ export default {
 
         // Handle successful login
         console.log('Login successful!');
+        router.push('/pages')
       } catch (error) {
         // Handle login error
         console.error('Login error:', error.message);

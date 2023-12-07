@@ -24,6 +24,12 @@ export class Post extends Document {
 
   @Prop({ type: [String], default: [] }) // Array of strings (subcategories)
   subcategories: string[];
+
+  @Prop({ default: Date.now })
+  createdAt: Date;
+
+  @Prop({ default: 'Draft', enum: ['Active', 'Draft'] })
+  status: string; // "Active" or "Draft"
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post);

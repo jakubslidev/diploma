@@ -21,11 +21,26 @@ export class PostsService {
     return this.postModel.find({ webpage: new Types.ObjectId(webpageId) }).exec();
   }
 
-  async addPostToWebpage(webpageId: string, postData: Partial<Post>, category: string): Promise<Post> {
-    const post = new this.postModel(postData);
-    console.log(post);
-    post.webpage = new Types.ObjectId(webpageId); 
-    console.log(post);
+  async addPostToWebpage(
+    webpageId: string,
+    postData: Partial<Post>,
+    category: string,
+    status: string = 'Draft', // default to 'Draft'
+  ): Promise<Post> {
+    const post = new this.postModel({ ...postData, status });
+    post.webpage = new Types.ObjectId(webpageId);
     return await post.save();
+  }
+
+  async updatePostStatus(postId: string, status: string): Promise<Post | null> {
+    return this.postModel.findByIdAndUpdate(
+      postId,
+      { $set: { status } },
+      { new: true }, // return the updated document
+    ).exec();
+  }
+
+  async deletePost(postId: string): Promise<void> {
+    await this.postModel.findByIdAndDelete(postId).exec();
   }
 }

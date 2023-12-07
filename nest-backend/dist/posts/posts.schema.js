@@ -39,6 +39,14 @@ __decorate([
     (0, mongoose_1.Prop)({ type: [String], default: [] }),
     __metadata("design:type", Array)
 ], Post.prototype, "subcategories", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: Date.now }),
+    __metadata("design:type", Date)
+], Post.prototype, "createdAt", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: 'Draft', enum: ['Active', 'Draft'] }),
+    __metadata("design:type", String)
+], Post.prototype, "status", void 0);
 Post = __decorate([
     (0, mongoose_1.Schema)()
 ], Post);

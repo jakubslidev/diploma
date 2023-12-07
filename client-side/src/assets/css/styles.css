@@ -4,3 +4,8 @@
     format("truetype");
     font-weight: bold;
   } 
+
+
+.ProseMirror{
+  min-height: 700px;
+}

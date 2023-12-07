@@ -8,4 +8,6 @@ export declare class PostsController {
     findOne(id: string): Promise<PostModel>;
     findAllForWebpageBackOffice(webpageId: string): Promise<PostModel[]>;
     findAllForWebpageView(webpageId: string): Promise<PostModel[]>;
+    updatePostStatus(id: string, status: string): Promise<PostModel>;
+    deletePost(id: string): Promise<void>;
 }

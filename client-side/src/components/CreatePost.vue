@@ -5,7 +5,15 @@
       <label for="title">Title:</label>
       <input v-model="title" type="text" id="title" required><br>
       <label for="content">Content:</label><br>
-      <textarea v-model="content" id="content" cols="30" rows="10" required></textarea><br>
+      <div>
+    <TextEditor v-model="content" />
+
+    <div class="content">
+      <h3>Content</h3>
+      <pre><code>{{ content }}</code></pre>
+    </div>
+  </div>
+
 
       <label for="category">Category:</label>
       <select v-model="selectedCategory" @change="fetchSubcategories">
@@ -40,14 +48,16 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import axios from 'axios';
 import PostListUser from './PostsListUser.vue';
 import { useRoute } from 'vue-router';
+import TextEditor from './TextEditor.vue'
 
 export default {
   components: {
     PostListUser,
+    TextEditor,
   },
   setup() {
     const title = ref('');
@@ -64,8 +74,9 @@ export default {
 
     const handleSubmit = async () => {
       const accessToken = localStorage.getItem('accessToken');
-
       try {
+        const currentDate = new Date();
+        console.log(content.value);
         await axios.post(
           `http://localhost:3000/posts/${webpageId.value}/addPost`,
           {
@@ -74,6 +85,7 @@ export default {
             category: selectedCategory.value,
             categoryName: selectedCategoryObj.name.toString(),
             subcategories: selectedSubcategories.value, // Pass selected subcategories to the backend
+            createdAt: currentDate.toISOString(),
           },
           {
             headers: {
@@ -124,6 +136,10 @@ export default {
     const removeSubcategory = (subcategory) => {
       selectedSubcategories.value = selectedSubcategories.value.filter(item => item !== subcategory);
     };
+
+    watch(content, (newContent) => {
+      console.log('Content changed:', newContent);
+    });
 
     // Extract webpageId from the route params and fetch categories on mount
     onMounted(() => {

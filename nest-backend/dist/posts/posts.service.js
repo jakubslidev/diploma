@@ -30,12 +30,16 @@ let PostsService = class PostsService {
     async findAllForWebpage(webpageId) {
         return this.postModel.find({ webpage: new mongoose_2.Types.ObjectId(webpageId) }).exec();
     }
-    async addPostToWebpage(webpageId, postData, category) {
-        const post = new this.postModel(postData);
-        console.log(post);
+    async addPostToWebpage(webpageId, postData, category, status = 'Draft') {
+        const post = new this.postModel(Object.assign(Object.assign({}, postData), { status }));
         post.webpage = new mongoose_2.Types.ObjectId(webpageId);
-        console.log(post);
         return await post.save();
+    }
+    async updatePostStatus(postId, status) {
+        return this.postModel.findByIdAndUpdate(postId, { $set: { status } }, { new: true }).exec();
+    }
+    async deletePost(postId) {
+        await this.postModel.findByIdAndDelete(postId).exec();
     }
 };
 PostsService = __decorate([

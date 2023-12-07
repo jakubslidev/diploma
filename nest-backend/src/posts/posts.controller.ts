@@ -1,6 +1,6 @@
 // posts/posts.controller.ts
 
-import { Controller, Get, Post, Body, Param, UseGuards, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards, Query, Patch, Delete } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { Post as PostModel } from './posts.schema';
 import { AuthGuard } from '@nestjs/passport';
@@ -34,5 +34,15 @@ export class PostsController {
   @Get('/view/webpage/:webpageId') 
   findAllForWebpageView(@Param('webpageId') webpageId: string) {
     return this.postsService.findAllForWebpage(webpageId);
+  }
+
+  @Patch(':id/updateStatus')
+  updatePostStatus(@Param('id') id: string, @Body('status') status: string) {
+    return this.postsService.updatePostStatus(id, status);
+  }
+
+  @Delete(':id/deleteSelected')
+  deletePost(@Param('id') id: string) {
+    return this.postsService.deletePost(id);
   }
 }

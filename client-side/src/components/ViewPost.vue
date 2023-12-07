@@ -1,13 +1,14 @@
 <template>
-    <div v-if="post">
-      <h2>{{ post.title }}</h2>
-      <p>{{ post.content }}</p>
-      <p><strong>{{  post.categoryName }}</strong></p>
-    </div>
-    <div v-else>
-      Loading...
-    </div>
-  </template>
+  <div v-if="post">
+    <h2>{{ post.title }}</h2>
+    <div v-html="post.content"></div>
+    <p><strong>{{ post.categoryName }}</strong></p>
+  </div>
+  <div v-else>
+    Loading...
+  </div>
+</template>
+
   
   <script>
   import { ref, onMounted } from 'vue';
