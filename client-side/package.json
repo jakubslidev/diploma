@@ -28,9 +28,11 @@
     "jquery": "^3.7.1",
     "popper.js": "^1.16.1",
     "vue": "^3.2.13",
+    "vue-cookies": "^1.8.3",
     "vue-dompurify-html": "^4.1.4",
     "vue-quill-editor": "^3.0.6",
-    "vue-router": "^4.0.3"
+    "vue-router": "^4.0.3",
+    "vue3-cookies": "^1.0.6"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

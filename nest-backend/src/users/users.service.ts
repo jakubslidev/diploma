@@ -4,7 +4,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
-import * as dotenv from 'dotenv';
 
 @Injectable()
 export class UsersService {
@@ -14,43 +13,35 @@ export class UsersService {
     return this.userModel.findOne({ email }).exec();
   }
 
+  async findById(_id: string): Promise<any> {
+    return this.userModel.findOne({ _id }).exec();
+  }
+
   async create(userData: any): Promise<any> {
     const existingUser = await this.findByEmail(userData.email);
-  
+
     if (existingUser) {
       throw new Error('User already exists');
     }
-  
-    const saltRounds = 10; // Number of rounds for the salt
+
+    const saltRounds = 10;
     const salt = await bcrypt.genSalt(saltRounds);
     const hashedPassword = await bcrypt.hash(userData.password, salt);
-  
+
     const newUser = new this.userModel({
       email: userData.email,
       password: hashedPassword,
-      salt: salt
+      salt: salt,
     });
-  
+
     return newUser.save();
   }
-  
-  
 
-  async login(email: string, password: string): Promise<string> {
-    const user = await this.findByEmail(email);
+  async verifyPassword(plainPassword: string, hashedPassword: string): Promise<boolean> {
+    return bcrypt.compare(plainPassword, hashedPassword);
+  }
 
-    if (!user) {
-      throw new Error('User not found');
-    }
-
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-
-    if (!isPasswordValid) {
-      throw new Error('Invalid password');
-    }
-
-    const accessToken = jwt.sign({ _id: user._id, email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: '4h' });
-
-    return accessToken;
+  generateAccessToken(user: any): string {
+    return jwt.sign({ _id: user._id, email: user.email, role: user.role }, 'secret-key', { expiresIn: '4h' });
   }
 }

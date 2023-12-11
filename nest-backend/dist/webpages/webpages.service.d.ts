@@ -8,4 +8,6 @@ export declare class WebpagesService {
     findAll(): Promise<Webpage[]>;
     findById(id: string): Promise<Webpage>;
     getWebpagesForUser(payload: JwtPayload): Promise<Webpage[]>;
+    findOne(webpageId: string): Promise<Webpage>;
+    isUserInWebpage(userID: string, webpageId: string): Promise<boolean>;
 }

@@ -53,6 +53,7 @@ import axios from 'axios';
 import PostListUser from './PostsListUser.vue';
 import { useRoute } from 'vue-router';
 import TextEditor from './TextEditor.vue'
+import { useCookies } from 'vue3-cookies';
 
 export default {
   components: {
@@ -70,10 +71,11 @@ export default {
     const subcategories = ref([]);
     const categories = ref([]);
     const route = useRoute();
+    const { cookies } = useCookies(['access_token']);
     let selectedCategoryObj = null;
-
     const handleSubmit = async () => {
-      const accessToken = localStorage.getItem('accessToken');
+      
+      const accessToken = cookies.get('access_token');
       try {
         const currentDate = new Date();
         console.log(content.value);

@@ -31,6 +31,7 @@ let WebpagesController = class WebpagesController {
     }
     async getUserWebpages(req) {
         const user = req.user;
+        console.log(user);
         const webpages = await this.webpagesService.getWebpagesForUser(user);
         return webpages;
     }
@@ -59,7 +60,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], WebpagesController.prototype, "findById", null);
 __decorate([
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt2')),
     (0, common_1.Get)('user-webpages'),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),

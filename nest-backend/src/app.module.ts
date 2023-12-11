@@ -4,9 +4,9 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PostsModule } from './posts/posts.module';
 import {CategoryModule} from './category/category.module';
-import { AuthzModule } from './authz/authz.module';
 import { UsersModule } from './users/users.module';
 import { WebpagesModule } from './webpages/webpages.module';
+import { AuthzModule } from './authz/authz.module';
 
 
 @Module({

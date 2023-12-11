@@ -11,9 +11,9 @@ const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
 const posts_module_1 = require("./posts/posts.module");
 const category_module_1 = require("./category/category.module");
-const authz_module_1 = require("./authz/authz.module");
 const users_module_1 = require("./users/users.module");
 const webpages_module_1 = require("./webpages/webpages.module");
+const authz_module_1 = require("./authz/authz.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([

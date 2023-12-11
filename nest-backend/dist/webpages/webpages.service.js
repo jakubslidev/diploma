@@ -35,6 +35,22 @@ let WebpagesService = class WebpagesService {
         console.log(payload._id);
         return userWebpages;
     }
+    async findOne(webpageId) {
+        return this.webpageModel.findById(webpageId).exec();
+    }
+    async isUserInWebpage(userID, webpageId) {
+        try {
+            const webpage = await this.webpageModel.findById(webpageId).exec();
+            if (!webpage) {
+                return false;
+            }
+            const userInWebpage = webpage.users.some((user) => user.user.equals(userID));
+            return userInWebpage;
+        }
+        catch (error) {
+            return false;
+        }
+    }
 };
 WebpagesService = __decorate([
     (0, common_1.Injectable)(),

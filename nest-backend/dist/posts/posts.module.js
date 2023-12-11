@@ -12,15 +12,17 @@ const mongoose_1 = require("@nestjs/mongoose");
 const posts_controller_1 = require("./posts.controller");
 const posts_service_1 = require("./posts.service");
 const posts_schema_1 = require("./posts.schema");
+const webpage_validation_service_1 = require("../authz/webpage-validation.service");
+const webpages_module_1 = require("../webpages/webpages.module");
 let PostsModule = class PostsModule {
 };
 PostsModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            mongoose_1.MongooseModule.forFeature([{ name: posts_schema_1.Post.name, schema: posts_schema_1.PostSchema }]),
+            mongoose_1.MongooseModule.forFeature([{ name: posts_schema_1.Post.name, schema: posts_schema_1.PostSchema }]), webpages_module_1.WebpagesModule
         ],
         controllers: [posts_controller_1.PostsController],
-        providers: [posts_service_1.PostsService],
+        providers: [posts_service_1.PostsService, webpage_validation_service_1.WebpageValidationService],
     })
 ], PostsModule);
 exports.PostsModule = PostsModule;

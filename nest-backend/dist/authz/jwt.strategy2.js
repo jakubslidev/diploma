@@ -9,12 +9,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.JwtStrategy = void 0;
+exports.JwtStrategy2 = void 0;
 const common_1 = require("@nestjs/common");
 const passport_1 = require("@nestjs/passport");
 const passport_jwt_1 = require("passport-jwt");
 const webpages_service_1 = require("../webpages/webpages.service");
-let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(passport_jwt_1.Strategy) {
+let JwtStrategy2 = class JwtStrategy2 extends (0, passport_1.PassportStrategy)(passport_jwt_1.Strategy, 'jwt2') {
     constructor(webpagesService) {
         super({
             jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -24,28 +24,13 @@ let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(pas
         this.webpagesService = webpagesService;
     }
     async validate(payload, req) {
-        console.log("PARAMS: " + req.params);
-        console.log("PARAMS: " + req.query);
         const { _id: userID } = payload;
-        console.log(payload);
-        const webpageID = req.query.webpageId;
-        console.log('WebpageID:', webpageID);
-        if (webpageID) {
-            const webpage = await this.webpagesService.findOne(webpageID.toString());
-            if (!webpage) {
-                throw new common_1.UnauthorizedException('Webpage not found');
-            }
-            const userIsInWebpage = webpage.users.some(user => user.user.toString() === userID);
-            if (!userIsInWebpage) {
-                throw new common_1.UnauthorizedException();
-            }
-        }
         return payload;
     }
 };
-JwtStrategy = __decorate([
+JwtStrategy2 = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [webpages_service_1.WebpagesService])
-], JwtStrategy);
-exports.JwtStrategy = JwtStrategy;
-//# sourceMappingURL=jwt.strategy.js.map
+], JwtStrategy2);
+exports.JwtStrategy2 = JwtStrategy2;
+//# sourceMappingURL=jwt.strategy2.js.map

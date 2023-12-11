@@ -4,6 +4,8 @@ import { Controller, Get, Post, Body, Param, Req, UseGuards, NotFoundException }
 import { WebpagesService } from './webpages.service';
 import { Webpage } from './webpages.schema'
 import { AuthGuard } from '@nestjs/passport';
+import { JwtPayload } from 'src/authz/jwt.decorator';
+//import { JwtPayload } from 'src/authz/jwt-payload.interface';
 
 @Controller('webpages')
 export class WebpagesController {
@@ -24,10 +26,11 @@ export class WebpagesController {
     return this.webpagesService.findById(id);
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt2'))
   @Get('user-webpages')
   async getUserWebpages(@Req() req) {
     const user = req.user; // This will contain the payload from the JWT token
+    console.log(user);
     const webpages = await this.webpagesService.getWebpagesForUser(user);
     return webpages;
   }

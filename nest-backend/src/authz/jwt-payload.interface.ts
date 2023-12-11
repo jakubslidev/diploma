@@ -5,5 +5,7 @@ export interface JwtPayload {
     email: string;
     role: string;
     // Add any other properties your JWT payload may have
+    pageId?: string;
 }
+
   
