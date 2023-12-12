@@ -6,9 +6,10 @@ exports.UserSchema = new mongoose.Schema({
     email: String,
     password: String,
     salt: String,
-    role: {
-        type: String,
-        default: 'Worker'
+    roles: {
+        type: Map,
+        of: String,
+        default: {}
     },
 });
 //# sourceMappingURL=users.schema.js.map

@@ -24,7 +24,8 @@ let PostsController = class PostsController {
     }
     async addPostToWebpage(webpageId, postData, categoryId, req) {
         const userId = req.user._id;
-        await this.webpageValidationService.validateWebpageId(webpageId, userId);
+        const jwtRoles = req.user.roles;
+        await this.webpageValidationService.validateWebpageId(webpageId, userId, jwtRoles);
         return this.postsService.addPostToWebpage(webpageId, postData, categoryId);
     }
     findAll() {
@@ -35,12 +36,14 @@ let PostsController = class PostsController {
     }
     async findAllForWebpageBackOffice(webpageId, req) {
         const userId = req.user._id;
-        await this.webpageValidationService.validateWebpageId(webpageId, userId);
+        const jwtRoles = req.user.roles;
+        await this.webpageValidationService.validateWebpageId(webpageId, userId, jwtRoles);
         return this.postsService.findAllForWebpage(webpageId);
     }
     async findAllForWebpageView(webpageId, req) {
         const userId = req.user._id;
-        await this.webpageValidationService.validateWebpageId(webpageId, userId);
+        const jwtRoles = req.user.roles;
+        await this.webpageValidationService.validateWebpageId(webpageId, userId, jwtRoles);
         return this.postsService.findAllForWebpage(webpageId);
     }
     updatePostStatus(id, status) {

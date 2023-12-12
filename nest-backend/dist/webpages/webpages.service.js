@@ -33,7 +33,11 @@ let WebpagesService = class WebpagesService {
     async getWebpagesForUser(payload) {
         const userWebpages = await this.webpageModel.find({ 'users.user': payload._id }).exec();
         console.log(payload._id);
-        return userWebpages;
+        const userWebpagesWithRole = userWebpages.map(webpage => {
+            const userInWebpage = webpage.users.find(user => user.user.toString() === payload._id);
+            return Object.assign(Object.assign({}, webpage.toObject()), { role: userInWebpage ? userInWebpage.role : null });
+        });
+        return userWebpagesWithRole;
     }
     async findOne(webpageId) {
         return this.webpageModel.findById(webpageId).exec();

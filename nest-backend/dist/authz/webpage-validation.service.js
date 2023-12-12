@@ -16,16 +16,22 @@ let WebpageValidationService = class WebpageValidationService {
     constructor(webpagesService) {
         this.webpagesService = webpagesService;
     }
-    async validateWebpageId(webpageId, userId) {
+    async validateWebpageId(webpageId, userId, jwtRoles) {
         const webpage = await this.webpagesService.findOne(webpageId);
         console.log(webpage);
         if (!webpage) {
             throw new common_1.UnauthorizedException('Webpage not found');
         }
-        const userIsInWebpage = webpage.users.some(user => user.user.toString() === userId);
-        if (!userIsInWebpage) {
+        const userInWebpage = webpage.users.find(user => user.user.toString() === userId);
+        if (!userInWebpage) {
             throw new common_1.UnauthorizedException();
         }
+        const jwtRole = jwtRoles[webpageId];
+        if (userInWebpage.role !== jwtRole) {
+            throw new common_1.UnauthorizedException('Role does not match');
+        }
+        console.log("the role of the user: " + userInWebpage.role);
+        return userInWebpage.role;
     }
 };
 WebpageValidationService = __decorate([

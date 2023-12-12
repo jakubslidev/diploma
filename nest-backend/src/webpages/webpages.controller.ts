@@ -4,12 +4,14 @@ import { Controller, Get, Post, Body, Param, Req, UseGuards, NotFoundException }
 import { WebpagesService } from './webpages.service';
 import { Webpage } from './webpages.schema'
 import { AuthGuard } from '@nestjs/passport';
+import { WebpageValidationService } from '../authz/webpage-validation.service';
 import { JwtPayload } from 'src/authz/jwt.decorator';
 //import { JwtPayload } from 'src/authz/jwt-payload.interface';
 
 @Controller('webpages')
 export class WebpagesController {
-  constructor(private readonly webpagesService: WebpagesService) {}
+  constructor(private readonly webpagesService: WebpagesService,
+    private readonly webpageValidationService: WebpageValidationService,) {}
   @UseGuards(AuthGuard('jwt'))
   @Post()
   async create(@Body() webpage: Webpage): Promise<Webpage> {
@@ -33,6 +35,15 @@ export class WebpagesController {
     console.log(user);
     const webpages = await this.webpagesService.getWebpagesForUser(user);
     return webpages;
+  }
+
+  @UseGuards(AuthGuard('jwt2'))
+  @Get(':webpageId/role')
+  async getUserRole(@Param('webpageId') webpageId: string, @Req() req) {
+    const userId = req.user._id;
+    const jwtRoles = req.user.roles;
+    const role = await this.webpageValidationService.validateWebpageId(webpageId, userId, jwtRoles);
+    return { role };
   }
 
 }

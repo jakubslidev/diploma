@@ -47,7 +47,7 @@ let UsersService = class UsersService {
         return bcrypt.compare(plainPassword, hashedPassword);
     }
     generateAccessToken(user) {
-        return jwt.sign({ _id: user._id, email: user.email, role: user.role }, 'secret-key', { expiresIn: '4h' });
+        return jwt.sign({ _id: user._id, email: user.email, roles: user.roles }, 'secret-key', { expiresIn: '4h' });
     }
 };
 UsersService = __decorate([

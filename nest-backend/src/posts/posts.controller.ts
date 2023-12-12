@@ -15,7 +15,8 @@ export class PostsController {
   @Post(':webpageId/addPost') 
   async addPostToWebpage(@Param('webpageId') webpageId: string, @Body() postData: Partial<PostModel>, @Query('categoryId') categoryId: string, @Request() req) {
     const userId = req.user._id;
-    await this.webpageValidationService.validateWebpageId(webpageId, userId);
+    const jwtRoles = req.user.roles;
+    await this.webpageValidationService.validateWebpageId(webpageId, userId, jwtRoles);
     return this.postsService.addPostToWebpage(webpageId, postData, categoryId);
   }
 
@@ -35,7 +36,8 @@ export class PostsController {
   @Get('/webpage/:webpageId') 
   async findAllForWebpageBackOffice(@Param('webpageId') webpageId: string, @Request() req) {
     const userId = req.user._id;
-    await this.webpageValidationService.validateWebpageId(webpageId, userId);
+    const jwtRoles = req.user.roles;
+    await this.webpageValidationService.validateWebpageId(webpageId, userId, jwtRoles);
     return this.postsService.findAllForWebpage(webpageId);
   }
 
@@ -43,7 +45,8 @@ export class PostsController {
   @Get('/view/webpage/:webpageId') 
   async findAllForWebpageView(@Param('webpageId') webpageId: string, @Request() req) {
     const userId = req.user._id;
-    await this.webpageValidationService.validateWebpageId(webpageId, userId);
+    const jwtRoles = req.user.roles;
+    await this.webpageValidationService.validateWebpageId(webpageId, userId, jwtRoles);
     return this.postsService.findAllForWebpage(webpageId);
   }
   

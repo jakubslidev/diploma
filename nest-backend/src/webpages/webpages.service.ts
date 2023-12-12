@@ -23,10 +23,20 @@ export class WebpagesService {
     return this.webpageModel.findById(id).exec();
   }
 
-  async getWebpagesForUser(payload: JwtPayload): Promise<Webpage[]> {
+  async getWebpagesForUser(payload: JwtPayload): Promise<any[]> {
     const userWebpages = await this.webpageModel.find({ 'users.user': payload._id }).exec();
     console.log(payload._id);
-    return userWebpages;
+
+    // Map over the webpages to include the user's role
+    const userWebpagesWithRole = userWebpages.map(webpage => {
+      const userInWebpage = webpage.users.find(user => user.user.toString() === payload._id);
+      return {
+        ...webpage.toObject(),
+        role: userInWebpage ? userInWebpage.role : null,
+      };
+    });
+
+    return userWebpagesWithRole;
   }
 
   async findOne(webpageId: string): Promise<Webpage> {

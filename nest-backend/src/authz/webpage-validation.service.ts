@@ -6,7 +6,7 @@ import { WebpagesService } from '../webpages/webpages.service';
 export class WebpageValidationService {
   constructor(private readonly webpagesService: WebpagesService) {}
 
-  async validateWebpageId(webpageId: string, userId: string) {
+  async validateWebpageId(webpageId: string, userId: string, jwtRoles: Record<string, string>) {
     const webpage = await this.webpagesService.findOne(webpageId);
     console.log(webpage);
 
@@ -14,10 +14,20 @@ export class WebpageValidationService {
       throw new UnauthorizedException('Webpage not found');
     }
 
-    const userIsInWebpage = webpage.users.some(user => user.user.toString() === userId);
+    const userInWebpage = webpage.users.find(user => user.user.toString() === userId);
 
-    if (!userIsInWebpage) {
+    if (!userInWebpage) {
       throw new UnauthorizedException();
     }
+
+    const jwtRole = jwtRoles[webpageId];
+    if (userInWebpage.role !== jwtRole) {
+      throw new UnauthorizedException('Role does not match');
+    }
+
+    console.log("the role of the user: " + userInWebpage.role);
+
+    // Return the user's role
+    return userInWebpage.role;
   }
 }

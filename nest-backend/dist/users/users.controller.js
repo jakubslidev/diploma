@@ -37,10 +37,9 @@ let UsersController = class UsersController {
             if (!isPasswordValid) {
                 throw new common_1.HttpException('Invalid password', common_1.HttpStatus.UNAUTHORIZED);
             }
-            req.session.user = { _id: user._id, email: user.email, role: user.role };
+            req.session.user = { _id: user._id, email: user.email, roles: user.roles };
             console.log(req.session.user);
             const accessToken = this.usersService.generateAccessToken(user);
-            console.log(accessToken);
             return { accessToken };
         }
         catch (error) {

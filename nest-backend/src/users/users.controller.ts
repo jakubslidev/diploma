@@ -35,14 +35,13 @@ export class UsersController {
       }
 
       // Store user information in the session
-      req.session.user = { _id: user._id, email: user.email, role: user.role };
+      req.session.user = { _id: user._id, email: user.email, roles: user.roles };
       console.log(req.session.user);
 
       // You can also store the user's ID in the session and retrieve the user details when needed
       // req.session.userId = user._id;
 
       const accessToken = this.usersService.generateAccessToken(user);
-      console.log(accessToken);
       return { accessToken };
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);

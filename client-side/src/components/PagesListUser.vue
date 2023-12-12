@@ -3,7 +3,7 @@
     <h2>Pages</h2>
     <ul>
       <li v-for="page in pages" :key="page._id">
-        <a :href="'/office/' + page._id">{{ page.title }}</a>
+        <a :href="'/office/' + page._id">{{ page.title }} - {{ page.role }}</a>
       </li>
     </ul>
   </div>

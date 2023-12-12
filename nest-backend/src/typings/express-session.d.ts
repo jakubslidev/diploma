@@ -5,7 +5,11 @@ declare module 'express-session' {
     user: {
       _id: string;
       email: string;
-      role: string;
+      roles: {
+        type: Map,
+        of: String,
+        default: {} // Set default roles to an empty dictionary
+      },
       // Add any other user properties as needed
     };
   }
