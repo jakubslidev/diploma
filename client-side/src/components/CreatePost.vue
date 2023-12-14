@@ -43,21 +43,18 @@
 
       <button type="submit">Create Post</button>
     </form>
-    <PostListUser :webpageId="webpageId" />
   </div>
 </template>
 
 <script>
 import { ref, onMounted, watch } from 'vue';
 import axios from 'axios';
-import PostListUser from './PostsListUser.vue';
 import { useRoute } from 'vue-router';
 import TextEditor from './TextEditor.vue'
 import { useCookies } from 'vue3-cookies';
 
 export default {
   components: {
-    PostListUser,
     TextEditor,
   },
   setup() {
