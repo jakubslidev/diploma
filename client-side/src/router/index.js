@@ -10,6 +10,7 @@ import DisplayPosts from '../views/PostsBackOffice.vue'
 import PageView from '../views/PageView.vue'
 import CategoryPosts from '../views/CategoryPosts.vue'
 import UnauthorizedError from '../views/UnauthorizedError.vue'
+import DisplayInvitations from '../views/DisplayInvitations.vue'
 const routes = [
   {
     path: '/pages',
@@ -78,6 +79,11 @@ const routes = [
     path: '/unauthorizedError',
     name: 'unauthorizedError',
     component: UnauthorizedError,
+  },
+  {
+    path: '/displayInvitations',
+    name: 'DisplayInvitations',
+    component: DisplayInvitations,
   },
 ]
 

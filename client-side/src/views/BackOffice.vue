@@ -27,6 +27,11 @@
             :class="{ 'btn-primary': currentView === 'CategoryAdd', 'btn-secondary': currentView !== 'CategoryAdd' }"
             @click="setCurrentView('CategoryAdd')"
           >Categories</button>
+          <button
+            class="btn w-100 mb-2"
+            :class="{ 'btn-primary': currentView === 'InvitingUsers', 'btn-secondary': currentView !== 'InvitingUsers' }"
+            @click="setCurrentView('InvitingUsers')"
+          >Invite Users!</button>
           <!-- ... other buttons ... -->
         </div>
       </div>
@@ -58,6 +63,7 @@ import { useRoute, useRouter } from 'vue-router';
 import MainNavbar from "@/components/mainNavbar.vue";
 import PostsListUser from "@/components/PostsListUser.vue";
 import CategoryAdd from '@/components/CategoryAdd.vue'
+import InvitingUsers from '@/components/InvitingUsers.vue';
 import { Offcanvas } from 'bootstrap';
 
 export default {
@@ -65,6 +71,7 @@ export default {
     MainNavbar,
     PostsListUser,
     CategoryAdd,
+    InvitingUsers,
   },
   setup() {
     const role = ref(null);

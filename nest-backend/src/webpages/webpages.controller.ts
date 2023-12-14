@@ -6,7 +6,6 @@ import { Webpage } from './webpages.schema'
 import { AuthGuard } from '@nestjs/passport';
 import { WebpageValidationService } from '../authz/webpage-validation.service';
 import { JwtPayload } from 'src/authz/jwt.decorator';
-//import { JwtPayload } from 'src/authz/jwt-payload.interface';
 
 @Controller('webpages')
 export class WebpagesController {

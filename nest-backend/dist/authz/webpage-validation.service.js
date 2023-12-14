@@ -18,7 +18,6 @@ let WebpageValidationService = class WebpageValidationService {
     }
     async validateWebpageId(webpageId, userId, jwtRoles) {
         const webpage = await this.webpagesService.findOne(webpageId);
-        console.log(webpage);
         if (!webpage) {
             throw new common_1.UnauthorizedException('Webpage not found');
         }

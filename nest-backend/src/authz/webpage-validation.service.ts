@@ -8,7 +8,6 @@ export class WebpageValidationService {
 
   async validateWebpageId(webpageId: string, userId: string, jwtRoles: Record<string, string>) {
     const webpage = await this.webpagesService.findOne(webpageId);
-    console.log(webpage);
 
     if (!webpage) {
       throw new UnauthorizedException('Webpage not found');

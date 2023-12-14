@@ -7,6 +7,7 @@ import {CategoryModule} from './category/category.module';
 import { UsersModule } from './users/users.module';
 import { WebpagesModule } from './webpages/webpages.module';
 import { AuthzModule } from './authz/authz.module';
+import { UserInvitationsModule } from './user-invitations/user-invitations.module';
 
 
 @Module({
@@ -18,7 +19,7 @@ import { AuthzModule } from './authz/authz.module';
         useUnifiedTopology: true,
       }),
     }),
-    PostsModule, CategoryModule, AuthzModule, UsersModule, WebpagesModule
+    PostsModule, CategoryModule, AuthzModule, UsersModule, WebpagesModule, UserInvitationsModule
   ],
 })
 export class AppModule {}
