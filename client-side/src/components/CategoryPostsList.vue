@@ -67,7 +67,7 @@
   
       const fetchData = async (webpageId, categoryId) => {
   try {
-    const response = await axios.get(`http://localhost:3000/posts/view/webpage/${webpageId}`);
+    const response = await axios.get(`http://localhost:3000/posts/view/webpage/${webpageId}/withoutauth`);
     console.log('Response:', response.data);
 
     // Filter posts based on category ObjectId

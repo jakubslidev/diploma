@@ -32,10 +32,15 @@
             :class="{ 'btn-primary': currentView === 'InvitingUsers', 'btn-secondary': currentView !== 'InvitingUsers' }"
             @click="setCurrentView('InvitingUsers')"
           >Invite Users!</button>
+          <router-link
+            :to="{ path: '/view/' + $route.params.webpageId }"
+            class="btn btn-success w-100 mb-2"
+            target="_blank"
+            >Display Page</router-link>
+
           <!-- ... other buttons ... -->
         </div>
       </div>
-
       <!-- Button to toggle the sidebar (visible on mobile only) -->
       <button
         v-if="!isDesktop"

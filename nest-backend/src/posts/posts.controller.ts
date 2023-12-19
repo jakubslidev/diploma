@@ -49,6 +49,12 @@ export class PostsController {
     await this.webpageValidationService.validateWebpageId(webpageId, userId, jwtRoles);
     return this.postsService.findAllForWebpage(webpageId);
   }
+
+  // @UseGuards(AuthGuard('jwt2'))
+  @Get('/view/webpage/:webpageId/withoutauth') 
+  async findAllForUserView(@Param('webpageId') webpageId: string, @Request() req) {
+    return this.postsService.findAllActiveForWebpage(webpageId);
+  }
   
   @Patch(':id/updateStatus')
   updatePostStatus(@Param('id') id: string, @Body('status') status: string) {

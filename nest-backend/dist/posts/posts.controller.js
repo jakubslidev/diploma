@@ -46,6 +46,9 @@ let PostsController = class PostsController {
         await this.webpageValidationService.validateWebpageId(webpageId, userId, jwtRoles);
         return this.postsService.findAllForWebpage(webpageId);
     }
+    async findAllForUserView(webpageId, req) {
+        return this.postsService.findAllActiveForWebpage(webpageId);
+    }
     updatePostStatus(id, status) {
         return this.postsService.updatePostStatus(id, status);
     }
@@ -95,6 +98,14 @@ __decorate([
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], PostsController.prototype, "findAllForWebpageView", null);
+__decorate([
+    (0, common_1.Get)('/view/webpage/:webpageId/withoutauth'),
+    __param(0, (0, common_1.Param)('webpageId')),
+    __param(1, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], PostsController.prototype, "findAllForUserView", null);
 __decorate([
     (0, common_1.Patch)(':id/updateStatus'),
     __param(0, (0, common_1.Param)('id')),

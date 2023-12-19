@@ -1,6 +1,10 @@
 <!-- PostsListUser.vue -->
 <template>
   <div class="container mt-4">
+    <router-link
+            :to="{ path: '/office/' + $route.params.webpageId + '/posts/addPost' }"
+            class="btn btn-primary w-100 mb-2"
+            >Add post!</router-link>
     <h2 class="mb-4">Posts</h2>
 
     <!-- Pagination -->
@@ -51,7 +55,7 @@
     <li v-for="(post, index) in paginatePosts" :key="post._id" class="list-group-item" :class="{ 'bg-light': index % 2 !== 0 }">
       <div class="d-flex align-items-center">
         <input type="checkbox" class="me-2" v-model="post.selected" @change="handleCheckboxChange(post)" />
-        <router-link :to="'/post/' + post._id">{{ post.title }}</router-link>
+        <router-link :to="'/post/' + post._id">{{ post.title }} | {{ post.status }}</router-link>
       </div>
     </li>
   </ul>

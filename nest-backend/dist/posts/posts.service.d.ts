@@ -6,6 +6,7 @@ export declare class PostsService {
     findAll(): Promise<Post[]>;
     findOne(id: string): Promise<Post | null>;
     findAllForWebpage(webpageId: string): Promise<Post[]>;
+    findAllActiveForWebpage(webpageId: string): Promise<Post[]>;
     addPostToWebpage(webpageId: string, postData: Partial<Post>, category: string, status?: string): Promise<Post>;
     updatePostStatus(postId: string, status: string): Promise<Post | null>;
     deletePost(postId: string): Promise<void>;
