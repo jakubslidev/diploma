@@ -16,9 +16,11 @@ exports.WebpagesController = void 0;
 const common_1 = require("@nestjs/common");
 const webpages_service_1 = require("./webpages.service");
 const passport_1 = require("@nestjs/passport");
+const webpage_validation_service_1 = require("../authz/webpage-validation.service");
 let WebpagesController = class WebpagesController {
-    constructor(webpagesService) {
+    constructor(webpagesService, webpageValidationService) {
         this.webpagesService = webpagesService;
+        this.webpageValidationService = webpageValidationService;
     }
     async create(webpage) {
         return this.webpagesService.create(webpage);
@@ -31,8 +33,15 @@ let WebpagesController = class WebpagesController {
     }
     async getUserWebpages(req) {
         const user = req.user;
+        console.log(user);
         const webpages = await this.webpagesService.getWebpagesForUser(user);
         return webpages;
+    }
+    async getUserRole(webpageId, req) {
+        const userId = req.user._id;
+        const jwtRoles = req.user.roles;
+        const role = await this.webpageValidationService.validateWebpageId(webpageId, userId, jwtRoles);
+        return { role };
     }
 };
 __decorate([
@@ -59,16 +68,26 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], WebpagesController.prototype, "findById", null);
 __decorate([
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt2')),
     (0, common_1.Get)('user-webpages'),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], WebpagesController.prototype, "getUserWebpages", null);
+__decorate([
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt2')),
+    (0, common_1.Get)(':webpageId/role'),
+    __param(0, (0, common_1.Param)('webpageId')),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], WebpagesController.prototype, "getUserRole", null);
 WebpagesController = __decorate([
     (0, common_1.Controller)('webpages'),
-    __metadata("design:paramtypes", [webpages_service_1.WebpagesService])
+    __metadata("design:paramtypes", [webpages_service_1.WebpagesService,
+        webpage_validation_service_1.WebpageValidationService])
 ], WebpagesController);
 exports.WebpagesController = WebpagesController;
 //# sourceMappingURL=webpages.controller.js.map

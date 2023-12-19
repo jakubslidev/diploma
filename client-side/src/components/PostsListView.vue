@@ -63,9 +63,10 @@ export default {
     const posts = ref([]);
     const route = useRoute();
 
+
     const fetchData = async (webpageId) => {
       try {
-        const response = await axios.get(`http://localhost:3000/posts/view/webpage/${webpageId}`);
+        const response = await axios.get(`http://localhost:3000/posts/view/webpage/${webpageId}/withoutauth  `);
         posts.value = response.data;
         console.log(posts);
       } catch (error) {

@@ -25,6 +25,9 @@ let UsersService = class UsersService {
     async findByEmail(email) {
         return this.userModel.findOne({ email }).exec();
     }
+    async findById(_id) {
+        return this.userModel.findOne({ _id }).exec();
+    }
     async create(userData) {
         const existingUser = await this.findByEmail(userData.email);
         if (existingUser) {
@@ -36,21 +39,15 @@ let UsersService = class UsersService {
         const newUser = new this.userModel({
             email: userData.email,
             password: hashedPassword,
-            salt: salt
+            salt: salt,
         });
         return newUser.save();
     }
-    async login(email, password) {
-        const user = await this.findByEmail(email);
-        if (!user) {
-            throw new Error('User not found');
-        }
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
-            throw new Error('Invalid password');
-        }
-        const accessToken = jwt.sign({ _id: user._id, email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: '4h' });
-        return accessToken;
+    async verifyPassword(plainPassword, hashedPassword) {
+        return bcrypt.compare(plainPassword, hashedPassword);
+    }
+    generateAccessToken(user) {
+        return jwt.sign({ _id: user._id, email: user.email, roles: user.roles }, 'secret-key', { expiresIn: '4h' });
     }
 };
 UsersService = __decorate([

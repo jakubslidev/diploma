@@ -23,9 +23,37 @@ export class WebpagesService {
     return this.webpageModel.findById(id).exec();
   }
 
-  async getWebpagesForUser(payload: JwtPayload): Promise<Webpage[]> {
+  async getWebpagesForUser(payload: JwtPayload): Promise<any[]> {
     const userWebpages = await this.webpageModel.find({ 'users.user': payload._id }).exec();
     console.log(payload._id);
-    return userWebpages;
+
+    // Map over the webpages to include the user's role
+    const userWebpagesWithRole = userWebpages.map(webpage => {
+      const userInWebpage = webpage.users.find(user => user.user.toString() === payload._id);
+      return {
+        ...webpage.toObject(),
+        role: userInWebpage ? userInWebpage.role : null,
+      };
+    });
+
+    return userWebpagesWithRole;
+  }
+
+  async findOne(webpageId: string): Promise<Webpage> {
+    return this.webpageModel.findById(webpageId).exec();
+  }
+
+  async isUserInWebpage(userID: string, webpageId: string): Promise<boolean> {
+    try {
+      const webpage = await this.webpageModel.findById(webpageId).exec();
+      if (!webpage) {
+        return false; // Webpage not found
+      }
+
+      const userInWebpage = webpage.users.some((user) => user.user.equals(userID));
+      return userInWebpage;
+    } catch (error) {
+      return false;
+    }
   }
 }

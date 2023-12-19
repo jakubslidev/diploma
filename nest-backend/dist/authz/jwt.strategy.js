@@ -13,25 +13,39 @@ exports.JwtStrategy = void 0;
 const common_1 = require("@nestjs/common");
 const passport_1 = require("@nestjs/passport");
 const passport_jwt_1 = require("passport-jwt");
-const dotenv = require("dotenv");
-dotenv.config();
+const webpages_service_1 = require("../webpages/webpages.service");
 let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(passport_jwt_1.Strategy) {
-    constructor() {
+    constructor(webpagesService) {
         super({
             jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
-            secretOrKey: process.env.JWT_SECRET,
+            secretOrKey: 'secret-key',
             algorithms: ['HS256'],
         });
-        console.log('JwtStrategy instantiated');
+        this.webpagesService = webpagesService;
     }
-    validate(payload) {
-        console.log('Payload validated:', payload);
+    async validate(payload, req) {
+        console.log("PARAMS: " + req.params);
+        console.log("PARAMS: " + req.query);
+        const { _id: userID } = payload;
+        console.log(payload);
+        const webpageID = req.query.webpageId;
+        console.log('WebpageID:', webpageID);
+        if (webpageID) {
+            const webpage = await this.webpagesService.findOne(webpageID.toString());
+            if (!webpage) {
+                throw new common_1.UnauthorizedException('Webpage not found');
+            }
+            const userIsInWebpage = webpage.users.some(user => user.user.toString() === userID);
+            if (!userIsInWebpage) {
+                throw new common_1.UnauthorizedException();
+            }
+        }
         return payload;
     }
 };
 JwtStrategy = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [])
+    __metadata("design:paramtypes", [webpages_service_1.WebpagesService])
 ], JwtStrategy);
 exports.JwtStrategy = JwtStrategy;
 //# sourceMappingURL=jwt.strategy.js.map

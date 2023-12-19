@@ -30,6 +30,9 @@ let PostsService = class PostsService {
     async findAllForWebpage(webpageId) {
         return this.postModel.find({ webpage: new mongoose_2.Types.ObjectId(webpageId) }).exec();
     }
+    async findAllActiveForWebpage(webpageId) {
+        return this.postModel.find({ webpage: new mongoose_2.Types.ObjectId(webpageId), status: 'Active' }).exec();
+    }
     async addPostToWebpage(webpageId, postData, category, status = 'Draft') {
         const post = new this.postModel(Object.assign(Object.assign({}, postData), { status }));
         post.webpage = new mongoose_2.Types.ObjectId(webpageId);

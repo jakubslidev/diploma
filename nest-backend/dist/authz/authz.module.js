@@ -10,12 +10,19 @@ exports.AuthzModule = void 0;
 const common_1 = require("@nestjs/common");
 const passport_1 = require("@nestjs/passport");
 const jwt_strategy_1 = require("./jwt.strategy");
+const jwt_strategy2_1 = require("./jwt.strategy2");
+const users_module_1 = require("../users/users.module");
+const webpages_module_1 = require("../webpages/webpages.module");
 let AuthzModule = class AuthzModule {
 };
 AuthzModule = __decorate([
     (0, common_1.Module)({
-        imports: [passport_1.PassportModule.register({ defaultStrategy: 'jwt' })],
-        providers: [jwt_strategy_1.JwtStrategy],
+        imports: [
+            passport_1.PassportModule.register({ defaultStrategy: 'jwt' }),
+            users_module_1.UsersModule,
+            webpages_module_1.WebpagesModule,
+        ],
+        providers: [jwt_strategy_1.JwtStrategy, jwt_strategy2_1.JwtStrategy2],
         exports: [passport_1.PassportModule],
     })
 ], AuthzModule);

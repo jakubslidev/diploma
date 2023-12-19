@@ -11,9 +11,10 @@ const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
 const posts_module_1 = require("./posts/posts.module");
 const category_module_1 = require("./category/category.module");
-const authz_module_1 = require("./authz/authz.module");
 const users_module_1 = require("./users/users.module");
 const webpages_module_1 = require("./webpages/webpages.module");
+const authz_module_1 = require("./authz/authz.module");
+const user_invitations_module_1 = require("./user-invitations/user-invitations.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -26,7 +27,7 @@ AppModule = __decorate([
                     useUnifiedTopology: true,
                 }),
             }),
-            posts_module_1.PostsModule, category_module_1.CategoryModule, authz_module_1.AuthzModule, users_module_1.UsersModule, webpages_module_1.WebpagesModule
+            posts_module_1.PostsModule, category_module_1.CategoryModule, authz_module_1.AuthzModule, users_module_1.UsersModule, webpages_module_1.WebpagesModule, user_invitations_module_1.UserInvitationsModule
         ],
     })
 ], AppModule);

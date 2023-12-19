@@ -5,8 +5,9 @@ export const UserSchema = new mongoose.Schema({
   email: String,
   password: String,
   salt: String,
-  role: {
-    type: String,
-    default: 'Worker' // Set default role to Worker
+  roles: {
+    type: Map,
+    of: String,
+    default: {} // Set default roles to an empty dictionary
   },
 });

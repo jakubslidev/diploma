@@ -33,7 +33,27 @@ let WebpagesService = class WebpagesService {
     async getWebpagesForUser(payload) {
         const userWebpages = await this.webpageModel.find({ 'users.user': payload._id }).exec();
         console.log(payload._id);
-        return userWebpages;
+        const userWebpagesWithRole = userWebpages.map(webpage => {
+            const userInWebpage = webpage.users.find(user => user.user.toString() === payload._id);
+            return Object.assign(Object.assign({}, webpage.toObject()), { role: userInWebpage ? userInWebpage.role : null });
+        });
+        return userWebpagesWithRole;
+    }
+    async findOne(webpageId) {
+        return this.webpageModel.findById(webpageId).exec();
+    }
+    async isUserInWebpage(userID, webpageId) {
+        try {
+            const webpage = await this.webpageModel.findById(webpageId).exec();
+            if (!webpage) {
+                return false;
+            }
+            const userInWebpage = webpage.users.some((user) => user.user.equals(userID));
+            return userInWebpage;
+        }
+        catch (error) {
+            return false;
+        }
     }
 };
 WebpagesService = __decorate([

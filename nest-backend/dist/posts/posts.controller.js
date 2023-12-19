@@ -16,11 +16,16 @@ exports.PostsController = void 0;
 const common_1 = require("@nestjs/common");
 const posts_service_1 = require("./posts.service");
 const passport_1 = require("@nestjs/passport");
+const webpage_validation_service_1 = require("../authz/webpage-validation.service");
 let PostsController = class PostsController {
-    constructor(postsService) {
+    constructor(postsService, webpageValidationService) {
         this.postsService = postsService;
+        this.webpageValidationService = webpageValidationService;
     }
-    addPostToWebpage(webpageId, postData, categoryId) {
+    async addPostToWebpage(webpageId, postData, categoryId, req) {
+        const userId = req.user._id;
+        const jwtRoles = req.user.roles;
+        await this.webpageValidationService.validateWebpageId(webpageId, userId, jwtRoles);
         return this.postsService.addPostToWebpage(webpageId, postData, categoryId);
     }
     findAll() {
@@ -29,11 +34,20 @@ let PostsController = class PostsController {
     findOne(id) {
         return this.postsService.findOne(id);
     }
-    findAllForWebpageBackOffice(webpageId) {
+    async findAllForWebpageBackOffice(webpageId, req) {
+        const userId = req.user._id;
+        const jwtRoles = req.user.roles;
+        await this.webpageValidationService.validateWebpageId(webpageId, userId, jwtRoles);
         return this.postsService.findAllForWebpage(webpageId);
     }
-    findAllForWebpageView(webpageId) {
+    async findAllForWebpageView(webpageId, req) {
+        const userId = req.user._id;
+        const jwtRoles = req.user.roles;
+        await this.webpageValidationService.validateWebpageId(webpageId, userId, jwtRoles);
         return this.postsService.findAllForWebpage(webpageId);
+    }
+    async findAllForUserView(webpageId, req) {
+        return this.postsService.findAllActiveForWebpage(webpageId);
     }
     updatePostStatus(id, status) {
         return this.postsService.updatePostStatus(id, status);
@@ -43,14 +57,15 @@ let PostsController = class PostsController {
     }
 };
 __decorate([
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt2')),
     (0, common_1.Post)(':webpageId/addPost'),
     __param(0, (0, common_1.Param)('webpageId')),
     __param(1, (0, common_1.Body)()),
     __param(2, (0, common_1.Query)('categoryId')),
+    __param(3, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object, String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [String, Object, String, Object]),
+    __metadata("design:returntype", Promise)
 ], PostsController.prototype, "addPostToWebpage", null);
 __decorate([
     (0, common_1.Get)(),
@@ -66,20 +81,31 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], PostsController.prototype, "findOne", null);
 __decorate([
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt2')),
     (0, common_1.Get)('/webpage/:webpageId'),
     __param(0, (0, common_1.Param)('webpageId')),
+    __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
 ], PostsController.prototype, "findAllForWebpageBackOffice", null);
 __decorate([
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt2')),
     (0, common_1.Get)('/view/webpage/:webpageId'),
     __param(0, (0, common_1.Param)('webpageId')),
+    __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
 ], PostsController.prototype, "findAllForWebpageView", null);
+__decorate([
+    (0, common_1.Get)('/view/webpage/:webpageId/withoutauth'),
+    __param(0, (0, common_1.Param)('webpageId')),
+    __param(1, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], PostsController.prototype, "findAllForUserView", null);
 __decorate([
     (0, common_1.Patch)(':id/updateStatus'),
     __param(0, (0, common_1.Param)('id')),
@@ -97,7 +123,8 @@ __decorate([
 ], PostsController.prototype, "deletePost", null);
 PostsController = __decorate([
     (0, common_1.Controller)('posts'),
-    __metadata("design:paramtypes", [posts_service_1.PostsService])
+    __metadata("design:paramtypes", [posts_service_1.PostsService,
+        webpage_validation_service_1.WebpageValidationService])
 ], PostsController);
 exports.PostsController = PostsController;
 //# sourceMappingURL=posts.controller.js.map

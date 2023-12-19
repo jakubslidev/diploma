@@ -26,9 +26,20 @@ let UsersController = class UsersController {
         }
         return this.usersService.create(userData);
     }
-    async login(loginData) {
+    async login(loginData, req) {
         try {
-            const accessToken = await this.usersService.login(loginData.email, loginData.password);
+            const user = await this.usersService.findByEmail(loginData.email);
+            console.log(user);
+            if (!user) {
+                throw new common_1.HttpException('User not found', common_1.HttpStatus.UNAUTHORIZED);
+            }
+            const isPasswordValid = await this.usersService.verifyPassword(loginData.password, user.password);
+            if (!isPasswordValid) {
+                throw new common_1.HttpException('Invalid password', common_1.HttpStatus.UNAUTHORIZED);
+            }
+            req.session.user = { _id: user._id, email: user.email, roles: user.roles };
+            console.log(req.session.user);
+            const accessToken = this.usersService.generateAccessToken(user);
             return { accessToken };
         }
         catch (error) {
@@ -46,8 +57,9 @@ __decorate([
 __decorate([
     (0, common_1.Post)('login'),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "login", null);
 UsersController = __decorate([

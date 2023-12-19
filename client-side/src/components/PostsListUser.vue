@@ -1,5 +1,10 @@
+<!-- PostsListUser.vue -->
 <template>
   <div class="container mt-4">
+    <router-link
+            :to="{ path: '/office/' + $route.params.webpageId + '/posts/addPost' }"
+            class="btn btn-primary w-100 mb-2"
+            >Add post!</router-link>
     <h2 class="mb-4">Posts</h2>
 
     <!-- Pagination -->
@@ -50,7 +55,7 @@
     <li v-for="(post, index) in paginatePosts" :key="post._id" class="list-group-item" :class="{ 'bg-light': index % 2 !== 0 }">
       <div class="d-flex align-items-center">
         <input type="checkbox" class="me-2" v-model="post.selected" @change="handleCheckboxChange(post)" />
-        <router-link :to="'/post/' + post._id">{{ post.title }}</router-link>
+        <router-link :to="'/post/' + post._id">{{ post.title }} | {{ post.status }}</router-link>
       </div>
     </li>
   </ul>
@@ -62,6 +67,7 @@
 import { ref, onMounted, watchEffect, computed } from 'vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
+import { useCookies } from 'vue3-cookies';
 
 export default {
   setup() {
@@ -69,11 +75,12 @@ export default {
     const selectedPosts = ref([]);
     const selectedAction = ref('');
     const searchText = ref('');
-    const accessToken = localStorage.getItem('accessToken');
     const route = useRoute();
     const currentPage = ref(0);
     const itemsPerPage = 12;
     const totalPages = computed(() => Math.ceil(posts.value.length / itemsPerPage));
+    const { cookies } = useCookies(['access_token']);
+    const accessToken = cookies.get('access_token');
 
     const postId = computed(() => {
       // Extract postId from the URL
@@ -81,18 +88,19 @@ export default {
     });
 
     const fetchData = async (webpageId) => {
-      try {
-        const response = await axios.get(`http://localhost:3000/posts/webpage/${webpageId}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-        posts.value = response.data.map((post) => ({ ...post, selected: false }));
-        console.log(posts);
-      } catch (error) {
-        console.error('Error fetching posts:', error.message);
-      }
-    };
+  try {
+    const response = await axios.get(`http://localhost:3000/posts/view/webpage/${webpageId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    posts.value = response.data.map((post) => ({ ...post, selected: false }));
+    console.log(posts);
+  } catch (error) {
+    console.error('Error fetching posts:', error.message);
+  }
+};
+
 
     const toggleSelectAll = () => {
       // Toggle individual checkboxes

@@ -15,6 +15,7 @@
 <script>
 import { ref } from 'vue';
 import axios from 'axios';
+import { useCookies } from 'vue3-cookies';
 import mainNavbar from '@/components/mainNavbar.vue';
 import router from '@/router';
 
@@ -25,6 +26,7 @@ export default {
   setup() {
     const email = ref('');
     const password = ref('');
+    const { cookies } = useCookies(['access_token']);
 
     const login = async () => {
       try {
@@ -34,23 +36,34 @@ export default {
         });
 
         const accessToken = response.data.accessToken;
+        console.log('Access Token:', accessToken);
 
-        // Save token to local storage
-        localStorage.setItem('accessToken', accessToken);
+        // Save token as a cookie using vue3-cookies
+        cookies.set('access_token', accessToken, '4h');
+        console.log('Cookie set successfully');
+
+        // Log cookies for debugging
+        console.log('Cookies:', cookies.getAll());
 
         // Handle successful login
         console.log('Login successful!');
-        router.push('/pages')
+        router.push('/pages');
+        console.log('After router push'); // Log to check if this line is reached
       } catch (error) {
         // Handle login error
         console.error('Login error:', error.message);
+        console.log('Error occurred during login');
       }
     };
 
-    return { email, password, login };
+    return { email, password, login, cookies };
   },
 };
 </script>
+
+
+
+
 
 <style scoped>
 .login-container {

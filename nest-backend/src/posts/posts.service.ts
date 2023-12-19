@@ -21,6 +21,10 @@ export class PostsService {
     return this.postModel.find({ webpage: new Types.ObjectId(webpageId) }).exec();
   }
 
+  async findAllActiveForWebpage(webpageId: string): Promise<Post[]> {
+    return this.postModel.find({ webpage: new Types.ObjectId(webpageId), status: 'Active' }).exec();
+  }
+
   async addPostToWebpage(
     webpageId: string,
     postData: Partial<Post>,
