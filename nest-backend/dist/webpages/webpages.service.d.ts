@@ -10,4 +10,5 @@ export declare class WebpagesService {
     getWebpagesForUser(payload: JwtPayload): Promise<any[]>;
     findOne(webpageId: string): Promise<Webpage>;
     isUserInWebpage(userID: string, webpageId: string): Promise<boolean>;
+    findAllUsersForWebpage(webpageId: string): Promise<any[]>;
 }

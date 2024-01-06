@@ -56,4 +56,16 @@ export class WebpagesService {
       return false;
     }
   }
+
+  async findAllUsersForWebpage(webpageId: string): Promise<any[]> {
+    try {
+      const webpage = await this.webpageModel.findById(webpageId).exec();
+      if (!webpage) {
+        return []; // Return an empty array if the webpage doesn't exist
+      }
+      return webpage.users; // Assuming 'users' is an array of user information in the Webpage schema
+    } catch (error) {
+      throw new Error('Error fetching users for webpage: ' + error.message);
+    }
+  }
 }

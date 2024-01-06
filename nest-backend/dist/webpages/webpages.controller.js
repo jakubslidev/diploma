@@ -43,6 +43,16 @@ let WebpagesController = class WebpagesController {
         const role = await this.webpageValidationService.validateWebpageId(webpageId, userId, jwtRoles);
         return { role };
     }
+    async findAllUsersForWebpage(webpageId) {
+        try {
+            const users = await this.webpagesService.findAllUsersForWebpage(webpageId);
+            console.log(users);
+            return users;
+        }
+        catch (error) {
+            throw new common_1.NotFoundException('Webpage not found or error fetching users: ' + error.message);
+        }
+    }
 };
 __decorate([
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
@@ -84,6 +94,14 @@ __decorate([
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], WebpagesController.prototype, "getUserRole", null);
+__decorate([
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt2')),
+    (0, common_1.Get)(':webpageId/users'),
+    __param(0, (0, common_1.Param)('webpageId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], WebpagesController.prototype, "findAllUsersForWebpage", null);
 WebpagesController = __decorate([
     (0, common_1.Controller)('webpages'),
     __metadata("design:paramtypes", [webpages_service_1.WebpagesService,

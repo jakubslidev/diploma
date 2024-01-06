@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="form-card">
     <h2>Create Post</h2>
-    <form @submit.prevent="handleSubmit">
+    <form @submit.prevent="handleSubmit" class="form-grid">
       <label for="title">Title:</label>
       <input v-model="title" type="text" id="title" required><br>
       <label for="content">Content:</label><br>
@@ -165,3 +165,47 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.form-card {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.form-grid label, .form-grid input, .form-grid select {
+  margin-bottom: 10px;
+}
+
+button {
+  background-color: #0055ff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #003399;
+}
+
+.category-tag {
+  display: inline-block;
+  background: #e0e0e0;
+  border-radius: 20px;
+  padding: 5px 10px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.tag-remove {
+  margin-left: 10px;
+  color: red;
+  cursor: pointer;
+}
+
+</style>

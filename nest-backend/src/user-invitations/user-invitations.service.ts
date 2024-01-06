@@ -59,7 +59,7 @@ export class UserInvitationsService {
     const webpage = await this.webpagesService.findById(invitation.webpageId);
     if (!webpage) throw new UnauthorizedException('Webpage not found');
 
-    webpage.users.push({ user: objectId, role: invitation.role });
+    webpage.users.push({ user: objectId, role: invitation.role, email: user.email});
     await webpage.save();
 
     // Update the invitation status

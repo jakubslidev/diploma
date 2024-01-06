@@ -59,7 +59,7 @@ let UserInvitationsService = class UserInvitationsService {
         const webpage = await this.webpagesService.findById(invitation.webpageId);
         if (!webpage)
             throw new common_1.UnauthorizedException('Webpage not found');
-        webpage.users.push({ user: objectId, role: invitation.role });
+        webpage.users.push({ user: objectId, role: invitation.role, email: user.email });
         await webpage.save();
         invitation.status = 'accepted';
         return invitation.save();

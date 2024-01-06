@@ -8,11 +8,18 @@
       <option value="Admin">Admin</option>
     </select>
     <button @click="sendInvitation">Send Invitation</button>
+
+    <div v-if="users.length > 0">
+      <h3>Users Managing This Webpage:</h3>
+      <ul>
+        <li v-for="user in users" :key="user.id">{{ user.email }} - {{ user.role }}</li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useCookies } from 'vue3-cookies';
 import { useRoute } from 'vue-router';
@@ -24,6 +31,7 @@ const role = ref('editor'); // Default role or make it dynamic as needed
 const route = useRoute();
 const webpageId = ref(route.params.webpageId);
 const userRole = ref(null);
+const users = ref([]);
 
 const fetchRole = async () => {
   try {
@@ -38,6 +46,21 @@ const fetchRole = async () => {
     // Handle unauthorized error or redirect as needed
   }
 };
+
+const fetchUsers = async () => {
+  try {
+    const response = await axios.get(`http://localhost:3000/webpages/${webpageId.value}/users`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    users.value = response.data;
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    // Handle error appropriately
+  }
+};
+
 
 const sendInvitation = async () => {
   await fetchRole();
@@ -62,5 +85,9 @@ const sendInvitation = async () => {
     console.error('Error sending invitation:', error);
   }
 };
+
+onMounted(() => {
+  fetchUsers();
+});
 </script>
 

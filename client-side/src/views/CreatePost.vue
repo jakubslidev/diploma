@@ -1,4 +1,5 @@
 <template>
+    <mainNavbar/>
     <CreatePost/>
 </template>
   
@@ -6,10 +7,12 @@
   import { ref } from 'vue';
   import axios from 'axios';
   import CreatePost from '@/components/CreatePost.vue'
+  import mainNavbar from '@/components/mainNavbar.vue';
   
   export default {
     components: {
-    CreatePost
+    CreatePost,
+    mainNavbar
   },
     setup() {
       const title = ref('');

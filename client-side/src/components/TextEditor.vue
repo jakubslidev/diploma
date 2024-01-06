@@ -1,3 +1,5 @@
+//TextEditor.vue
+
 <template>
     <div class="text-editor-container">
       <div class="editor-toolbar" v-if="editor">
@@ -9,13 +11,14 @@
   </select>
   <!-- Other buttons can be added here if needed -->
   <button
-    v-for="item in items"
-    :key="item.title"
-    @click="handleButtonClick(item)"
-    :class="{ 'is-active': item.isActive && item.isActive() }"
-  >
-    {{ item.title }}
-  </button>
+  v-for="item in items"
+  :key="item.title"
+  @click="handleButtonClick(item)"
+  :class="{ 'is-active': item.isActive && item.isActive() }"
+>
+<font-awesome-icon :icon="item.icon" />
+</button>
+
 </div>
       <editor-content class="editor" v-if="editor" :editor="editor" @keydown.tab.prevent="handleTab" />
     </div>
@@ -24,10 +27,21 @@
   <script>
   import StarterKit from '@tiptap/starter-kit'
   import { Editor, EditorContent } from '@tiptap/vue-3'
+  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+  import { library } from '@fortawesome/fontawesome-svg-core';
+  import { faBold, faItalic, faStrikethrough, faCode, faHeading, faParagraph, faListUl, faListOl, faTasks, faCodeBranch, faEraser, faQuoteRight, faMinus, faTextHeight, faUndoAlt, faRedoAlt, faAlignLeft, faAlignCenter, faAlignRight, faAlignJustify } from '@fortawesome/free-solid-svg-icons';
+
+  library.add(
+  faBold, faItalic, faStrikethrough, faCode, faHeading, faParagraph,
+  faListUl, faListOl, faTasks, faCodeBranch, faQuoteRight, faMinus, 
+  faTextHeight, faUndoAlt, faRedoAlt, faAlignLeft, faAlignCenter, 
+  faAlignRight, faAlignJustify, faEraser
+);
   
   export default {
     components: {
       EditorContent,
+      'font-awesome-icon': FontAwesomeIcon,
     },
   
     props: {
@@ -38,7 +52,7 @@
     },
   
     emits: ['update:modelValue'],
-  
+
     data() {
       return {
         editor: null,
@@ -64,35 +78,32 @@
 					isActive: () => this.editor.isActive('strike'),
 				},
 				{
-					icon: 'code-view',
+					icon: 'code',
 					title: 'Code',
 					action: () => this.editor.chain().focus().toggleCode().run(),
 					isActive: () => this.editor.isActive('code'),
 				},
+				// {
+				// 	icon: 'highlighter',
+				// 	title: 'Highlight',
+				// 	action: () => this.editor.chain().focus().toggleHighlight().run(),
+				// 	isActive: () => this.editor.isActive('highlight'),
+				// },
 				{
-					icon: 'mark-pen-line',
-					title: 'Highlight',
-					action: () => this.editor.chain().focus().toggleHighlight().run(),
-					isActive: () => this.editor.isActive('highlight'),
-				},
-				{
-					type: 'divider',
-				},
-				{
-					icon: 'h-1',
+					icon: 'heading',
 					title: 'Heading 1',
 					action: () => this.editor.chain().focus().toggleHeading({ level: 1 }).run(),
 					isActive: () => this.editor.isActive('heading', { level: 1 }),
 				},
 				{
-					icon: 'h-2',
+					icon: 'heading',
 					title: 'Heading 2',
 					action: () => this.editor.chain().focus().toggleHeading({ level: 2 }).run(),
 					isActive: () => this.editor.isActive('heading', { level: 2 }),
 				},
 				// add H3
 				{
-					icon: 'h-3',
+					icon: 'heading',
 					title: 'Heading 3',
 					action: () => this.editor.chain().focus().toggleHeading({ level: 3 }).run(),
 					isActive: () => this.editor.isActive('heading', { level: 3 }),
@@ -104,53 +115,47 @@
 					isActive: () => this.editor.isActive('paragraph'),
 				},
 				{
-					icon: 'list-unordered',
+					icon: 'list-ul',
 					title: 'Bullet List',
 					action: () => this.editor.chain().focus().toggleBulletList().run(),
 					isActive: () => this.editor.isActive('bulletList'),
 				},
 				{
-					icon: 'list-ordered',
+					icon: 'list-ol',
 					title: 'Ordered List',
 					action: () => this.editor.chain().focus().toggleOrderedList().run(),
 					isActive: () => this.editor.isActive('orderedList'),
 				},
 				{
-					icon: 'list-check-2',
+					icon: 'tasks',
 					title: 'Task List',
 					action: () => this.editor.chain().focus().toggleTaskList().run(),
 					isActive: () => this.editor.isActive('taskList'),
 				},
 				{
-					icon: 'code-box-line',
+					icon: 'code-branch',
 					title: 'Code Block',
 					action: () => this.editor.chain().focus().toggleCodeBlock().run(),
 					isActive: () => this.editor.isActive('codeBlock'),
 				},
 				{
-					type: 'divider',
-				},
-				{
-					icon: 'double-quotes-l',
+					icon: 'quote-right',
 					title: 'Blockquote',
 					action: () => this.editor.chain().focus().toggleBlockquote().run(),
 					isActive: () => this.editor.isActive('blockquote'),
 				},
 				{
-					icon: 'separator',
+					icon: 'minus',
 					title: 'Horizontal Rule',
 					action: () => this.editor.chain().focus().setHorizontalRule().run(),
 				},
 				{
-					type: 'divider',
-				},
-				{
-					icon: 'text-wrap',
+					icon: 'text-height',
 					title: 'Hard Break',
 					action: () => this.editor.chain().focus().setHardBreak().run(),
 				},
 				{
-					icon: 'format-clear',
+					icon: 'eraser',
 					title: 'Clear Format',
 					action: () => this.editor.chain()
 						.focus()
@@ -159,42 +164,15 @@
 						.run(),
 				},
 				{
-					type: 'divider',
-				},
-				{
-					icon: 'arrow-go-back-line',
+					icon: 'undo-alt',
 					title: 'Undo',
 					action: () => this.editor.chain().focus().undo().run(),
 				},
 				{
-					icon: 'arrow-go-forward-line',
+					icon: 'redo-alt',
 					title: 'Redo',
 					action: () => this.editor.chain().focus().redo().run(),
 				},
-        {
-    icon: 'align-left',
-    title: 'Align Left',
-    action: () => this.editor.chain().focus().setTextAlign('left').run(),
-    isActive: () => this.editor.isActive('textAlign', { align: 'left' }),
-  },
-  {
-    icon: 'align-center',
-    title: 'Align Center',
-    action: () => this.editor.chain().focus().setTextAlign('center').run(),
-    isActive: () => this.editor.isActive('textAlign', { align: 'center' }),
-  },
-  {
-    icon: 'align-right',
-    title: 'Align Right',
-    action: () => this.editor.chain().focus().setTextAlign('right').run(),
-    isActive: () => this.editor.isActive('textAlign', { align: 'right' }),
-  },
-  {
-    icon: 'align-justify',
-    title: 'Justify',
-    action: () => this.editor.chain().focus().setTextAlign('justify').run(),
-    isActive: () => this.editor.isActive('textAlign', { align: 'justify' }),
-  },
 			],
       };
     },
@@ -242,9 +220,9 @@
       toggleCode() {
         this.editor.chain().focus().toggleCode().run();
       },
-      toggleHighlight() {
-        this.editor.chain().focus().toggleHighlight().run();
-      },
+      // toggleHighlight() {
+      //   this.editor.chain().focus().toggleHighlight().run();
+      // },
       toggleColor() {
         const color = prompt('Enter a color (e.g., red):');
         if (color) {
@@ -281,9 +259,6 @@
         if (this.editor.can().chain().focus().redo().run()) {
           this.$emit('update:modelValue', this.editor.getHTML());
         }
-      },
-      setTextAlign(align) {
-        this.editor.chain().focus().setTextAlign(align).run();
       },
     },
   
@@ -323,7 +298,7 @@
   color: #ffffff;
   padding: 10px;
   text-align: left;
-  height: 800px;
+  height: 700px;
   overflow-y: auto;
   display: flex; /* Use flexbox for layout */
   flex-direction: column; /* Stack child elements vertically */

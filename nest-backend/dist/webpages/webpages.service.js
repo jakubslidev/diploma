@@ -55,6 +55,18 @@ let WebpagesService = class WebpagesService {
             return false;
         }
     }
+    async findAllUsersForWebpage(webpageId) {
+        try {
+            const webpage = await this.webpageModel.findById(webpageId).exec();
+            if (!webpage) {
+                return [];
+            }
+            return webpage.users;
+        }
+        catch (error) {
+            throw new Error('Error fetching users for webpage: ' + error.message);
+        }
+    }
 };
 WebpagesService = __decorate([
     (0, common_1.Injectable)(),

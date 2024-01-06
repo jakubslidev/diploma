@@ -2,6 +2,7 @@ import * as mongoose from 'mongoose';
 export declare const WebpageSchema: mongoose.Schema<any, mongoose.Model<any, any, any, any, any, any>, {}, {}, {}, {}, mongoose.DefaultSchemaOptions, {
     users: {
         role?: string;
+        email?: string;
         user?: mongoose.Types.ObjectId;
     }[];
     posts: mongoose.Types.ObjectId[];
@@ -10,6 +11,7 @@ export declare const WebpageSchema: mongoose.Schema<any, mongoose.Model<any, any
 }, mongoose.Document<unknown, {}, {
     users: {
         role?: string;
+        email?: string;
         user?: mongoose.Types.ObjectId;
     }[];
     posts: mongoose.Types.ObjectId[];
@@ -18,6 +20,7 @@ export declare const WebpageSchema: mongoose.Schema<any, mongoose.Model<any, any
 }> & {
     users: {
         role?: string;
+        email?: string;
         user?: mongoose.Types.ObjectId;
     }[];
     posts: mongoose.Types.ObjectId[];
@@ -32,6 +35,7 @@ export interface Webpage extends mongoose.Document {
     users: Array<{
         user: mongoose.Types.ObjectId;
         role: string;
+        email: string;
     }>;
     posts: mongoose.Types.ObjectId[];
 }

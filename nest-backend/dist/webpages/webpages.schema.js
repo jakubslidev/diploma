@@ -12,6 +12,7 @@ exports.WebpageSchema = new mongoose.Schema({
                 ref: 'User',
             },
             role: String,
+            email: String,
         },
     ],
     posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }]

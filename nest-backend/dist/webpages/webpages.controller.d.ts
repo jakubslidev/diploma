@@ -12,4 +12,5 @@ export declare class WebpagesController {
     getUserRole(webpageId: string, req: any): Promise<{
         role: string;
     }>;
+    findAllUsersForWebpage(webpageId: string): Promise<any[]>;
 }

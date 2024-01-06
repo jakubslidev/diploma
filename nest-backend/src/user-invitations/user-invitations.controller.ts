@@ -25,7 +25,6 @@ async inviteUser(@Body() inviteDto: InviteDto, @Req() req) {
     return this.userInvitationsService.inviteUser(inviteDto, userId);
 }
 
-
   @UseGuards(AuthGuard('jwt2'))
   @Get()
   async listInvitations(@Param('userId') userId: string, @Req() req) {

@@ -45,4 +45,16 @@ export class WebpagesController {
     return { role };
   }
 
+  @UseGuards(AuthGuard('jwt2'))
+  @Get(':webpageId/users')
+  async findAllUsersForWebpage(@Param('webpageId') webpageId: string): Promise<any[]> {
+    try {
+      const users = await this.webpagesService.findAllUsersForWebpage(webpageId);
+      console.log(users);
+      return users;
+    } catch (error) {
+      throw new NotFoundException('Webpage not found or error fetching users: ' + error.message);
+    }
+  }
+
 }

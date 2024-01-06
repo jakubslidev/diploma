@@ -14,8 +14,11 @@
                     <li class="nav-item">
                         <router-link class="nav-link" to="/pages">Pages</router-link>
                     </li>
-                    <li class="nav-item">
-                        <router-link class="nav-link" to="/login">Login</router-link>
+                    <li class="nav-item" v-if="!isLoggedIn">
+                     <router-link class="nav-link" to="/login">Login</router-link>
+                    </li>
+                    <li class="nav-item" v-if="isLoggedIn">
+                     <button class="nav-link" @click="logout">Logout</button>
                     </li>
                     <li class="nav-item">
                         <router-link class="nav-link" to="/displayInvitations">Notifications</router-link>
@@ -25,13 +28,29 @@
         </div>
     </nav>
 </div>
-  </template>
+</template>
   
-  <script>
-  export default {
-    name: 'mainNavbar',
-  };
-  </script>
+<script>
+import { ref } from 'vue';
+import { useCookies } from 'vue3-cookies';
+import router from '@/router';
+
+export default {
+  name: 'mainNavbar',
+  setup() {
+    const { cookies } = useCookies();
+    const isLoggedIn = ref(cookies.isKey('access_token'));
+
+    const logout = () => {
+      cookies.remove('access_token');
+      isLoggedIn.value = false;
+      router.push('/login');
+    };
+
+    return { isLoggedIn, logout };
+  },
+};
+</script>
   
   <style scoped>
   /* Add any additional styling if needed */
