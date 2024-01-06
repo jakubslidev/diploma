@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -8,7 +8,10 @@ import { UsersModule } from './users/users.module';
 import { WebpagesModule } from './webpages/webpages.module';
 import { AuthzModule } from './authz/authz.module';
 import { UserInvitationsModule } from './user-invitations/user-invitations.module';
-
+import { MediaModule } from './media/media.module';
+import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static'; // Adjust the path according to your structure
+import { NoCacheMiddleware } from './no-cache.middleware';
 
 @Module({
   imports: [
@@ -19,7 +22,15 @@ import { UserInvitationsModule } from './user-invitations/user-invitations.modul
         useUnifiedTopology: true,
       }),
     }),
-    PostsModule, CategoryModule, AuthzModule, UsersModule, WebpagesModule, UserInvitationsModule
+    PostsModule, CategoryModule, AuthzModule, UsersModule, WebpagesModule, UserInvitationsModule, MediaModule, ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+      serveRoot: '/uploads',}),
   ],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(NoCacheMiddleware)
+      .forRoutes({ path: 'uploads/*', method: RequestMethod.GET }); // Apply only to uploads route
+  }
+}

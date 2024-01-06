@@ -15,7 +15,16 @@ const users_module_1 = require("./users/users.module");
 const webpages_module_1 = require("./webpages/webpages.module");
 const authz_module_1 = require("./authz/authz.module");
 const user_invitations_module_1 = require("./user-invitations/user-invitations.module");
+const media_module_1 = require("./media/media.module");
+const path_1 = require("path");
+const serve_static_1 = require("@nestjs/serve-static");
+const no_cache_middleware_1 = require("./no-cache.middleware");
 let AppModule = class AppModule {
+    configure(consumer) {
+        consumer
+            .apply(no_cache_middleware_1.NoCacheMiddleware)
+            .forRoutes({ path: 'uploads/*', method: common_1.RequestMethod.GET });
+    }
 };
 AppModule = __decorate([
     (0, common_1.Module)({
@@ -27,7 +36,10 @@ AppModule = __decorate([
                     useUnifiedTopology: true,
                 }),
             }),
-            posts_module_1.PostsModule, category_module_1.CategoryModule, authz_module_1.AuthzModule, users_module_1.UsersModule, webpages_module_1.WebpagesModule, user_invitations_module_1.UserInvitationsModule
+            posts_module_1.PostsModule, category_module_1.CategoryModule, authz_module_1.AuthzModule, users_module_1.UsersModule, webpages_module_1.WebpagesModule, user_invitations_module_1.UserInvitationsModule, media_module_1.MediaModule, serve_static_1.ServeStaticModule.forRoot({
+                rootPath: (0, path_1.join)(__dirname, '..', 'uploads'),
+                serveRoot: '/uploads',
+            }),
         ],
     })
 ], AppModule);

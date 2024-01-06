@@ -27,15 +27,17 @@
   <script>
   import StarterKit from '@tiptap/starter-kit'
   import { Editor, EditorContent } from '@tiptap/vue-3'
+  import Image from '@tiptap/extension-image';
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+  import axios from 'axios';
   import { library } from '@fortawesome/fontawesome-svg-core';
-  import { faBold, faItalic, faStrikethrough, faCode, faHeading, faParagraph, faListUl, faListOl, faTasks, faCodeBranch, faEraser, faQuoteRight, faMinus, faTextHeight, faUndoAlt, faRedoAlt, faAlignLeft, faAlignCenter, faAlignRight, faAlignJustify } from '@fortawesome/free-solid-svg-icons';
+  import { faBold, faItalic, faStrikethrough, faCode, faHeading, faParagraph, faListUl, faListOl, faTasks, faCodeBranch, faEraser, faQuoteRight, faMinus, faTextHeight, faUndoAlt, faRedoAlt, faAlignLeft, faAlignCenter, faAlignRight, faAlignJustify, faImage } from '@fortawesome/free-solid-svg-icons';
 
   library.add(
   faBold, faItalic, faStrikethrough, faCode, faHeading, faParagraph,
   faListUl, faListOl, faTasks, faCodeBranch, faQuoteRight, faMinus, 
   faTextHeight, faUndoAlt, faRedoAlt, faAlignLeft, faAlignCenter, 
-  faAlignRight, faAlignJustify, faEraser
+  faAlignRight, faAlignJustify, faEraser, faImage
 );
   
   export default {
@@ -108,6 +110,11 @@
 					action: () => this.editor.chain().focus().toggleHeading({ level: 3 }).run(),
 					isActive: () => this.editor.isActive('heading', { level: 3 }),
 				},
+        {
+					icon: 'image',
+					title: 'Insert Image',
+					action: () => this.promptForImage(),
+				},
 				{
 					icon: 'paragraph',
 					title: 'Paragraph',
@@ -178,6 +185,49 @@
     },
   
     methods: {
+      promptForImage() {
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/png, image/jpeg'); // Accept only JPEG and PNG
+    input.click(); // open file dialog
+
+    input.onchange = () => {
+      const file = input.files[0];
+      if (file) {
+        this.uploadImage(file);
+      }
+    };
+  },
+
+  async uploadImage(file) {
+  // Validate the file (check file type)
+  if (!['image/jpeg', 'image/png'].includes(file.type)) {
+    alert('Only JPG and PNG images are allowed.');
+    return;
+  }
+
+  // Prepare the file for upload (e.g., FormData)
+  const formData = new FormData();
+  formData.append('image', file);
+
+  try {
+    // Replace with your API endpoint
+    const response = await axios.post('http://localhost:3000/media/upload', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+
+    // The full URL to the image
+    // Assuming your server is running on localhost:3000 and the images are served from the /uploads directory
+    const imagePath = `http://localhost:3000/${response.data.path}`;
+    
+
+    // Insert the image in the editor at the current cursor position
+    this.editor.chain().focus().setImage({ src: imagePath }).run();
+  } catch (error) {
+    console.error('Failed to upload image:', error);
+  }
+},
+
 
         increaseEditorHeight() {
       const currentHeight = parseInt(
@@ -276,6 +326,7 @@
       this.editor = new Editor({
         extensions: [
           StarterKit,
+          Image,
           // Add other necessary extensions here
         ],
         content: this.modelValue,
