@@ -9,3 +9,8 @@
 .ProseMirror{
   min-height: 600px;
 }
+
+.ProseMirror img{
+  height: 250px;
+  width: 400px;
+}

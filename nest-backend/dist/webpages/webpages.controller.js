@@ -53,6 +53,9 @@ let WebpagesController = class WebpagesController {
             throw new common_1.NotFoundException('Webpage not found or error fetching users: ' + error.message);
         }
     }
+    async removeUser(webpageId, userId) {
+        return this.webpagesService.removeUserFromWebpage(userId, webpageId);
+    }
 };
 __decorate([
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
@@ -102,6 +105,15 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], WebpagesController.prototype, "findAllUsersForWebpage", null);
+__decorate([
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt2')),
+    (0, common_1.Delete)(':webpageId/remove-user/:userId'),
+    __param(0, (0, common_1.Param)('webpageId')),
+    __param(1, (0, common_1.Param)('userId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], WebpagesController.prototype, "removeUser", null);
 WebpagesController = __decorate([
     (0, common_1.Controller)('webpages'),
     __metadata("design:paramtypes", [webpages_service_1.WebpagesService,

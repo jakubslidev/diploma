@@ -12,6 +12,9 @@ export declare class UserInvitationsService {
     constructor(invitationModel: Model<UserInvitation>, usersService: UsersService, webpagesService: WebpagesService, webpageValidationService: WebpageValidationService);
     inviteUser(inviteDto: InviteDto, invitedBy: string): Promise<UserInvitation>;
     listInvitationsForUser(userId: string): Promise<UserInvitation[]>;
-    acceptInvitation(invitationId: string, userId: string): Promise<UserInvitation>;
+    acceptInvitation(invitationId: string, userId: string): Promise<{
+        invitation: UserInvitation;
+        accessToken: string;
+    }>;
     declineInvitation(invitationId: string, userId: string): Promise<UserInvitation>;
 }

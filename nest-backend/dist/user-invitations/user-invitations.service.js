@@ -51,18 +51,22 @@ let UserInvitationsService = class UserInvitationsService {
         if (!user)
             throw new common_1.UnauthorizedException('User not found');
         if (!user.roles) {
-            user.roles = new Map();
+            user.roles = {};
         }
-        user.roles.set(invitation.webpageId.toString(), invitation.role);
+        user.roles[invitation.webpageId.toString()] = invitation.role;
         await user.save();
-        const objectId = new mongoose_2.Types.ObjectId(userId);
         const webpage = await this.webpagesService.findById(invitation.webpageId);
         if (!webpage)
             throw new common_1.UnauthorizedException('Webpage not found');
-        webpage.users.push({ user: objectId, role: invitation.role, email: user.email });
+        webpage.users.push({ user: new mongoose_2.Types.ObjectId(userId), role: invitation.role, email: user.email });
         await webpage.save();
         invitation.status = 'accepted';
-        return invitation.save();
+        await invitation.save();
+        const accessToken = this.usersService.generateAccessToken(user);
+        return {
+            invitation,
+            accessToken
+        };
     }
     async declineInvitation(invitationId, userId) {
         const invitation = await this.invitationModel.findById(invitationId);

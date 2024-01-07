@@ -16,9 +16,11 @@ exports.WebpagesService = void 0;
 const mongoose_1 = require("mongoose");
 const common_1 = require("@nestjs/common");
 const mongoose_2 = require("@nestjs/mongoose");
+const users_service_1 = require("../users/users.service");
 let WebpagesService = class WebpagesService {
-    constructor(webpageModel) {
+    constructor(webpageModel, usersService) {
         this.webpageModel = webpageModel;
+        this.usersService = usersService;
     }
     async create(webpage) {
         const createdWebpage = new this.webpageModel(webpage);
@@ -67,11 +69,22 @@ let WebpagesService = class WebpagesService {
             throw new Error('Error fetching users for webpage: ' + error.message);
         }
     }
+    async removeUserFromWebpage(userEmail, webpageId) {
+        const user = await this.usersService.findByEmail(userEmail);
+        if (!user) {
+            throw new Error('User not found');
+        }
+        if (user.roles && user.roles.has(webpageId)) {
+            user.roles.delete(webpageId);
+            await user.save();
+        }
+        return this.webpageModel.findOneAndUpdate({ _id: webpageId }, { $pull: { users: { email: userEmail } } }, { new: true }).exec();
+    }
 };
 WebpagesService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_2.InjectModel)('Webpage')),
-    __metadata("design:paramtypes", [mongoose_1.Model])
+    __metadata("design:paramtypes", [mongoose_1.Model, users_service_1.UsersService])
 ], WebpagesService);
 exports.WebpagesService = WebpagesService;
 //# sourceMappingURL=webpages.service.js.map

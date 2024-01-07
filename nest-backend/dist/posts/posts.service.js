@@ -33,6 +33,12 @@ let PostsService = class PostsService {
     async findAllActiveForWebpage(webpageId) {
         return this.postModel.find({ webpage: new mongoose_2.Types.ObjectId(webpageId), status: 'Active' }).exec();
     }
+    async findAllActiveForWebpageLimited(webpageId) {
+        return this.postModel.find({ webpage: new mongoose_2.Types.ObjectId(webpageId), status: 'Active' })
+            .sort({ createdAt: -1 })
+            .limit(10)
+            .exec();
+    }
     async addPostToWebpage(webpageId, postData, category, status = 'Draft') {
         const post = new this.postModel(Object.assign(Object.assign({}, postData), { status }));
         post.webpage = new mongoose_2.Types.ObjectId(webpageId);
@@ -41,8 +47,32 @@ let PostsService = class PostsService {
     async updatePostStatus(postId, status) {
         return this.postModel.findByIdAndUpdate(postId, { $set: { status } }, { new: true }).exec();
     }
+    async update(id, updatePostDto) {
+        return this.postModel.findByIdAndUpdate(id, updatePostDto, { new: true }).exec();
+    }
     async deletePost(postId) {
         await this.postModel.findByIdAndDelete(postId).exec();
+    }
+    async searchPosts(webpageId, query) {
+        const searchRegex = new RegExp(query, 'i');
+        console.log(`Searching posts for webpageId: ${webpageId} with query: ${query}`);
+        try {
+            const searchResults = await this.postModel.find({
+                webpage: new mongoose_2.Types.ObjectId(webpageId),
+                status: 'Active',
+                $or: [
+                    { title: { $regex: searchRegex } },
+                    { content: { $regex: searchRegex } },
+                ],
+            }).exec();
+            console.log(`Found ${searchResults.length} posts matching query.`);
+            console.log(searchResults);
+            return searchResults;
+        }
+        catch (error) {
+            console.error('Error during post search:', error);
+            throw error;
+        }
     }
 };
 PostsService = __decorate([

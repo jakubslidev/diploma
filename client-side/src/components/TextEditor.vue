@@ -342,7 +342,7 @@
   };
   </script>
   
-  <style scoped>
+<style scoped>
 
 .text-editor-container {
   background-color: #001f3f;
@@ -377,5 +377,4 @@
 .editor-toolbar button.active {
   background-color: #555555;
 }
-
 </style>

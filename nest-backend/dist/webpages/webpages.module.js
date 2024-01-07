@@ -13,11 +13,12 @@ const webpages_controller_1 = require("./webpages.controller");
 const webpages_service_1 = require("./webpages.service");
 const webpages_schema_1 = require("./webpages.schema");
 const webpage_validation_service_1 = require("../authz/webpage-validation.service");
+const users_module_1 = require("../users/users.module");
 let WebpagesModule = class WebpagesModule {
 };
 WebpagesModule = __decorate([
     (0, common_1.Module)({
-        imports: [mongoose_1.MongooseModule.forFeature([{ name: 'Webpage', schema: webpages_schema_1.WebpageSchema }])],
+        imports: [mongoose_1.MongooseModule.forFeature([{ name: 'Webpage', schema: webpages_schema_1.WebpageSchema }]), (0, common_1.forwardRef)(() => users_module_1.UsersModule)],
         controllers: [webpages_controller_1.WebpagesController],
         providers: [webpages_service_1.WebpagesService, webpage_validation_service_1.WebpageValidationService],
         exports: [webpages_service_1.WebpagesService, mongoose_1.MongooseModule],

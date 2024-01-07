@@ -10,11 +10,14 @@
     <button @click="sendInvitation">Send Invitation</button>
 
     <div v-if="users.length > 0">
-      <h3>Users Managing This Webpage:</h3>
-      <ul>
-        <li v-for="user in users" :key="user.id">{{ user.email }} - {{ user.role }}</li>
-      </ul>
-    </div>
+    <h3>Users Managing This Webpage:</h3>
+    <ul>
+      <li v-for="user in users" :key="user.email">
+    {{ user.email }} - {{ user.role }}
+    <span class="remove-user" @click="removeUser(user.email)">R</span>
+  </li>
+    </ul>
+  </div>
   </div>
 </template>
 
@@ -86,8 +89,42 @@ const sendInvitation = async () => {
   }
 };
 
+
+const removeUser = async (userEmail) => {
+  if (confirm("Are you sure you want to remove this user?")) {
+    try {
+      await axios.delete(`http://localhost:3000/webpages/${webpageId.value}/remove-user/${encodeURIComponent(userEmail)}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      alert('User removed successfully!');
+      fetchUsers(); // Refresh the list of users
+    } catch (error) {
+      console.error('Error removing user:', error);
+    }
+  }
+};
+
 onMounted(() => {
   fetchUsers();
 });
+
+
 </script>
 
+
+
+<style scoped>
+/* ... existing styles ... */
+
+.remove-user {
+  cursor: pointer;
+  color: red;
+  margin-left: 10px;
+}
+
+.remove-user:hover {
+  text-decoration: underline;
+}
+</style>

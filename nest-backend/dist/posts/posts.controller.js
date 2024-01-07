@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const posts_service_1 = require("./posts.service");
 const passport_1 = require("@nestjs/passport");
 const webpage_validation_service_1 = require("../authz/webpage-validation.service");
+const update_post_dto_1 = require("./update-post.dto");
 let PostsController = class PostsController {
     constructor(postsService, webpageValidationService) {
         this.postsService = postsService;
@@ -49,11 +50,20 @@ let PostsController = class PostsController {
     async findAllForUserView(webpageId, req) {
         return this.postsService.findAllActiveForWebpage(webpageId);
     }
+    async findAllForWebpageLimited(webpageId) {
+        return this.postsService.findAllActiveForWebpageLimited(webpageId);
+    }
     updatePostStatus(id, status) {
         return this.postsService.updatePostStatus(id, status);
     }
+    async updatePost(id, updatePostDto) {
+        return this.postsService.update(id, updatePostDto);
+    }
     deletePost(id) {
         return this.postsService.deletePost(id);
+    }
+    search(webpageId, query) {
+        return this.postsService.searchPosts(webpageId, query);
     }
 };
 __decorate([
@@ -107,6 +117,13 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PostsController.prototype, "findAllForUserView", null);
 __decorate([
+    (0, common_1.Get)('/view/webpage/:webpageId/limited'),
+    __param(0, (0, common_1.Param)('webpageId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], PostsController.prototype, "findAllForWebpageLimited", null);
+__decorate([
     (0, common_1.Patch)(':id/updateStatus'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)('status')),
@@ -115,12 +132,29 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], PostsController.prototype, "updatePostStatus", null);
 __decorate([
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt2')),
+    (0, common_1.Patch)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, update_post_dto_1.UpdatePostDto]),
+    __metadata("design:returntype", Promise)
+], PostsController.prototype, "updatePost", null);
+__decorate([
     (0, common_1.Delete)(':id/deleteSelected'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], PostsController.prototype, "deletePost", null);
+__decorate([
+    (0, common_1.Get)('/search/:webpageId'),
+    __param(0, (0, common_1.Param)('webpageId')),
+    __param(1, (0, common_1.Query)('q')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", void 0)
+], PostsController.prototype, "search", null);
 PostsController = __decorate([
     (0, common_1.Controller)('posts'),
     __metadata("design:paramtypes", [posts_service_1.PostsService,

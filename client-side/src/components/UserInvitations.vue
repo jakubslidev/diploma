@@ -38,11 +38,14 @@ import MainNavbar from '@/components/mainNavbar.vue';
   
   const acceptInvitation = async (invitationId) => {
     try {
-      await axios.post(`http://localhost:3000/user-invitations/accept/${invitationId}`, {}, {
+      const response = await axios.post(`http://localhost:3000/user-invitations/accept/${invitationId}`, {}, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
+      const newAccessToken = response.data.accessToken;
+      // Update the cookie with the new access token
+      cookies.set('access_token', newAccessToken, '4h');
       await fetchInvitations(); // Refresh the list after accepting
     } catch (error) {
       console.error('Error accepting invitation:', error);

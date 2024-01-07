@@ -1,6 +1,6 @@
 // webpages/webpages.controller.ts
 
-import { Controller, Get, Post, Body, Param, Req, UseGuards, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Req, UseGuards, NotFoundException, Delete } from '@nestjs/common';
 import { WebpagesService } from './webpages.service';
 import { Webpage } from './webpages.schema'
 import { AuthGuard } from '@nestjs/passport';
@@ -55,6 +55,12 @@ export class WebpagesController {
     } catch (error) {
       throw new NotFoundException('Webpage not found or error fetching users: ' + error.message);
     }
+  }
+
+  @UseGuards(AuthGuard('jwt2'))
+  @Delete(':webpageId/remove-user/:userId')
+  async removeUser(@Param('webpageId') webpageId: string, @Param('userId') userId: string): Promise<Webpage> {
+    return this.webpagesService.removeUserFromWebpage(userId, webpageId);
   }
 
 }

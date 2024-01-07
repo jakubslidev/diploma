@@ -36,35 +36,42 @@ export class UserInvitationsService {
     return this.invitationModel.find({ invitee: userId, status: 'pending' }).exec();
   }
 
-  async acceptInvitation(invitationId: string, userId: string): Promise<UserInvitation> {
+  async acceptInvitation(invitationId: string, userId: string): Promise<{ invitation: UserInvitation, accessToken: string }> {
     const invitation = await this.invitationModel.findById(invitationId);
     if (!invitation || invitation.invitee.toString() !== userId || invitation.status !== 'pending') {
       throw new UnauthorizedException('Invalid or already processed invitation');
     }
-
+  
     // Update the User document
-  const user = await this.usersService.findById(userId);
-  if (!user) throw new UnauthorizedException('User not found');
-
-  if (!user.roles) {
-    user.roles = new Map();
-  }
-
-  user.roles.set(invitation.webpageId.toString(), invitation.role);
-  await user.save();
-
-    const objectId = new Types.ObjectId(userId);
-
+    const user = await this.usersService.findById(userId);
+    if (!user) throw new UnauthorizedException('User not found');
+  
+    // Update user's roles
+    if (!user.roles) {
+      user.roles = {};
+    }
+    user.roles[invitation.webpageId.toString()] = invitation.role;
+    await user.save();
+  
     // Update the Webpage document
     const webpage = await this.webpagesService.findById(invitation.webpageId);
     if (!webpage) throw new UnauthorizedException('Webpage not found');
-
-    webpage.users.push({ user: objectId, role: invitation.role, email: user.email});
+  
+    webpage.users.push({ user: new Types.ObjectId(userId), role: invitation.role, email: user.email });
     await webpage.save();
-
+  
     // Update the invitation status
     invitation.status = 'accepted';
-    return invitation.save();
+    await invitation.save();
+  
+    // Generate new access token with updated roles
+    const accessToken = this.usersService.generateAccessToken(user);
+  
+    // Return both the updated invitation and the access token
+    return {
+      invitation,
+      accessToken
+    };
   }
 
   async declineInvitation(invitationId: string, userId: string): Promise<UserInvitation> {

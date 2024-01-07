@@ -1,14 +1,16 @@
 // webpages/webpages.service.ts
 
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Webpage } from './webpages.schema';
 import { JwtPayload } from '../authz/jwt-payload.interface'; // Import the JwtPayload interface
+import { Types } from 'mongoose';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class WebpagesService {
-  constructor(@InjectModel('Webpage') private readonly webpageModel: Model<Webpage>) {}
+  constructor(@InjectModel('Webpage') private readonly webpageModel: Model<Webpage>, private usersService: UsersService) {}
 
   async create(webpage: Webpage): Promise<Webpage> {
     const createdWebpage = new this.webpageModel(webpage);
@@ -68,4 +70,27 @@ export class WebpagesService {
       throw new Error('Error fetching users for webpage: ' + error.message);
     }
   }
+
+
+  async removeUserFromWebpage(userEmail: string, webpageId: string): Promise<Webpage> {
+    // Find the user by email first
+    const user = await this.usersService.findByEmail(userEmail);
+    if (!user) {
+      throw new Error('User not found');
+    }
+  
+    // Remove the role from the user's roles
+    if (user.roles && user.roles.has(webpageId)) {
+      user.roles.delete(webpageId); // Removes the role for the webpage
+      await user.save(); // Save the updated user document
+    }
+  
+    // Remove the user from the webpage
+    return this.webpageModel.findOneAndUpdate(
+      { _id: webpageId },
+      { $pull: { users: { email: userEmail } } }, // Remove the user with the specified email
+      { new: true }
+    ).exec();
+  }
+
 }

@@ -56,6 +56,7 @@
       <div class="d-flex align-items-center">
         <input type="checkbox" class="me-2" v-model="post.selected" @change="handleCheckboxChange(post)" />
         <router-link :to="'/post/' + post._id">{{ post.title }} | {{ post.status }}</router-link>
+        <router-link :to="{ name: 'EditPost', params: { postId: post._id }}" class="btn btn-primary">Edit</router-link>
       </div>
     </li>
   </ul>
@@ -109,7 +110,6 @@ export default {
         updateSelectedPosts(post);
       });
     };
-
 
     const selectAllOnPage = () => {
       const startIndex = currentPage.value * itemsPerPage;

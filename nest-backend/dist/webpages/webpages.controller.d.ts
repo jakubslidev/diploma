@@ -13,4 +13,5 @@ export declare class WebpagesController {
         role: string;
     }>;
     findAllUsersForWebpage(webpageId: string): Promise<any[]>;
+    removeUser(webpageId: string, userId: string): Promise<Webpage>;
 }

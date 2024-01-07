@@ -11,6 +11,8 @@ import PageView from '../views/PageView.vue'
 import CategoryPosts from '../views/CategoryPosts.vue'
 import UnauthorizedError from '../views/UnauthorizedError.vue'
 import DisplayInvitations from '../views/DisplayInvitations.vue'
+import EditPost from '../views/EditPost.vue'
+import SearchView from '../views/SearchView.vue'
 const routes = [
   {
     path: '/pages',
@@ -61,6 +63,11 @@ const routes = [
     component: CreatePost,
   },
   {
+    path: '/office/:webpageId/posts/:postId/edit',
+    name: 'EditPost',
+    component: EditPost,
+  },
+  {
     path: '/office/:webpageId/categories',
     name: 'CategoryAdd',
     component: CategoryAdd,
@@ -74,6 +81,11 @@ const routes = [
     path: '/view/:webpageId/:categoryId',
     name: 'categoryView',
     component: CategoryPosts,
+  },
+  {
+    path: '/view/:webpageId/search',
+    name: 'searchView',
+    component: SearchView,
   },
   {
     path: '/unauthorizedError',
