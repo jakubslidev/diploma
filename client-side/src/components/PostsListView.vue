@@ -191,7 +191,7 @@ export default {
 
 .post-entry {
   margin-bottom: 1rem; /* Adds spacing between post entries */
-  font-size: 10px;
+  font-size: 15px;
 }
 
 .post-link {

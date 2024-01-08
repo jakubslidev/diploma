@@ -4,7 +4,7 @@
     <div class="main-content">
       <h1 class="welcome-title" ref="welcomeTitle"><span id="cursor">{{ dynamicText + "|" }}</span></h1>
       <div class="button-container">
-        <button class="get-started-button">GET STARTED</button>
+        <button class="get-started-button">REGISTER</button>
       </div>
     </div>
   </div>

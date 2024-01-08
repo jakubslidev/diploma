@@ -8,10 +8,10 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <router-link class="nav-link" to="/about">About</router-link>
-                    </li>
-                    <li class="nav-item">
+                    </li> -->
+                    <li class="nav-item" v-if="isLoggedIn">
                         <router-link class="nav-link" to="/pages">Pages</router-link>
                     </li>
                     <li class="nav-item" v-if="!isLoggedIn">
@@ -20,7 +20,7 @@
                     <li class="nav-item" v-if="isLoggedIn">
                      <button class="nav-link" @click="logout">Logout</button>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" v-if="isLoggedIn">
                         <router-link class="nav-link" to="/displayInvitations">Notifications</router-link>
                     </li>
                 </ul>

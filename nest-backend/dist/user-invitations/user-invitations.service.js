@@ -51,10 +51,13 @@ let UserInvitationsService = class UserInvitationsService {
         if (!user)
             throw new common_1.UnauthorizedException('User not found');
         if (!user.roles) {
-            user.roles = {};
+            user.roles = new Map();
         }
-        user.roles[invitation.webpageId.toString()] = invitation.role;
+        console.log("Current roles before update:", user.roles);
+        user.roles.set(invitation.webpageId.toString(), invitation.role);
+        console.log("Updated roles:", user.roles);
         await user.save();
+        console.log("User after save:", user);
         const webpage = await this.webpagesService.findById(invitation.webpageId);
         if (!webpage)
             throw new common_1.UnauthorizedException('Webpage not found');
