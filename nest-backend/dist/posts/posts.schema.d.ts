@@ -9,6 +9,8 @@ export declare class Post extends Document {
     subcategories: string[];
     createdAt: Date;
     status: string;
+    thumbnailBig: string;
+    thumbnailSmall: string;
 }
 export declare const PostSchema: mongoose.Schema<Post, mongoose.Model<Post, any, any, any, Document<unknown, any, Post> & Post & {
     _id: mongoose.Types.ObjectId;

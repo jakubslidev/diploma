@@ -10,5 +10,11 @@ export class UpdatePostDto {
   @IsOptional()
   readonly content?: string;
 
-  // Include other properties that can be updated
+  @IsString()
+  @IsOptional()
+  readonly thumbnailBig?: string; 
+
+  @IsString()
+  @IsOptional()
+  readonly thumbnailSmall: string;
 }

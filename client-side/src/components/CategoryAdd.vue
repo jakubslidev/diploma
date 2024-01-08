@@ -70,15 +70,19 @@ export default {
     };
 
     const fetchCategories = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3000/categories?webpageId=${route.params.webpageId}`);
-        categories.value = response.data;
-        console.log(categories.value);
-      } catch (error) {
-        console.error(error);
-        alert('Error fetching categories. Please try again.');
-      }
-    };
+    const url = `http://localhost:3000/categories/webpage/${route.params.webpageId}`;
+
+    try {
+      const response = await axios.get(url);
+
+      categories.value = response.data;
+      console.log(categories.value);
+    } catch (error) {
+      console.error(error);
+      alert('Error fetching categories. Please try again.');
+    }
+  };
+
 
     onMounted(async () => {
       await fetchCategories(); // Fetch categories when the component is mounted

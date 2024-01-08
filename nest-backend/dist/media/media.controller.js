@@ -34,6 +34,20 @@ let MediaController = class MediaController {
             res.status(500).send('Failed to process image.');
         }
     }
+    async uploadThumbnail(file, res) {
+        if (!file) {
+            return res.status(400).send('No file uploaded.');
+        }
+        try {
+            const { bigPath, smallPath } = await this.mediaService.resizeAndSaveThumbnail(file);
+            console.log(bigPath, smallPath);
+            res.status(201).json({ bigPath, smallPath });
+        }
+        catch (error) {
+            console.error('Failed to resize thumbnail:', error);
+            res.status(500).send('Failed to process thumbnail.');
+        }
+    }
 };
 __decorate([
     (0, common_1.Post)('upload'),
@@ -44,6 +58,15 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], MediaController.prototype, "uploadFile", null);
+__decorate([
+    (0, common_1.Post)('upload-thumbnail'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('thumbnail', multer_config_1.multerOptions)),
+    __param(0, (0, common_1.UploadedFile)()),
+    __param(1, (0, common_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], MediaController.prototype, "uploadThumbnail", null);
 MediaController = __decorate([
     (0, common_1.Controller)('media'),
     __metadata("design:paramtypes", [media_service_1.MediaService])

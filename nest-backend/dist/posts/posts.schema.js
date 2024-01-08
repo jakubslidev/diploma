@@ -47,6 +47,14 @@ __decorate([
     (0, mongoose_1.Prop)({ default: 'Draft', enum: ['Active', 'Draft'] }),
     __metadata("design:type", String)
 ], Post.prototype, "status", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Post.prototype, "thumbnailBig", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Post.prototype, "thumbnailSmall", void 0);
 Post = __decorate([
     (0, mongoose_1.Schema)()
 ], Post);

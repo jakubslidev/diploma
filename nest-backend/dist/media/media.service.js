@@ -16,13 +16,35 @@ let MediaService = class MediaService {
     constructor() {
         this.uploadPath = 'uploads';
     }
-    async resizeAndSaveImage(file) {
-        const imagePath = (0, path_2.join)(this.uploadPath, file.filename);
+    async resizeAndSaveThumbnail(file) {
+        const filename = (0, uuid_1.v4)() + (0, path_1.extname)(file.originalname);
+        const bigPath = (0, path_2.join)(this.uploadPath, 'big_' + filename);
+        const smallPath = (0, path_2.join)(this.uploadPath, 'small_' + filename);
         const image = await jimp.read(file.path);
         await image
-            .resize(800, 600, jimp.RESIZE_BEZIER)
-            .quality(80)
-            .writeAsync(imagePath);
+            .resize(598, 312)
+            .writeAsync(bigPath);
+        await image
+            .resize(398, 312)
+            .writeAsync(smallPath);
+        return {
+            bigPath: `${this.uploadPath}/big_${filename}`,
+            smallPath: `${this.uploadPath}/small_${filename}`
+        };
+    }
+    async resizeAndSaveImage(file) {
+        const imagePath = `${this.uploadPath}/${file.filename}`;
+        const image = await jimp.read(file.path);
+        if (image.bitmap.width > 800 || image.bitmap.height > 600) {
+            await image
+                .resize(800, jimp.AUTO)
+                .quality(80);
+            await image.writeAsync(imagePath);
+        }
+        else {
+            const originalImage = await jimp.read(file.path);
+            await originalImage.writeAsync(imagePath);
+        }
         return imagePath;
     }
     saveImageFile(file) {

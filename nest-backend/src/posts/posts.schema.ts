@@ -1,3 +1,4 @@
+//post.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import * as mongoose from 'mongoose';
@@ -30,6 +31,13 @@ export class Post extends Document {
 
   @Prop({ default: 'Draft', enum: ['Active', 'Draft'] })
   status: string; // "Active" or "Draft"
+
+  @Prop()
+  thumbnailBig: string;
+
+  @Prop()
+  thumbnailSmall: string;
+
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post);

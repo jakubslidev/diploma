@@ -1,6 +1,16 @@
+<!-- CreatePost.vue -->
 <template>
   <div class="form-card">
     <h2>Create Post</h2>
+
+    <div class="thumbnail-upload">
+  <label for="thumbnail">Post Thumbnail:</label>
+  <input type="file" id="thumbnail" @change="uploadThumbnail" accept="image/jpeg, image/png">
+  <img v-if="thumbnailPathSmall" :src="thumbnailPathSmall" alt="Thumbnail preview" />
+    </div>
+    <br>
+    <br>
+    <br>
     <form @submit.prevent="handleSubmit" class="form-grid">
       <label for="title">Title:</label>
       <input v-model="title" type="text" id="title" required><br>
@@ -68,8 +78,11 @@ export default {
     const subcategories = ref([]);
     const categories = ref([]);
     const route = useRoute();
+    const thumbnailPathBig = ref('');
+    const thumbnailPathSmall = ref('');
     const { cookies } = useCookies(['access_token']);
     let selectedCategoryObj = null;
+
     const handleSubmit = async () => {
       
       const accessToken = cookies.get('access_token');
@@ -85,6 +98,8 @@ export default {
             categoryName: selectedCategoryObj.name.toString(),
             subcategories: selectedSubcategories.value, // Pass selected subcategories to the backend
             createdAt: currentDate.toISOString(),
+            thumbnailBig: thumbnailPathBig.value, 
+            thumbnailSmall: thumbnailPathSmall.value,
           },
           {
             headers: {
@@ -108,6 +123,29 @@ export default {
         categories.value = response.data;
       } catch (error) {
         console.error('Error fetching categories:', error.message);
+      }
+    };
+
+    const uploadThumbnail = async (event) => {
+      const file = event.target.files[0];
+      if (!file) {
+        alert('Please select an image.');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('thumbnail', file);
+
+      try {
+        const response = await axios.post('http://localhost:3000/media/upload-thumbnail', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+
+        console.log('Thumbnail uploaded:', response.data.smallPath);
+        thumbnailPathSmall.value = `http://localhost:3000/${response.data.smallPath}`;
+        thumbnailPathBig.value = `http://localhost:3000/${response.data.bigPath}`;
+      } catch (error) {
+        console.error('Failed to upload thumbnail:', error);
       }
     };
 
@@ -156,6 +194,9 @@ export default {
       selectedSubcategories,
       categories,
       subcategories,
+      thumbnailPathSmall,
+      thumbnailPathBig,
+      uploadThumbnail,
       handleSubmit,
       fetchSubcategories,
       addSubcategory,

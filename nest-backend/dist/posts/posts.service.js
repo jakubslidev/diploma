@@ -36,7 +36,7 @@ let PostsService = class PostsService {
     async findAllActiveForWebpageLimited(webpageId) {
         return this.postModel.find({ webpage: new mongoose_2.Types.ObjectId(webpageId), status: 'Active' })
             .sort({ createdAt: -1 })
-            .limit(10)
+            .limit(7)
             .exec();
     }
     async addPostToWebpage(webpageId, postData, category, status = 'Draft') {
@@ -55,7 +55,6 @@ let PostsService = class PostsService {
     }
     async searchPosts(webpageId, query) {
         const searchRegex = new RegExp(query, 'i');
-        console.log(`Searching posts for webpageId: ${webpageId} with query: ${query}`);
         try {
             const searchResults = await this.postModel.find({
                 webpage: new mongoose_2.Types.ObjectId(webpageId),
@@ -65,8 +64,6 @@ let PostsService = class PostsService {
                     { content: { $regex: searchRegex } },
                 ],
             }).exec();
-            console.log(`Found ${searchResults.length} posts matching query.`);
-            console.log(searchResults);
             return searchResults;
         }
         catch (error) {

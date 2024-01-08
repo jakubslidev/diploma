@@ -3,11 +3,11 @@
     <!-- First Row -->
     <div class="row main-row align-items-start">
       <!-- First Column (Original Post-box) -->
-      <div class="col-lg-6">
+      <div class="col-lg-6" v-if="posts.length > 0 && posts[0].thumbnailBig">
         <div class="card card-big"> <!-- Add class card-big to the first card in the first row -->
           <!-- Space for picture -->
           <div class="card-background">
-            <img src="../assets/images/test.png" alt="Ooops" style="height: 66.67%; object-fit: cover;">
+            <img :src="posts[0].thumbnailBig" alt="Thumbnail image">
           </div>
           <!-- Title inside the border -->
           <div class="content">
@@ -28,7 +28,7 @@
         <div class="text-box">
           <div v-for="(post) in displayedPosts2" :key="post._id" class="post-entry">
             <router-link :to="'/post/' + post._id" class="post-link">
-              <h4>{{ post.title }}</h4>
+              <h8>{{ post.title }}</h8>
             </router-link>
           <p>{{ new Date(post.createdAt).toUTCString() }}</p>
         </div>
@@ -36,12 +36,13 @@
     </div>  
     </div>
     <!-- Subsequent Rows (Converted to Cards) -->
-    <div class="row align-items-start">
-      <div class="col-lg-4" v-for="(post) in displayedPosts" :key="post._id">
-        <div class="card card-small">
-          <div class="card-background">
-            <img src="../assets/images/smaller-test.png" alt="Ooops" style="height: 66.67%; object-fit: cover;">
-          </div>
+    <div class="row align-items-start" v-if="posts.length > 0 && posts[0].thumbnailBig">
+      <div class="col-lg-4" v-for="(post, index) in displayedPosts" :key="post._id">
+    <div class="card card-small">
+      <div class="card-background">
+        <!-- This is not necessary since you already have the post object, but here's how you could use the index: -->
+        <img :src="posts[index+1].thumbnailSmall || 'path/to/default/placeholder.png'" alt="Thumbnail" />
+      </div>
           <div class="content">
             <div class="card-category">{{ post.categoryName }}</div>
             <router-link :to="'/post/' + post._id">
@@ -69,6 +70,7 @@ export default {
       try {
         const response = await axios.get(`http://localhost:3000/posts/view/webpage/${webpageId}/withoutauth`);
         posts.value = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        console.log(posts);
       } catch (error) {
         console.error('Error fetching posts:', error.message);
       }
@@ -83,6 +85,7 @@ export default {
         console.error('Error fetching limited posts:', error.message);
       }
     };
+
 
     onMounted(() => {
       const webpageId = route.params.webpageId;
@@ -191,6 +194,7 @@ export default {
 
 .post-entry {
   margin-bottom: 1rem; /* Adds spacing between post entries */
+  font-size: 10px;
 }
 
 .post-link {

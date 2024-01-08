@@ -28,8 +28,8 @@ export class PostsService {
 
   async findAllActiveForWebpageLimited(webpageId: string): Promise<Post[]> {
     return this.postModel.find({ webpage: new Types.ObjectId(webpageId), status: 'Active' })
-      .sort({ createdAt: -1 }) // Sort by createdAt date, descending (newest first)
-      .limit(10) // Limit to 10 documents
+      .sort({ createdAt: -1 }) // -1 means descending order
+      .limit(7) 
       .exec();
   }
 
@@ -37,7 +37,7 @@ export class PostsService {
     webpageId: string,
     postData: Partial<Post>,
     category: string,
-    status: string = 'Draft', // default to 'Draft'
+    status: string = 'Draft', // Draft as default status because we don't want to publish the post immediately
   ): Promise<Post> {
     const post = new this.postModel({ ...postData, status });
     post.webpage = new Types.ObjectId(webpageId);
