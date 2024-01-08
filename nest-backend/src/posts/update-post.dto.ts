@@ -17,4 +17,12 @@ export class UpdatePostDto {
   @IsString()
   @IsOptional()
   readonly thumbnailSmall: string;
+
+  @IsString()
+  @IsOptional()
+  readonly titleColor: string;
+
+  @IsString()
+  @IsOptional()
+  readonly categoryColor: string;
 }

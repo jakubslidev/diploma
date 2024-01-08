@@ -4,22 +4,19 @@
     <div class="row main-row align-items-start">
       <!-- First Column (Original Post-box) -->
       <div class="col-lg-6" v-if="posts.length > 0 && posts[0].thumbnailBig">
-        <div class="card card-big"> <!-- Add class card-big to the first card in the first row -->
-          <!-- Space for picture -->
+        <div class="card card-big">
           <div class="card-background">
             <img :src="posts[0].thumbnailBig" alt="Thumbnail image">
           </div>
-          <!-- Title inside the border -->
           <div class="content">
-            <div class="card-category">
+            <div class="card-category" :style="{ color: posts[0].categoryColor }">
               <p v-if="posts.length > 0">{{ posts[0].categoryName }}</p>
             </div>
             <div v-if="posts.length > 0">
               <router-link :to="'/post/' + posts[0]._id">
-                <h3 class="card-heading" v-if="posts.length > 0" >{{ posts[0].title }}</h3>
+                <h3 class="card-heading" v-if="posts.length > 0" :style="{ color: posts[0].titleColor }">{{ posts[0].title }}</h3>
               </router-link>
             </div>
-              
           </div>
         </div>
       </div>
@@ -44,9 +41,9 @@
         <img :src="posts[index+1].thumbnailSmall || 'path/to/default/placeholder.png'" alt="Thumbnail" />
       </div>
           <div class="content">
-            <div class="card-category">{{ post.categoryName }}</div>
+            <div class="card-category" :style="{color: posts[index+1].categoryColor}">{{ post.categoryName }}</div>
             <router-link :to="'/post/' + post._id">
-              <h3 class="card-heading">{{ post.title }}</h3>
+              <h3 class="card-heading" :style="{color: posts[index+1].titleColor}">{{ post.title }}</h3>
             </router-link>
           </div>
         </div>

@@ -3,4 +3,6 @@ export declare class UpdatePostDto {
     readonly content?: string;
     readonly thumbnailBig?: string;
     readonly thumbnailSmall: string;
+    readonly titleColor: string;
+    readonly categoryColor: string;
 }

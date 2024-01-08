@@ -38,6 +38,11 @@ export class Post extends Document {
   @Prop()
   thumbnailSmall: string;
 
+  @Prop()
+  titleColor: string;
+
+  @Prop()
+  categoryColor: string;
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post);

@@ -55,6 +55,14 @@ __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
 ], Post.prototype, "thumbnailSmall", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Post.prototype, "titleColor", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Post.prototype, "categoryColor", void 0);
 Post = __decorate([
     (0, mongoose_1.Schema)()
 ], Post);

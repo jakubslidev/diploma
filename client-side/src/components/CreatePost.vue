@@ -51,6 +51,12 @@
         </li>
       </ul>
 
+      <label for="titleColor">Title Color:</label>
+      <input type="color" v-model="titleColor" id="titleColor"><br>
+
+      <label for="categoryColor">Category Color:</label>
+      <input type="color" v-model="categoryColor" id="categoryColor"><br>
+
       <button type="submit">Create Post</button>
     </form>
   </div>
@@ -80,6 +86,8 @@ export default {
     const route = useRoute();
     const thumbnailPathBig = ref('');
     const thumbnailPathSmall = ref('');
+    const titleColor = ref('#ffffff'); // Default white
+    const categoryColor = ref('#ffffff'); // Default white
     const { cookies } = useCookies(['access_token']);
     let selectedCategoryObj = null;
 
@@ -100,6 +108,8 @@ export default {
             createdAt: currentDate.toISOString(),
             thumbnailBig: thumbnailPathBig.value, 
             thumbnailSmall: thumbnailPathSmall.value,
+            titleColor: titleColor.value,
+            categoryColor: categoryColor.value
           },
           {
             headers: {
@@ -196,6 +206,8 @@ export default {
       subcategories,
       thumbnailPathSmall,
       thumbnailPathBig,
+      titleColor,
+      categoryColor,
       uploadThumbnail,
       handleSubmit,
       fetchSubcategories,

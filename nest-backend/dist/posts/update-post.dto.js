@@ -34,5 +34,15 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], UpdatePostDto.prototype, "thumbnailSmall", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], UpdatePostDto.prototype, "titleColor", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], UpdatePostDto.prototype, "categoryColor", void 0);
 exports.UpdatePostDto = UpdatePostDto;
 //# sourceMappingURL=update-post.dto.js.map

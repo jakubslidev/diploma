@@ -48,7 +48,11 @@ let PostsService = class PostsService {
         return this.postModel.findByIdAndUpdate(postId, { $set: { status } }, { new: true }).exec();
     }
     async update(id, updatePostDto) {
-        return this.postModel.findByIdAndUpdate(id, updatePostDto, { new: true }).exec();
+        console.log('Updating post with ID:', id);
+        console.log('Update data:', updatePostDto);
+        const updatedPost = await this.postModel.findByIdAndUpdate(id, updatePostDto, { new: true }).exec();
+        console.log('Updated post:', updatedPost);
+        return updatedPost;
     }
     async deletePost(postId) {
         await this.postModel.findByIdAndDelete(postId).exec();
