@@ -34,9 +34,11 @@ let UserInvitationsService = class UserInvitationsService {
             webpageId: inviteDto.webpageId,
             invitedBy,
             invitee: user._id,
+            webpageName: inviteDto.webpageName,
             role: inviteDto.role,
             status: 'pending',
         });
+        console.log(invitation);
         return invitation.save();
     }
     async listInvitationsForUser(userId) {

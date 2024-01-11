@@ -31,7 +31,7 @@ export class WebpagesController {
     return this.webpagesService.findAll();
   }
   
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt2'))
   @Get('/pages/:id')
   async findById(@Param('id') id: string): Promise<Webpage> {
     return this.webpagesService.findById(id);

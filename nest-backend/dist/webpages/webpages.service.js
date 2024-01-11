@@ -43,7 +43,10 @@ let WebpagesService = class WebpagesService {
         return this.webpageModel.find().exec();
     }
     async findById(id) {
-        return this.webpageModel.findById(id).exec();
+        console.log("ID: " + id);
+        const result = await this.webpageModel.findById(id).exec();
+        console.log("RESULT" + result);
+        return result;
     }
     async getWebpagesForUser(payload) {
         const userWebpages = await this.webpageModel.find({ 'users.user': payload._id }).exec();

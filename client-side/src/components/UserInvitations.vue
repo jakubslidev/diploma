@@ -5,7 +5,7 @@
     <div class="list-group">
       <a v-for="invitation in invitations" :key="invitation._id" 
          href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-        You have been invited to manage: <strong>{{ invitation.webpageId }}</strong> as a <strong>{{ invitation.role }}</strong>
+        You have been invited to manage: <strong>{{ invitation.webpageName }}</strong> as a <strong>{{ invitation.role }}</strong>
         <span>
           <button @click="acceptInvitation(invitation._id)" class="btn btn-success btn-sm mx-1">Accept</button>
           <button @click="declineInvitation(invitation._id)" class="btn btn-danger btn-sm mx-1">Decline</button>

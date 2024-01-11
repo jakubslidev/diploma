@@ -35,6 +35,7 @@ const route = useRoute();
 const webpageId = ref(route.params.webpageId);
 const userRole = ref(null);
 const users = ref([]);
+const webpageName = ref('');
 
 const fetchRole = async () => {
   try {
@@ -64,6 +65,21 @@ const fetchUsers = async () => {
   }
 };
 
+const fetchWebpageName = async () => {
+  try {
+    const response = await axios.get(`http://localhost:3000/webpages/pages/${webpageId.value}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    webpageName.value = response.data.title;
+    console.log("RESPONSE" + response.data.title);
+  } catch (error) {
+    console.error('Error fetching webpage name:', error);
+    // Handle the error appropriately
+  }
+};
+
 
 const sendInvitation = async () => {
   await fetchRole();
@@ -78,6 +94,7 @@ const sendInvitation = async () => {
       email: email.value,
       role: role.value,
       webpageId: webpageId.value,
+      webpageName: webpageName.value,
     }, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -108,6 +125,7 @@ const removeUser = async (userEmail) => {
 
 onMounted(() => {
   fetchUsers();
+  fetchWebpageName();
 });
 
 

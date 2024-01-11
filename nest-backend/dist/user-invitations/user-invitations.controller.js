@@ -30,6 +30,7 @@ let UserInvitationsController = class UserInvitationsController {
         if (role !== 'Admin') {
             throw new common_1.UnauthorizedException('Only admins can invite users');
         }
+        console.log(inviteDto);
         return this.userInvitationsService.inviteUser(inviteDto, userId);
     }
     async listInvitations(userId, req) {

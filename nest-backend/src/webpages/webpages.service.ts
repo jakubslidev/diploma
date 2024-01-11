@@ -47,7 +47,10 @@ export class WebpagesService {
   }
 
   async findById(id: string): Promise<Webpage> {
-    return this.webpageModel.findById(id).exec();
+    console.log("ID: " + id);
+    const result = await this.webpageModel.findById(id).exec();
+    console.log("RESULT" + result);
+    return result;
   }
 
   async getWebpagesForUser(payload: JwtPayload): Promise<any[]> {

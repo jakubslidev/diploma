@@ -22,6 +22,8 @@ async inviteUser(@Body() inviteDto: InviteDto, @Req() req) {
         throw new UnauthorizedException('Only admins can invite users');
     }
 
+    console.log(inviteDto);
+
     return this.userInvitationsService.inviteUser(inviteDto, userId);
 }
 
