@@ -13,7 +13,7 @@
               <p v-if="posts.length > 0">{{ posts[0].categoryName }}</p>
             </div>
             <div v-if="posts.length > 0">
-              <router-link :to="'/post/' + posts[0]._id">
+              <router-link :to=" '/'+ pageId +'/post/' + posts[0]._id">
                 <h3 class="card-heading" v-if="posts.length > 0" :style="{ color: posts[0].titleColor }">{{ posts[0].title }}</h3>
               </router-link>
             </div>
@@ -42,7 +42,7 @@
       </div>
           <div class="content">
             <div class="card-category" :style="{color: posts[index+1].categoryColor}">{{ post.categoryName }}</div>
-            <router-link :to="'/post/' + post._id">
+            <router-link :to="'/' + pageId +'/post/' + post._id">
               <h3 class="card-heading" :style="{color: posts[index+1].titleColor}">{{ post.title }}</h3>
             </router-link>
           </div>
@@ -62,6 +62,7 @@ export default {
     const posts = ref([]);
     const limitedPosts = ref([]); // New ref to hold the 10 posts from the new endpoint
     const route = useRoute();
+    let pageId = route.params.webpageId;
 
     const fetchData = async (webpageId) => {
       try {
@@ -86,6 +87,8 @@ export default {
 
     onMounted(() => {
       const webpageId = route.params.webpageId;
+      pageId = route.params.webpageId;
+      console.log(pageId);
       if (webpageId) {
         fetchData(webpageId);
         fetchDataLimited(webpageId); // Fetch the limited posts when the component mounts
@@ -106,6 +109,7 @@ export default {
     const displayedPosts2 = computed(() => limitedPosts.value);
 
     return {
+      pageId,
       posts,
       displayedPosts,
       displayedPosts2,

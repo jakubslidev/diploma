@@ -12,6 +12,7 @@ import { MediaModule } from './media/media.module';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static'; // Adjust the path according to your structure
 import { NoCacheMiddleware } from './no-cache.middleware';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [
@@ -24,7 +25,7 @@ import { NoCacheMiddleware } from './no-cache.middleware';
     }),
     PostsModule, CategoryModule, AuthzModule, UsersModule, WebpagesModule, UserInvitationsModule, MediaModule, ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'uploads'),
-      serveRoot: '/uploads',}),
+      serveRoot: '/uploads',}), CommentsModule,
   ],
 })
 export class AppModule {

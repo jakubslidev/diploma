@@ -43,7 +43,7 @@ const routes = [
     component: userRegistration,
   },
   {
-    path: '/post/:id',
+    path: '/:webpageId/post/:id',
     name: 'DisplayPost',
     component: DisplayPost,
   },
