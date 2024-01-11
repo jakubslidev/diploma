@@ -5,6 +5,7 @@ export const UserSchema = new mongoose.Schema({
   email: String,
   password: String,
   salt: String,
+  firstName: String,
   roles: {
     type: Map,
     of: String,

@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const category_schema_1 = require("./category.schema");
+const common_2 = require("@nestjs/common");
 let CategoryService = class CategoryService {
     constructor(categoryModel) {
         this.categoryModel = categoryModel;
@@ -33,6 +34,21 @@ let CategoryService = class CategoryService {
         const createdCategory = new this.categoryModel(Object.assign(Object.assign({}, categoryData), { webpage: webpageId }));
         console.log(createdCategory);
         return createdCategory.save();
+    }
+    async removeCategory(categoryId) {
+        const result = await this.categoryModel.deleteOne({ _id: categoryId }).exec();
+        if (result.deletedCount === 0) {
+            throw new common_2.NotFoundException('Category not found');
+        }
+        return { id: categoryId };
+    }
+    async removeSubcategory(categoryId, subcategoryName) {
+        const category = await this.categoryModel.findById(categoryId);
+        if (!category) {
+            throw new common_2.NotFoundException('Category not found');
+        }
+        category.subcategories = category.subcategories.filter((subcategory) => subcategory !== subcategoryName);
+        return category.save();
     }
     async findAll() {
         return this.categoryModel.find().exec();

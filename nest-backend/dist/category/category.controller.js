@@ -25,6 +25,12 @@ let CategoryController = class CategoryController {
     async addSubcategory(id, body) {
         return this.categoryService.addSubcategory(id, body.name);
     }
+    removeCategory(id) {
+        return this.categoryService.removeCategory(id);
+    }
+    removeSubcategory(id, body) {
+        return this.categoryService.removeSubcategory(id, body.name);
+    }
     findAll() {
         return this.categoryService.findAll();
     }
@@ -48,6 +54,21 @@ __decorate([
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], CategoryController.prototype, "addSubcategory", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], CategoryController.prototype, "removeCategory", null);
+__decorate([
+    (0, common_1.Delete)(':id/subcategory'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", void 0)
+], CategoryController.prototype, "removeSubcategory", null);
 __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),

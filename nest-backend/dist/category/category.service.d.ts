@@ -5,6 +5,10 @@ export declare class CategoryService {
     constructor(categoryModel: Model<Category>);
     addSubcategory(categoryId: string, subcategoryName: string): Promise<Category>;
     createCategory(categoryData: Partial<Category>, webpageId: string): Promise<Category>;
+    removeCategory(categoryId: string): Promise<{
+        id: string;
+    }>;
+    removeSubcategory(categoryId: string, subcategoryName: string): Promise<Category>;
     findAll(): Promise<Category[]>;
     findAllForPage(webpageId: string): Promise<Category[]>;
 }

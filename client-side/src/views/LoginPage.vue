@@ -42,9 +42,6 @@ export default {
         cookies.set('access_token', accessToken, '4h');
         console.log('Cookie set successfully');
 
-        // Log cookies for debugging
-        console.log('Cookies:', cookies.getAll());
-
         // Handle successful login
         console.log('Login successful!');
         router.push('/pages');

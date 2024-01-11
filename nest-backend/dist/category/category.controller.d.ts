@@ -7,6 +7,12 @@ export declare class CategoryController {
     addSubcategory(id: string, body: {
         name: string;
     }): Promise<Category>;
+    removeCategory(id: string): Promise<{
+        id: string;
+    }>;
+    removeSubcategory(id: string, body: {
+        name: string;
+    }): Promise<Category>;
     findAll(): Promise<Category[]>;
     findAllForPage(webpageId: string): Promise<Category[]>;
 }

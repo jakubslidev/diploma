@@ -29,6 +29,7 @@ export class UsersService {
     const hashedPassword = await bcrypt.hash(userData.password, salt);
 
     const newUser = new this.userModel({
+      firstName: userData.firstName,
       email: userData.email,
       password: hashedPassword,
       salt: salt,
@@ -42,6 +43,6 @@ export class UsersService {
   }
 
   generateAccessToken(user: any): string {
-    return jwt.sign({ _id: user._id, email: user.email, roles: user.roles }, 'secret-key', { expiresIn: '4h' });
+    return jwt.sign({ _id: user._id, email: user.email, roles: user.roles, firstName: user.firstName }, 'secret-key', { expiresIn: '4h' });
   }
 }

@@ -15,12 +15,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
 const users_service_1 = require("./users.service");
+const axios_1 = require("@nestjs/axios");
 let UsersController = class UsersController {
-    constructor(usersService) {
+    constructor(usersService, httpService) {
         this.usersService = usersService;
+        this.httpService = httpService;
     }
     async register(userData) {
         const existingUser = await this.usersService.findByEmail(userData.email);
+        console.log(existingUser);
         if (existingUser) {
             throw new common_1.HttpException('User already exists', common_1.HttpStatus.BAD_REQUEST);
         }
@@ -64,7 +67,7 @@ __decorate([
 ], UsersController.prototype, "login", null);
 UsersController = __decorate([
     (0, common_1.Controller)('users'),
-    __metadata("design:paramtypes", [users_service_1.UsersService])
+    __metadata("design:paramtypes", [users_service_1.UsersService, axios_1.HttpService])
 ], UsersController);
 exports.UsersController = UsersController;
 //# sourceMappingURL=users.controller.js.map

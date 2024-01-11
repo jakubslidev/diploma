@@ -53,10 +53,12 @@
     <!-- Posts List -->
   <ul class="list-group">
     <li v-for="(post, index) in paginatePosts" :key="post._id" class="list-group-item" :class="{ 'bg-light': index % 2 !== 0 }">
-      <div class="d-flex align-items-center">
+      <div class="d-flex justify-content-between align-items-center">
         <input type="checkbox" class="me-2" v-model="post.selected" @change="handleCheckboxChange(post)" />
         <router-link :to="'/post/' + post._id">{{ post.title }} | {{ post.status }}</router-link>
-        <router-link :to="{ name: 'EditPost', params: { postId: post._id }}" class="btn btn-primary">Edit</router-link>
+        <div class="edit-link">
+          <router-link :to="{ name: 'EditPost', params: { postId: post._id }}" class="btn btn-primary">Edit</router-link>
+        </div>
       </div>
     </li>
   </ul>

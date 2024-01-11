@@ -3,14 +3,37 @@
 import { Controller, Post, Body, HttpStatus, HttpException, Req, Res } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Request, Response } from 'express';
+import { HttpService } from '@nestjs/axios';
+import { firstValueFrom } from 'rxjs';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService, private httpService: HttpService) {}
+
+  // private async verifyRecaptcha(token: string): Promise<any> {
+  //   const secretKey = "6LfR_UwpAAAAAETsoFNNhtjfnp_YX4W8XojhD6UM"
+  //   const response = await firstValueFrom(
+  //     this.httpService.post('https://www.google.com/recaptcha/api/siteverify', null, {
+  //       params: {
+  //         secret: secretKey,
+  //         response: token,
+  //       },
+  //     })
+  //   );
+    
+  //   return response.data;
+  // }
+
 
   @Post('register')
   async register(@Body() userData: any): Promise<any> {
     const existingUser = await this.usersService.findByEmail(userData.email);
+    console.log(existingUser);
+
+    // const captchaResponse = await this.verifyRecaptcha(userData.captchaToken);
+    // if (!captchaResponse.success) {
+    //   throw new HttpException('CAPTCHA verification failed', HttpStatus.BAD_REQUEST);
+    // } 
     if (existingUser) {
       throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
     }
@@ -47,4 +70,5 @@ export class UsersController {
       throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
     }
   }
+
 }

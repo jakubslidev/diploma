@@ -37,6 +37,7 @@ let UsersService = class UsersService {
         const salt = await bcrypt.genSalt(saltRounds);
         const hashedPassword = await bcrypt.hash(userData.password, salt);
         const newUser = new this.userModel({
+            firstName: userData.firstName,
             email: userData.email,
             password: hashedPassword,
             salt: salt,
@@ -47,7 +48,7 @@ let UsersService = class UsersService {
         return bcrypt.compare(plainPassword, hashedPassword);
     }
     generateAccessToken(user) {
-        return jwt.sign({ _id: user._id, email: user.email, roles: user.roles }, 'secret-key', { expiresIn: '4h' });
+        return jwt.sign({ _id: user._id, email: user.email, roles: user.roles, firstName: user.firstName }, 'secret-key', { expiresIn: '4h' });
     }
 };
 UsersService = __decorate([
