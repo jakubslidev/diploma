@@ -7,6 +7,8 @@ export declare class PostsController {
     private readonly webpageValidationService;
     constructor(postsService: PostsService, webpageValidationService: WebpageValidationService);
     addPostToWebpage(webpageId: string, postData: Partial<PostModel>, categoryId: string, req: any): Promise<PostModel>;
+    getNewestPosts(webpageId: string): Promise<PostModel[]>;
+    getPostsByCategory(categoryId: string, webpageId: string): Promise<PostModel[]>;
     findAll(): Promise<PostModel[]>;
     findOne(id: string): Promise<PostModel>;
     findAllForWebpageBackOffice(webpageId: string, req: any): Promise<PostModel[]>;
@@ -17,4 +19,5 @@ export declare class PostsController {
     updatePost(id: string, updatePostDto: UpdatePostDto): Promise<PostModel>;
     deletePost(id: string): Promise<void>;
     search(webpageId: string, query: string): Promise<PostModel[]>;
+    getPostsBySubcategory(webpageId: string, categoryId: string, subcategory: string): Promise<PostModel[]>;
 }

@@ -24,6 +24,9 @@ let PostsService = class PostsService {
     async findAll() {
         return this.postModel.find().exec();
     }
+    async findPostsByIds(postIds) {
+        return this.postModel.find({ _id: { $in: postIds } }).exec();
+    }
     async findOne(id) {
         return this.postModel.findById(id).exec();
     }
@@ -74,6 +77,25 @@ let PostsService = class PostsService {
             console.error('Error during post search:', error);
             throw error;
         }
+    }
+    async findNewestPosts(webpageId) {
+        return this.postModel.find({ webpage: new mongoose_2.Types.ObjectId(webpageId) })
+            .sort({ createdAt: -1 })
+            .limit(5)
+            .exec();
+    }
+    async findPostsByCategory(categoryId, webpageId) {
+        return this.postModel.find({ category: categoryId, webpage: new mongoose_2.Types.ObjectId(webpageId) })
+            .exec();
+    }
+    async findPostsBySubcategory(webpageId, categoryId, subcategory) {
+        const caseInsensitiveSubcategory = new RegExp(subcategory, 'i');
+        return this.postModel.find({
+            webpage: new mongoose_2.default.Types.ObjectId(webpageId),
+            category: new mongoose_2.default.Types.ObjectId(categoryId),
+            subcategories: { $regex: caseInsensitiveSubcategory },
+            status: 'Active',
+        }).exec();
     }
 };
 PostsService = __decorate([

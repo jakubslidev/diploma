@@ -1,4 +1,5 @@
 <template>
+  <MainNavbar />
   <div class="pages-wrapper">
     <div class="pages-container">
       <h2>Hello, user</h2>
@@ -16,9 +17,14 @@
           </div>
           <a :href="'/office/' + page._id" class="page-link">{{ page.title }}</a>
         </div>
-        <div class="page-item add-new" @click="redirectToNewPage">
+        <div class="page-item add-new" @click="showCreateInput = true">
           <div class="page-icon" style="background-color: white">+</div>
           <span class="page-link">Create New Page</span>
+        </div>
+        <!-- New Page Input and Button -->
+        <div v-if="showCreateInput" class="new-page-creation">
+          <input type="text" v-model="newPageTitle" placeholder="Enter page name" class="new-page-input"/>
+          <button @click="createNewPage" class="btn btn-success">Create!</button>
         </div>
       </div>
     </div>
@@ -36,11 +42,13 @@ export default {
     const pages = ref([]);
     const { cookies } = useCookies(['access_token']);
     const router = useRouter();
-    const accessToken = cookies.get('access_token');
     const colors = ['LightBlue', 'Purple', 'Green', 'Mint', 'Orange'];
+    const newPageTitle = ref('');
+    const showCreateInput = ref(false);
 
     onMounted(async () => {
       try {
+        const accessToken = cookies.get('access_token');
         const response = await axios.get('http://localhost:3000/webpages/user-webpages', {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -53,12 +61,40 @@ export default {
       }
     });
 
+
+    const createNewPage = async () => {
+  try {
+    const accessToken = cookies.get('access_token');
+    const response = await axios.post('http://localhost:3000/webpages', {
+      title: newPageTitle.value,
+    }, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+
+
+    pages.value.push(response.data.savedWebpage); // Make sure to push the right object if response.data is an object containing savedWebpage
+    console.log(response.data.accessToken);
+    // If the response contains a new accessToken, update the existing one
+    cookies.remove('access_token');
+    cookies.set('access_token', response.data.accessToken);
+    // Push the new page into the array and reset the state
+    showCreateInput.value = false;
+    newPageTitle.value = '';
+  } catch (error) {
+    console.error('Error creating new page:', error.message);
+  }
+};
+
+
     const getRandomColor = () => {
       return colors[Math.floor(Math.random() * colors.length)];
     };
 
     const getInitial = (role) => {
-      return role[0].toUpperCase(); // Assuming role is either 'Editor' or 'Admin'
+      // Check if role is defined and is a string before accessing the first character
+      return role && typeof role === 'string' ? role[0].toUpperCase() : '';
     };
 
     const redirectToNewPage = () => {
@@ -66,7 +102,10 @@ export default {
     };
 
     return {
+      newPageTitle,
+      showCreateInput,
       pages,
+      createNewPage,
       getRandomColor,
       getInitial,
       redirectToNewPage,
@@ -135,6 +174,34 @@ export default {
 
 .add-new {
   cursor: pointer;
+}
+
+
+.new-page-creation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.new-page-input {
+  margin-right: 10px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Additional styles for buttons */
+.btn-success {
+  padding: 5px 15px;
+  color: white;
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+  border-color: #1e7e34;
 }
 
 </style>

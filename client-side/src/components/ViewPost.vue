@@ -1,33 +1,71 @@
 <!-- ViewPost.vue -->
 <template>
-  <div v-if="post" class="post-content">
-    <h2>{{ post.title }}</h2>
-    <div class="post-details" v-html="post.content"></div>
-    <p><strong>{{ post.categoryName }}</strong></p>
+  <div class="container">
+    <div class="row">
+      <!-- Main Content Area -->
+      <div class="col-md-8">
+        <div v-if="post" class="post-content">
+          <h2>{{ post.title }}</h2>
+          <div class="post-details" v-html="post.content"></div>
+          <p><strong>{{ post.categoryName }}</strong></p>
 
-    <!-- Comment Section -->
+
+
+          <!-- Comment Section -->
     <div class="comments-section">
       <h3>Comments</h3>
       <div class="comment" v-for="comment in comments" :key="comment._id">
         <div class="comment-text">
           <p>{{ comment.content }}</p>
-          <small>Posted on {{ new Date(comment.createdAt).toLocaleDateString() }}</small>
+          <small class="text-muted">Posted on {{ new Date(comment.createdAt).toLocaleString() }}</small>
         </div>
-        <button class="report-button" @click="openReportModal(comment)">
-        Report
+        <button class="btn btn-sm btn-danger report-button" @click="openReportModal(comment)">
+          Report
         </button>
       </div>
 
       <h3>Leave a Comment</h3>
       <form @submit.prevent="submitComment">
-        <textarea v-model="newComment" required></textarea>
-        <button type="submit">Submit</button>
+        <div class="mb-3">
+          <textarea class="form-control" v-model="newComment" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
       </form>
     </div>
   </div>
-  <div v-else class="loading">
-    Loading...
-  </div>
+    </div>
+
+    <!-- Sidebar Area -->
+    <div class="col-md-4">
+        <!-- Sidebar for Newest Posts -->
+        <div class="sidebar-newest-posts mb-4">
+          <h3>Newest Posts</h3>
+          <ul class="list-unstyled">
+  <li v-for="newPost in newestPosts" :key="newPost._id" @click="navigateToPost($route.params.webpageId, newPost._id)">
+    {{ newPost.title }}
+  </li>
+</ul>
+        </div>
+
+        <!-- Sidebar for Posts from Same Category -->
+        <div class="sidebar-category-posts">
+          <h3>Posts from This Category</h3>
+          <!-- <ul class="list-unstyled">
+            <li v-for="categoryPost in categoryPosts" :key="categoryPost._id">
+              <router-link :to="'/' + $route.params.webpageId + '/post/' + categoryPost._id" >
+                <p>{{ categoryPost.title }}</p>
+              </router-link>
+            </li>
+          </ul> -->
+          <ul class="list-unstyled">
+  <li v-for="categoryPost in categoryPosts" :key="categoryPost._id" @click="navigateToPost($route.params.webpageId, categoryPost._id)">
+    {{ categoryPost.title }}
+  </li>
+</ul>
+        </div>
+      </div>
+    </div>
+    </div>
 
   <!-- Bootstrap Report Modal -->
   <div class="modal fade" id="reportModal" ref="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
@@ -39,13 +77,17 @@
         </div>
         <div class="modal-body">
           <form @submit.prevent="submitReport">
-            <select v-model="reportReason" class="form-select mb-3">
-              <option value="">Select a reason</option>
-              <option value="Hate comment">Hate comment</option>
-              <option value="Racist">Racist</option>
-              <option value="Other">Other</option>
-            </select>
-            <textarea v-model="additionalInfo" class="form-control" placeholder="Additional information (optional)"></textarea>
+            <div class="mb-3">
+              <select class="form-select" v-model="reportReason">
+                <option value="">Select a reason</option>
+                <option value="Hate comment">Hate comment</option>
+                <option value="Racist">Racist</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <textarea class="form-control" v-model="additionalInfo" placeholder="Additional information (optional)"></textarea>
+            </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
               <button type="submit" class="btn btn-primary" @click="submitReport(post._id)">Report Comment</button>
@@ -75,9 +117,33 @@ export default {
     const reportReason = ref(''); // To hold the selected report reason
     const additionalInfo = ref(''); // To hold any additional information for the report
     const commentToReport = ref({}); // To hold the comment data that is to be reported
+    const newestPosts = ref([]);
+    const categoryPosts = ref([]);
+
+
+    const navigateToPost = (webpageId, postId) => {
+     window.location.href = (`/${webpageId}/post/${postId}`);
+    };
 
 
 
+    const fetchNewestPosts = async (webpageId) => {
+      try {
+        const response = await axios.get(`http://localhost:3000/posts/newest/${webpageId}`);
+        newestPosts.value = response.data;
+      } catch (error) {
+        console.error('Error fetching newest posts:', error.message);
+      }
+    };
+
+    const fetchCategoryPosts = async (webpageId, categoryId) => {
+      try {
+        const response = await axios.get(`http://localhost:3000/posts/category/${categoryId}/${webpageId}`);
+        categoryPosts.value = response.data;
+      } catch (error) {
+        console.error('Error fetching category posts:', error.message);
+      }
+    };
 
     const fetchComments = async (postId) => {
       try {
@@ -147,6 +213,13 @@ export default {
       reportModal.value = new Modal(document.getElementById('reportModal'), {
       keyboard: false,
       });
+
+      const webpageId = route.params.webpageId; // Assuming webpageId is a route parameter
+      await fetchNewestPosts(webpageId);
+      console.log(post.value);
+      if (post.value && post.value.category) {
+        await fetchCategoryPosts(webpageId, post.value.category);
+      }
     });
 
     return {
@@ -155,6 +228,9 @@ export default {
       newComment,
       reportReason,
       additionalInfo,
+      newestPosts,
+      categoryPosts,
+      navigateToPost,
       submitReport,
       submitComment,
       selectCommentForReporting,
@@ -169,14 +245,41 @@ export default {
   max-width: 800px; /* Adjust width as needed */
   margin-left: 50px;
   padding-left: 15px; /* Adjust padding as needed */
+  margin-bottom: 2rem;
 }
 
 .comments-section {
   max-width: 800px; /* Adjust to match post content width */
   margin-left: 0;
   padding-left: 15px; /* Adjust padding to align with the post content */
+  margin-top: 2rem;
 }
 
+.sidebar-newest-posts,
+.sidebar-category-posts {
+  padding: 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+  background-color: #fff;
+}
+
+.sidebar-newest-posts h3,
+.sidebar-category-posts h3 {
+  margin-bottom: 1rem;
+}
+
+.sidebar-newest-posts ul,
+.sidebar-category-posts ul {
+  padding-left: 0;
+  list-style-type: none;
+}
+
+@media (max-width: 767.98px) {
+  .sidebar-newest-posts,
+  .sidebar-category-posts {
+    margin-bottom: 1.5rem;
+  }
+}
 
 .comment {
   background-color: #f4f4f4;
@@ -190,29 +293,10 @@ export default {
   margin-bottom: 5px;
 }
 
-.comment-options {
-  position: absolute;
-  top: 5px;
-  right: 10px;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
 
-.comment-options .dots {
-  display: inline-block;
-}
-
-.comment-options .report {
-  display: none;
-}
 
 .comment:hover .comment-options {
   opacity: 1;
 }
 
-.comment-options:hover .report {
-  display: inline;
-  margin-left: 5px;
-}
 </style>

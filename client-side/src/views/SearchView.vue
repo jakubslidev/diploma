@@ -21,11 +21,11 @@
         <div class="col-lg-4 col-md-6 col-sm-12" v-for="post in displayedPosts" :key="post._id">
           <div class="card">
             <div class="card-background">
-              <img src="../assets/images/test.png" alt="Post image" style="height: 66.67%; object-fit: cover;">
+              <img :src="post.thumbnailSmall" alt="Post image" style="height: 66.67%; object-fit: cover;">
             </div>
             <div class="content">
               <div class="card-category">{{ post.categoryName }}</div>
-              <router-link :to="'/post/' + post._id" class="post-link">
+              <router-link :to="`/${pageId}/post/${post._id}`" class="post-link">
                 <h3 class="card-heading">{{ post.title }}</h3>
               </router-link>
               <p class="post-date">{{ new Date(post.createdAt).toLocaleDateString() }}</p>
@@ -51,6 +51,7 @@ export default {
     const searchQuery = ref('');
     const isLoading = ref(false);
     const route = useRoute();
+    const pageId = route.params.webpageId;
 
     const performSearch = async () => {
       isLoading.value = true;
@@ -68,9 +69,11 @@ export default {
     };
 
 
+
     const displayedPosts = computed(() => posts.value);
 
     return {
+      pageId,
       posts,
       displayedPosts,
       searchQuery,

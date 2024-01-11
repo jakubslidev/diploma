@@ -1,17 +1,19 @@
-<!-- UserInvitations.vue -->
 <template>
-    <MainNavbar />
-    <div>
-      <h2>Your Invitations</h2>
-      <ul>
-        <li v-for="invitation in invitations" :key="invitation._id">
-          You have been invited to manage: {{ invitation.webpageId }} as a {{ invitation.role }}
-          <button @click="acceptInvitation(invitation._id)">Accept</button>
-          <button @click="declineInvitation(invitation._id)">Decline</button>
-        </li>
-      </ul>
+  <MainNavbar />
+  <div class="container my-5">
+    <h2 class="mb-4">Your Invitations</h2>
+    <div class="list-group">
+      <a v-for="invitation in invitations" :key="invitation._id" 
+         href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+        You have been invited to manage: <strong>{{ invitation.webpageId }}</strong> as a <strong>{{ invitation.role }}</strong>
+        <span>
+          <button @click="acceptInvitation(invitation._id)" class="btn btn-success btn-sm mx-1">Accept</button>
+          <button @click="declineInvitation(invitation._id)" class="btn btn-danger btn-sm mx-1">Decline</button>
+        </span>
+      </a>
     </div>
-  </template>
+  </div>
+</template>
   
   <script setup>
 import MainNavbar from '@/components/mainNavbar.vue';

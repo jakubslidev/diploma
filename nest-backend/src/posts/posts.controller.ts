@@ -21,6 +21,19 @@ export class PostsController {
     return this.postsService.addPostToWebpage(webpageId, postData, categoryId);
   }
 
+
+  @Get('/newest/:webpageId')
+  getNewestPosts(@Param('webpageId') webpageId: string) {
+    return this.postsService.findNewestPosts(webpageId);
+  }
+
+  @Get('/category/:categoryId/:webpageId')
+  getPostsByCategory(@Param('categoryId') categoryId: string, @Param('webpageId') webpageId: string) {
+    return this.postsService.findPostsByCategory(categoryId, webpageId);
+  }
+
+  
+
   // @UseGuards(AuthGuard('jwt'))
   @Get()
   findAll() {
@@ -83,4 +96,14 @@ export class PostsController {
   search(@Param('webpageId') webpageId: string, @Query('q') query: string) {
     return this.postsService.searchPosts(webpageId, query);
   }
+
+  @Get('/:webpageId/:categoryId/:subcategory')
+  getPostsBySubcategory(
+    @Param('webpageId') webpageId: string,
+    @Param('categoryId') categoryId: string,
+    @Param('subcategory') subcategory: string,
+  ): Promise<PostModel[]> {
+    return this.postsService.findPostsBySubcategory(webpageId, categoryId, subcategory);
+  }
+
 }

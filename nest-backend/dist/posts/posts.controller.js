@@ -29,6 +29,12 @@ let PostsController = class PostsController {
         await this.webpageValidationService.validateWebpageId(webpageId, userId, jwtRoles);
         return this.postsService.addPostToWebpage(webpageId, postData, categoryId);
     }
+    getNewestPosts(webpageId) {
+        return this.postsService.findNewestPosts(webpageId);
+    }
+    getPostsByCategory(categoryId, webpageId) {
+        return this.postsService.findPostsByCategory(categoryId, webpageId);
+    }
     findAll() {
         return this.postsService.findAll();
     }
@@ -65,6 +71,9 @@ let PostsController = class PostsController {
     search(webpageId, query) {
         return this.postsService.searchPosts(webpageId, query);
     }
+    getPostsBySubcategory(webpageId, categoryId, subcategory) {
+        return this.postsService.findPostsBySubcategory(webpageId, categoryId, subcategory);
+    }
 };
 __decorate([
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt2')),
@@ -77,6 +86,21 @@ __decorate([
     __metadata("design:paramtypes", [String, Object, String, Object]),
     __metadata("design:returntype", Promise)
 ], PostsController.prototype, "addPostToWebpage", null);
+__decorate([
+    (0, common_1.Get)('/newest/:webpageId'),
+    __param(0, (0, common_1.Param)('webpageId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], PostsController.prototype, "getNewestPosts", null);
+__decorate([
+    (0, common_1.Get)('/category/:categoryId/:webpageId'),
+    __param(0, (0, common_1.Param)('categoryId')),
+    __param(1, (0, common_1.Param)('webpageId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", void 0)
+], PostsController.prototype, "getPostsByCategory", null);
 __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
@@ -155,6 +179,15 @@ __decorate([
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", void 0)
 ], PostsController.prototype, "search", null);
+__decorate([
+    (0, common_1.Get)('/:webpageId/:categoryId/:subcategory'),
+    __param(0, (0, common_1.Param)('webpageId')),
+    __param(1, (0, common_1.Param)('categoryId')),
+    __param(2, (0, common_1.Param)('subcategory')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, String]),
+    __metadata("design:returntype", Promise)
+], PostsController.prototype, "getPostsBySubcategory", null);
 PostsController = __decorate([
     (0, common_1.Controller)('posts'),
     __metadata("design:paramtypes", [posts_service_1.PostsService,

@@ -19,9 +19,6 @@ export class Post extends Document {
 
   @Prop()
   categoryName: string;
-  
-  // @Prop()
-  // category: string;
 
   @Prop({ type: [String], default: [] }) // Array of strings (subcategories)
   subcategories: string[];

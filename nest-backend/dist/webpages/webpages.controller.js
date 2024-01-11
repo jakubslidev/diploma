@@ -17,13 +17,16 @@ const common_1 = require("@nestjs/common");
 const webpages_service_1 = require("./webpages.service");
 const passport_1 = require("@nestjs/passport");
 const webpage_validation_service_1 = require("../authz/webpage-validation.service");
+const mongoose_1 = require("mongoose");
+const mongoose = require("mongoose");
 let WebpagesController = class WebpagesController {
     constructor(webpagesService, webpageValidationService) {
         this.webpagesService = webpagesService;
         this.webpageValidationService = webpageValidationService;
     }
-    async create(webpage) {
-        return this.webpagesService.create(webpage);
+    async create(webpageData, req) {
+        const user = req.user;
+        return this.webpagesService.create(webpageData, user);
     }
     async findAll() {
         return this.webpagesService.findAll();
@@ -56,13 +59,30 @@ let WebpagesController = class WebpagesController {
     async removeUser(webpageId, userId) {
         return this.webpagesService.removeUserFromWebpage(userId, webpageId);
     }
+    async setMainPost(webpageId, postId) {
+        return this.webpagesService.setMainPost(webpageId, postId);
+    }
+    async addTrendingPost(webpageId, postId) {
+        return this.webpagesService.addTrendingPost(webpageId, postId);
+    }
+    async removeTrendingPost(webpageId, postId) {
+        const objectIdPostId = new mongoose.Types.ObjectId(postId);
+        return this.webpagesService.removeTrendingPost(webpageId, objectIdPostId);
+    }
+    async getPostsForWebpage(webpageId) {
+        return this.webpagesService.getTrendingAndMainPosts(webpageId);
+    }
+    async getPostsForWebpageNoAuth(webpageId) {
+        return this.webpagesService.getTrendingAndMainPosts(webpageId);
+    }
 };
 __decorate([
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt2')),
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], WebpagesController.prototype, "create", null);
 __decorate([
@@ -114,6 +134,48 @@ __decorate([
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", Promise)
 ], WebpagesController.prototype, "removeUser", null);
+__decorate([
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt2')),
+    (0, common_1.Post)(':webpageId/main-post'),
+    __param(0, (0, common_1.Param)('webpageId')),
+    __param(1, (0, common_1.Body)('postId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, mongoose_1.Types.ObjectId]),
+    __metadata("design:returntype", Promise)
+], WebpagesController.prototype, "setMainPost", null);
+__decorate([
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt2')),
+    (0, common_1.Post)(':webpageId/trending-posts'),
+    __param(0, (0, common_1.Param)('webpageId')),
+    __param(1, (0, common_1.Body)('postId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, mongoose_1.Types.ObjectId]),
+    __metadata("design:returntype", Promise)
+], WebpagesController.prototype, "addTrendingPost", null);
+__decorate([
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt2')),
+    (0, common_1.Delete)(':webpageId/remove-trending-post/:postId'),
+    __param(0, (0, common_1.Param)('webpageId')),
+    __param(1, (0, common_1.Param)('postId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], WebpagesController.prototype, "removeTrendingPost", null);
+__decorate([
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt2')),
+    (0, common_1.Get)(':webpageId/posts'),
+    __param(0, (0, common_1.Param)('webpageId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], WebpagesController.prototype, "getPostsForWebpage", null);
+__decorate([
+    (0, common_1.Get)(':webpageId/posts/noauth'),
+    __param(0, (0, common_1.Param)('webpageId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], WebpagesController.prototype, "getPostsForWebpageNoAuth", null);
 WebpagesController = __decorate([
     (0, common_1.Controller)('webpages'),
     __metadata("design:paramtypes", [webpages_service_1.WebpagesService,

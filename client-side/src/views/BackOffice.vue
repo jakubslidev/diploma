@@ -32,6 +32,11 @@
             :class="{ 'btn-primary': currentView === 'InvitingUsers', 'btn-secondary': currentView !== 'InvitingUsers' }"
             @click="setCurrentView('InvitingUsers')"
           >Invite Users!</button>
+          <button
+            class="btn w-100 mb-2"
+            :class="{ 'btn-primary': currentView === 'trendingPosts', 'btn-secondary': currentView !== 'trendingPosts' }"
+            @click="setCurrentView('trendingPosts')"
+          >Trending Posts</button>
           <router-link
             :to="{ path: '/view/' + $route.params.webpageId }"
             class="btn btn-success w-100 mb-2"
@@ -69,6 +74,7 @@ import MainNavbar from "@/components/mainNavbar.vue";
 import PostsListUser from "@/components/PostsListUser.vue";
 import CategoryAdd from '@/components/CategoryAdd.vue'
 import InvitingUsers from '@/components/InvitingUsers.vue';
+import trendingPosts from '@/components/trendingPosts.vue';
 import { Offcanvas } from 'bootstrap';
 
 export default {
@@ -77,6 +83,7 @@ export default {
     PostsListUser,
     CategoryAdd,
     InvitingUsers,
+    trendingPosts,
   },
   setup() {
     const role = ref(null);

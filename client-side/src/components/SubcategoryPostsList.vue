@@ -1,19 +1,16 @@
 <template>
     <div class="container text-center">
-      <!-- Subsequent Rows (Converted to Cards) -->
-      <br>
-      <br>
-      <br>
+      <br><br><br>
       <div class="row align-items-start">
         <div class="col-lg-4" v-for="(post) in displayedPosts" :key="post._id">
-          <div class="card card-small">
+          <div class="card">
             <div class="card-background">
-              <img :src="post.thumbnailSmall" style="height: 66.67%; object-fit: cover;">
+              <img :src="post.thumbnailSmall" class="card-img">
             </div>
             <div class="content">
               <div class="card-category">{{ post.categoryName }}</div>
               <router-link :to="'/' + $route.params.webpageId + '/post/' + post._id">
-              <h3 class="card-heading" :style="{ color: post.titleColor }">{{ post.title }}</h3>
+                <h3 class="card-heading" :style="{ color: post.titleColor }">{{ post.title }}</h3>
               </router-link>
             </div>
           </div>
@@ -21,10 +18,9 @@
       </div>
     </div>
   </template>
-  
 
   <script>
-  import { ref, onMounted, watchEffect, computed } from 'vue';
+  import { ref, onMounted, watch, computed } from 'vue';
   import axios from 'axios';
   import { useRoute } from 'vue-router';
   
@@ -32,64 +28,41 @@
     setup() {
       const posts = ref([]);
       const route = useRoute();
-      const categoryId = ref('');
-  
-      const fetchData = async (webpageId, categoryId) => {
-  try {
-    const response = await axios.get(`http://localhost:3000/posts/view/webpage/${webpageId}/withoutauth`);
-    console.log('Response:', response.data);
+    
+      const fetchData = async () => {
+        const categoryId = route.params.categoryId; // Extract the categoryId from the route params
+        const subcategory = route.params.subcategory; // Extract the subcategory from the route params
+        
+        console.log(categoryId);
+        console.log(subcategory);
 
-    // Filter posts based on category ObjectId
-    posts.value = response.data.filter(post => {
-      const postCategoryId = post.category;
-
-      // Add a filter condition
-      const isMatchingCategory = postCategoryId === categoryId._value;
-
-      return isMatchingCategory;
-    });
-
-    console.log('Filtered Posts:', posts.value);
-  } catch (error) {
-    console.error('Error fetching posts:', error.message);
-  }
-};
-
-
-  
-      onMounted(() => {
-        const webpageId = route.params.webpageId;
-        const lastParam = route.params.categoryId.split('/').pop();
-        categoryId.value = lastParam;
-  
-        if (webpageId && categoryId) {
-          fetchData(webpageId, categoryId);
+        try {
+          // Adjust the URL to match the new endpoint structure
+          const response = await axios.get(`http://localhost:3000/posts/${route.params.webpageId}/${categoryId}/${subcategory}`);
+          posts.value = response.data;
+          console.log("RESPONSE" + response.data);
+          console.log("POSTS" + posts.value);
+        } catch (error) {
+          console.error('Error fetching posts by subcategory:', error.message);
         }
-      });
+      };
   
-      watchEffect(() => {
-        const webpageId = route.params.webpageId;
-        const lastParam = route.params.categoryId.split('/').pop();
-        categoryId.value = lastParam;
+      // Fetch data when the component is mounted
+      onMounted(fetchData);
   
-        if (webpageId && categoryId) {
-          fetchData(webpageId, categoryId);
-        }
-      });
+      // Re-fetch data when route parameters change
+      watch(() => [route.params.webpageId, route.params.categoryId, route.params.subcategory], fetchData, { immediate: true });
   
       const displayedPosts = computed(() => posts.value);
   
       return {
-        posts,
         displayedPosts,
-        categoryId,
       };
     },
   };
   </script>
   
 
-  
   <style scoped>
   .row {
     margin-bottom: 50px;

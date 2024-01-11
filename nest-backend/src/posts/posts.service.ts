@@ -2,7 +2,7 @@
 
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import mongoose, { Model, Types } from 'mongoose';
 import { Post } from '../posts/posts.schema';
 import { UpdatePostDto } from './update-post.dto';
 
@@ -12,6 +12,10 @@ export class PostsService {
 
   async findAll(): Promise<Post[]> {
     return this.postModel.find().exec();
+  }
+
+  async findPostsByIds(postIds: string[]): Promise<Post[]> {
+    return this.postModel.find({ _id: { $in: postIds } }).exec();
   }
 
   async findOne(id: string): Promise<Post | null> {
@@ -85,5 +89,28 @@ export class PostsService {
       throw error; // Re-throw the error to handle it in the calling function
     }
   }
-  
+
+  async findNewestPosts(webpageId: string): Promise<Post[]> {
+    return this.postModel.find({ webpage: new Types.ObjectId(webpageId) })
+                         .sort({ createdAt: -1 })
+                         .limit(5)
+                         .exec();
+  }
+
+  async findPostsByCategory(categoryId: string, webpageId: string): Promise<Post[]> {
+    return this.postModel.find({ category: categoryId, webpage: new Types.ObjectId(webpageId) })
+                         .exec();
+  }
+
+  async findPostsBySubcategory(webpageId: string, categoryId: string, subcategory: string): Promise<Post[]> {
+    const caseInsensitiveSubcategory = new RegExp(subcategory, 'i'); // Create a case-insensitive regex
+
+    return this.postModel.find({
+      webpage: new mongoose.Types.ObjectId(webpageId),
+      category: new mongoose.Types.ObjectId(categoryId),
+      subcategories: { $regex: caseInsensitiveSubcategory }, // Use the regex for a case-insensitive search
+      status: 'Active',
+    }).exec();
+  }
+
 }

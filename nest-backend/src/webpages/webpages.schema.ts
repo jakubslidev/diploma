@@ -7,13 +7,15 @@ export const WebpageSchema = new mongoose.Schema({
     {
       user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // Assuming 'User' is the name of your user model
+        ref: 'User',
       },
       role: String,
       email: String,
     },
   ],
-  posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }] // Add this line for the array of posts
+  posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
+  trendingPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }], // Added for trending posts
+  mainPost: { type: mongoose.Schema.Types.ObjectId, ref: 'Post' }, // Added for main post
 });
 
 export interface Webpage extends mongoose.Document {
@@ -24,5 +26,7 @@ export interface Webpage extends mongoose.Document {
     role: string;
     email: string,
   }>;
-  posts: mongoose.Types.ObjectId[]; // Define the type for the array of post references
+  posts: mongoose.Types.ObjectId[];
+  trendingPosts: mongoose.Types.ObjectId[]; // Trending posts array
+  mainPost: mongoose.Types.ObjectId; // Main post reference
 }

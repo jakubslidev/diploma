@@ -1,5 +1,5 @@
 <template>
-  <MainNavbar></MainNavbar>
+  <viewNavbar></viewNavbar>
     <div class="home">
       <ViewPost/>
     </div>
@@ -8,13 +8,13 @@
   <script>
   // @ is an alias to /src
   import ViewPost from '@/components/ViewPost.vue'
-import MainNavbar from '@/components/mainNavbar.vue';
+import viewNavbar from '@/components/viewNavbar.vue';
   
   export default {
     name: 'DisplayPost',
     components: {
     ViewPost,
-    MainNavbar
+    viewNavbar
 }
   }
   </script>

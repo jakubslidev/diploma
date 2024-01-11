@@ -9,6 +9,7 @@ import userRegistration from '../views/RegisterPage.vue'
 import DisplayPosts from '../views/PostsBackOffice.vue'
 import PageView from '../views/PageView.vue'
 import CategoryPosts from '../views/CategoryPosts.vue'
+import SubcategoryPosts from '../views/SubcategoryPosts.vue'
 import UnauthorizedError from '../views/UnauthorizedError.vue'
 import DisplayInvitations from '../views/DisplayInvitations.vue'
 import EditPost from '../views/EditPost.vue'
@@ -81,6 +82,11 @@ const routes = [
     path: '/view/:webpageId/:categoryId',
     name: 'categoryView',
     component: CategoryPosts,
+  },
+  {
+    path: '/view/:webpageId/:categoryId/:subcategory',
+    name: 'subcategoryView',
+    component: SubcategoryPosts,
   },
   {
     path: '/view/:webpageId/search',
