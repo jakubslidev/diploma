@@ -17,5 +17,6 @@ import viewNavbar from '@/components/viewNavbar.vue';
     viewNavbar
 }
   }
+
   </script>
   

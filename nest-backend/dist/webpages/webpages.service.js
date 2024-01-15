@@ -127,6 +127,19 @@ let WebpagesService = class WebpagesService {
             mainPost
         };
     }
+    async changeWebpageStatus(webpageId, newStatus, newTitle, userId) {
+        return this.webpageModel.findByIdAndUpdate(webpageId, { $set: { status: newStatus, title: newTitle } }, { new: true }).exec();
+    }
+    async deleteWebpage(webpageId, userId) {
+        await this.webpageModel.findByIdAndDelete(webpageId).exec();
+    }
+    async getWebpageStatus(webpageId) {
+        const webpage = await this.webpageModel.findById(webpageId).exec();
+        if (!webpage) {
+            throw new common_1.NotFoundException('Webpage not found');
+        }
+        return { status: webpage.status };
+    }
 };
 WebpagesService = __decorate([
     (0, common_1.Injectable)(),

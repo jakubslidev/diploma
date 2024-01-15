@@ -28,4 +28,9 @@ export declare class WebpagesService {
         trendingPosts: Post[];
         mainPost: Post | null;
     }>;
+    changeWebpageStatus(webpageId: string, newStatus: string, newTitle: string, userId: string): Promise<Webpage>;
+    deleteWebpage(webpageId: string, userId: string): Promise<void>;
+    getWebpageStatus(webpageId: string): Promise<{
+        status: string;
+    }>;
 }

@@ -56,6 +56,9 @@ let PostsController = class PostsController {
     async findAllForUserView(webpageId, req) {
         return this.postsService.findAllActiveForWebpage(webpageId);
     }
+    async findAllForUserViewLazy(webpageId, skip = 0, limit = 3) {
+        return this.postsService.findAllActiveForWebpageLazy(webpageId, skip, limit);
+    }
     async findAllForWebpageLimited(webpageId) {
         return this.postsService.findAllActiveForWebpageLimited(webpageId);
     }
@@ -140,6 +143,15 @@ __decorate([
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], PostsController.prototype, "findAllForUserView", null);
+__decorate([
+    (0, common_1.Get)('/view/webpage/:webpageId/withoutauth/lazy'),
+    __param(0, (0, common_1.Param)('webpageId')),
+    __param(1, (0, common_1.Query)('skip')),
+    __param(2, (0, common_1.Query)('limit')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Number, Number]),
+    __metadata("design:returntype", Promise)
+], PostsController.prototype, "findAllForUserViewLazy", null);
 __decorate([
     (0, common_1.Get)('/view/webpage/:webpageId/limited'),
     __param(0, (0, common_1.Param)('webpageId')),

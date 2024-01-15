@@ -14,6 +14,7 @@ export declare class PostsController {
     findAllForWebpageBackOffice(webpageId: string, req: any): Promise<PostModel[]>;
     findAllForWebpageView(webpageId: string, req: any): Promise<PostModel[]>;
     findAllForUserView(webpageId: string, req: any): Promise<PostModel[]>;
+    findAllForUserViewLazy(webpageId: string, skip?: number, limit?: number): Promise<PostModel[]>;
     findAllForWebpageLimited(webpageId: string): Promise<PostModel[]>;
     updatePostStatus(id: string, status: string): Promise<PostModel>;
     updatePost(id: string, updatePostDto: UpdatePostDto): Promise<PostModel>;

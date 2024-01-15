@@ -70,6 +70,15 @@ export class PostsController {
     return this.postsService.findAllActiveForWebpage(webpageId);
   }
 
+  @Get('/view/webpage/:webpageId/withoutauth/lazy')
+  async findAllForUserViewLazy(
+    @Param('webpageId') webpageId: string, 
+    @Query('skip') skip: number = 0, 
+    @Query('limit') limit: number = 3
+  ) {
+    return this.postsService.findAllActiveForWebpageLazy(webpageId, skip, limit);
+  }
+
 
   @Get('/view/webpage/:webpageId/limited')
   async findAllForWebpageLimited(@Param('webpageId') webpageId: string) {

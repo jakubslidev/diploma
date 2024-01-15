@@ -137,7 +137,6 @@ const confirmSubcategoryRemoval = (categoryId, subcategoryName) => {
       const response = await axios.get(url);
 
       categories.value = response.data;
-      console.log(categories.value);
     } catch (error) {
       console.error(error);
       alert('Error fetching categories. Please try again.');

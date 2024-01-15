@@ -29,4 +29,5 @@ export class WebpageValidationService {
     // Return the user's role
     return userInWebpage.role;
   }
+
 }

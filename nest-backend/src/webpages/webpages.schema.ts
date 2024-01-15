@@ -1,3 +1,5 @@
+//webpage.schema.ts
+
 import * as mongoose from 'mongoose';
 
 export const WebpageSchema = new mongoose.Schema({
@@ -16,6 +18,7 @@ export const WebpageSchema = new mongoose.Schema({
   posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
   trendingPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }], // Added for trending posts
   mainPost: { type: mongoose.Schema.Types.ObjectId, ref: 'Post' }, // Added for main post
+  status: String,
 });
 
 export interface Webpage extends mongoose.Document {
@@ -29,4 +32,5 @@ export interface Webpage extends mongoose.Document {
   posts: mongoose.Types.ObjectId[];
   trendingPosts: mongoose.Types.ObjectId[]; // Trending posts array
   mainPost: mongoose.Types.ObjectId; // Main post reference
+  status: string;
 }

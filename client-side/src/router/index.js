@@ -14,6 +14,7 @@ import UnauthorizedError from '../views/UnauthorizedError.vue'
 import DisplayInvitations from '../views/DisplayInvitations.vue'
 import EditPost from '../views/EditPost.vue'
 import SearchView from '../views/SearchView.vue'
+import MaintenanceMessage from '../views/MaintenanceMessage.vue'
 const routes = [
   {
     path: '/pages',
@@ -102,6 +103,11 @@ const routes = [
     path: '/displayInvitations',
     name: 'DisplayInvitations',
     component: DisplayInvitations,
+  },
+  {
+    path: '/maintenanceMessage',
+    name: 'MaintenanceMessage',
+    component: MaintenanceMessage,
   },
 ]
 

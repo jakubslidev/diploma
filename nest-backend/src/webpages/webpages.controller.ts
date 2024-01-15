@@ -1,6 +1,6 @@
 // webpages/webpages.controller.ts
 
-import { Controller, Get, Post, Body, Param, Req, UseGuards, NotFoundException, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Req, UseGuards, NotFoundException, Delete, UnauthorizedException, Patch } from '@nestjs/common';
 import { WebpagesService } from './webpages.service';
 import { Webpage } from './webpages.schema'
 import { AuthGuard } from '@nestjs/passport';
@@ -104,4 +104,44 @@ export class WebpagesController {
   }
 
 
+  @UseGuards(AuthGuard('jwt2'))
+  @Patch(':webpageId/status')
+  async changeStatus(
+    @Param('webpageId') webpageId: string, 
+    @Body('status') status: string, 
+    @Body('title') webpageTitle: string, // Use @Body() for webpageTitle
+    @Req() req
+  ): Promise<Webpage> {
+    const userId = req.user._id;
+    const jwtRoles = req.user.roles;
+  
+    // Validate if the user is an admin
+    const role = await this.webpageValidationService.validateWebpageId(webpageId, userId, jwtRoles);
+    if (role !== 'Admin') {
+      throw new UnauthorizedException('Only admins can change webpage status');
+    }
+  
+    return this.webpagesService.changeWebpageStatus(webpageId, status, webpageTitle, userId);
+  }
+
+@UseGuards(AuthGuard('jwt2'))
+@Delete(':webpageId')
+async deleteWebpage(@Param('webpageId') webpageId: string, @Req() req): Promise<void> {
+  const userId = req.user._id;
+  const jwtRoles = req.user.roles;
+
+  // Validate if the user is an admin
+  const role = await this.webpageValidationService.validateWebpageId(webpageId, userId, jwtRoles);
+  if (role !== 'Admin') {
+    throw new UnauthorizedException('Only admins can delete webpages');
+  }
+
+  await this.webpagesService.deleteWebpage(webpageId, userId);
+}
+
+@Get(':webpageId/status')
+async getWebpageStatus(@Param('webpageId') webpageId: string): Promise<{ status: string }> {
+  console.log(this.webpagesService.getWebpageStatus(webpageId));
+  return this.webpagesService.getWebpageStatus(webpageId);
+}
 }

@@ -1,7 +1,7 @@
 // webpages/webpages.service.ts
 
 import mongoose, { Model, ObjectId } from 'mongoose';
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Webpage } from './webpages.schema';
 import { JwtPayload } from '../authz/jwt-payload.interface'; // Import the JwtPayload interface
@@ -178,5 +178,29 @@ export class WebpagesService {
 }
 
 
-  
+// Function to change the status of a webpage
+async changeWebpageStatus(webpageId: string, newStatus: string, newTitle: string, userId: string): Promise<Webpage> {
+ // Update the status of the webpage
+ return this.webpageModel.findByIdAndUpdate(
+  webpageId,
+  { $set: { status: newStatus, title: newTitle } },
+  { new: true }
+).exec();
+}
+
+
+// Function to delete a webpage
+async deleteWebpage(webpageId: string, userId: string): Promise<void> {
+  // Delete the webpage
+  await this.webpageModel.findByIdAndDelete(webpageId).exec();
+}
+
+async getWebpageStatus(webpageId: string): Promise<{ status: string }> {
+  const webpage = await this.webpageModel.findById(webpageId).exec();
+  if (!webpage) {
+    throw new NotFoundException('Webpage not found');
+  }
+  return { status: webpage.status };
+}
+
 }

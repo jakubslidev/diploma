@@ -75,6 +75,28 @@ let WebpagesController = class WebpagesController {
     async getPostsForWebpageNoAuth(webpageId) {
         return this.webpagesService.getTrendingAndMainPosts(webpageId);
     }
+    async changeStatus(webpageId, status, webpageTitle, req) {
+        const userId = req.user._id;
+        const jwtRoles = req.user.roles;
+        const role = await this.webpageValidationService.validateWebpageId(webpageId, userId, jwtRoles);
+        if (role !== 'Admin') {
+            throw new common_1.UnauthorizedException('Only admins can change webpage status');
+        }
+        return this.webpagesService.changeWebpageStatus(webpageId, status, webpageTitle, userId);
+    }
+    async deleteWebpage(webpageId, req) {
+        const userId = req.user._id;
+        const jwtRoles = req.user.roles;
+        const role = await this.webpageValidationService.validateWebpageId(webpageId, userId, jwtRoles);
+        if (role !== 'Admin') {
+            throw new common_1.UnauthorizedException('Only admins can delete webpages');
+        }
+        await this.webpagesService.deleteWebpage(webpageId, userId);
+    }
+    async getWebpageStatus(webpageId) {
+        console.log(this.webpagesService.getWebpageStatus(webpageId));
+        return this.webpagesService.getWebpageStatus(webpageId);
+    }
 };
 __decorate([
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt2')),
@@ -176,6 +198,33 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], WebpagesController.prototype, "getPostsForWebpageNoAuth", null);
+__decorate([
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt2')),
+    (0, common_1.Patch)(':webpageId/status'),
+    __param(0, (0, common_1.Param)('webpageId')),
+    __param(1, (0, common_1.Body)('status')),
+    __param(2, (0, common_1.Body)('title')),
+    __param(3, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, String, Object]),
+    __metadata("design:returntype", Promise)
+], WebpagesController.prototype, "changeStatus", null);
+__decorate([
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt2')),
+    (0, common_1.Delete)(':webpageId'),
+    __param(0, (0, common_1.Param)('webpageId')),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], WebpagesController.prototype, "deleteWebpage", null);
+__decorate([
+    (0, common_1.Get)(':webpageId/status'),
+    __param(0, (0, common_1.Param)('webpageId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], WebpagesController.prototype, "getWebpageStatus", null);
 WebpagesController = __decorate([
     (0, common_1.Controller)('webpages'),
     __metadata("design:paramtypes", [webpages_service_1.WebpagesService,

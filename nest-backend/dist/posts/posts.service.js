@@ -36,6 +36,12 @@ let PostsService = class PostsService {
     async findAllActiveForWebpage(webpageId) {
         return this.postModel.find({ webpage: new mongoose_2.Types.ObjectId(webpageId), status: 'Active' }).exec();
     }
+    async findAllActiveForWebpageLazy(webpageId, skip, limit) {
+        return this.postModel.find({ webpage: new mongoose_2.Types.ObjectId(webpageId), status: 'Active' })
+            .skip(skip)
+            .limit(limit)
+            .exec();
+    }
     async findAllActiveForWebpageLimited(webpageId) {
         return this.postModel.find({ webpage: new mongoose_2.Types.ObjectId(webpageId), status: 'Active' })
             .sort({ createdAt: -1 })

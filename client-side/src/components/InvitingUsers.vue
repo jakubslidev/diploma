@@ -1,25 +1,33 @@
 <!-- AdminInviteUser.vue -->
 <template>
-  <div>
-    <h2>Invite User to Manage Webpage</h2>
-    <input type="email" v-model="email" placeholder="Enter user's email" />
-    <select v-model="role">
-      <option value="Editor">Editor</option>
-      <option value="Admin">Admin</option>
-    </select>
-    <button @click="sendInvitation">Send Invitation</button>
+  <div class="container py-5">
+    <h2 class="mb-4">Invite User to Manage Webpage</h2>
 
-    <div v-if="users.length > 0">
-    <h3>Users Managing This Webpage:</h3>
-    <ul>
-      <li v-for="user in users" :key="user.email">
-    {{ user.email }} - {{ user.role }}
-    <span class="remove-user" @click="removeUser(user.email)">R</span>
-  </li>
-    </ul>
-  </div>
+    <div class="input-group mb-3">
+      <input type="email" class="form-control" v-model="email" placeholder="Enter user's email" aria-label="User's email" aria-describedby="button-invite">
+      <button class="btn btn-outline-secondary" type="button" id="button-invite" @click="sendInvitation">Send Invitation</button>
+    </div>
+
+    <div class="mb-3">
+      <label for="roleSelect" class="form-label">Select Role</label>
+      <select class="form-select" id="roleSelect" v-model="role">
+        <option value="Editor">Editor</option>
+        <option value="Admin">Admin</option>
+      </select>
+    </div>
+
+    <div v-if="users.length > 0" class="mt-4">
+      <h3>Users Managing This Webpage:</h3>
+      <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center" v-for="user in users" :key="user.email">
+          {{ user.email }} - {{ user.role }}
+          <button type="button" class="btn btn-danger btn-sm" @click="removeUser(user.email)">Remove</button>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref, onMounted } from 'vue';

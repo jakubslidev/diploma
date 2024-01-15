@@ -18,5 +18,6 @@ exports.WebpageSchema = new mongoose.Schema({
     posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
     trendingPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
     mainPost: { type: mongoose.Schema.Types.ObjectId, ref: 'Post' },
+    status: String,
 });
 //# sourceMappingURL=webpages.schema.js.map

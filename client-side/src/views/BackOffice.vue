@@ -1,7 +1,7 @@
 <template>
   <MainNavbar />
-  <div class="container-fluid">
-    <div class="row">
+  <div class="container-fluid" >
+    <div class="row" v-if="!loading">
       <!-- Unified Sidebar -->
       <div
         class="bg-dark text-white sidebar"
@@ -27,7 +27,7 @@
             :class="{ 'btn-primary': currentView === 'CategoryAdd', 'btn-secondary': currentView !== 'CategoryAdd' }"
             @click="setCurrentView('CategoryAdd')"
           >Categories</button>
-          <button
+          <button v-if="role === 'Admin'"
             class="btn w-100 mb-2"
             :class="{ 'btn-primary': currentView === 'InvitingUsers', 'btn-secondary': currentView !== 'InvitingUsers' }"
             @click="setCurrentView('InvitingUsers')"
@@ -37,6 +37,11 @@
             :class="{ 'btn-primary': currentView === 'trendingPosts', 'btn-secondary': currentView !== 'trendingPosts' }"
             @click="setCurrentView('trendingPosts')"
           >Trending Posts</button>
+          <button v-if="role === 'Admin'"
+            class="btn w-100 mb-2"
+            :class="{ 'btn-primary': currentView === 'editPage', 'btn-secondary': currentView !== 'editPage' }"
+            @click="setCurrentView('editPage')"
+          >Page Settings</button>
           <router-link
             :to="{ path: '/view/' + $route.params.webpageId }"
             class="btn btn-success w-100 mb-2"
@@ -75,6 +80,7 @@ import PostsListUser from "@/components/PostsListUser.vue";
 import CategoryAdd from '@/components/CategoryAdd.vue'
 import InvitingUsers from '@/components/InvitingUsers.vue';
 import trendingPosts from '@/components/trendingPosts.vue';
+import EditPage from '@/components/EditPage.vue';
 import { Offcanvas } from 'bootstrap';
 
 export default {
@@ -84,6 +90,7 @@ export default {
     CategoryAdd,
     InvitingUsers,
     trendingPosts,
+    EditPage,
   },
   setup() {
     const role = ref(null);
@@ -93,6 +100,7 @@ export default {
     const router = useRouter();
     const sidebarVisible = ref(false);
     const currentView = ref('PostsListUser');
+    const loading = ref(true);
 
     // Computed property to determine if we are in desktop view
     const isDesktop = computed(() => window.innerWidth >= 768);
@@ -110,7 +118,8 @@ export default {
       currentView.value = viewName;
     };
 
-    onMounted(async () => {
+    // Fetch user role on component mount
+    const fetchRole = async () => {
       try {
         const response = await axios.get(`http://localhost:3000/webpages/${route.params.webpageId}/role`, {
           headers: {
@@ -122,33 +131,21 @@ export default {
       } catch (error) {
         console.error('Error fetching user role:', error.message);
         if (error.response && error.response.status === 401) {
-          // Redirect to login page or error page
           router.push('/UnauthorizedError');
         }
-      }
-    });
-
-
-    // Fetch user role on component mount
-    const fetchRole = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3000/webpages/${route.params.webpageId}/role`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-        role.value = response.data.role;
-      } catch (error) {
-        console.error('Error fetching user role:', error.message);
-        if (error.response && error.response.status === 401) {
-          router.push('/UnauthorizedError');
-        }
+      } finally {
+        loading.value = false;
+        console.log("LOADING VALUE: " + loading.value);
       }
     };
 
-    fetchRole();
+    onMounted( async () => {
+      await fetchRole();
+    });
+
 
     return {
+      loading,
       role,
       isDesktop,
       toggleSidebar,

@@ -10,10 +10,14 @@
         <ul class="navbar-nav">
           <li v-for="category in categories" :key="category._id" class="nav-item dropdown"
               @mouseover="openDropdown(category)" @mouseleave="closeDropdown(category)">
-            <router-link class="nav-link dropdown-toggle" :to="'/view/' + webpageId + '/' + category._id" 
-              data-bs-toggle="dropdown" aria-expanded="false">
-              {{ category.name }}
-            </router-link>
+            <div class="d-flex">
+              <!-- Actual navigation link -->
+              <router-link class="nav-link" :to="'/view/' + webpageId + '/' + category._id">
+                {{ category.name }}
+              </router-link>
+              <!-- Dropdown toggle -->
+              <a href="#" class="nav-link dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false"></a>
+            </div>
             <ul class="dropdown-menu" :class="{ show: category.showDropdown }">
               <li v-for="subcategory in category.subcategories" :key="subcategory">
                 <router-link class="dropdown-item" :to="'/view/' + webpageId + '/' + category._id + '/' + subcategory">
@@ -87,4 +91,10 @@ export default {
 .dropdown-menu.show {
   display: block;
 }
+
+.navbar
+        {
+            border-bottom:1px solid #60bc92;
+        }
+
 </style>

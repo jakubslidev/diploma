@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
 import TextEditor from './TextEditor.vue'
@@ -151,7 +151,6 @@ export default {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
 
-        console.log('Thumbnail uploaded:', response.data.smallPath);
         thumbnailPathSmall.value = `http://localhost:3000/${response.data.smallPath}`;
         thumbnailPathBig.value = `http://localhost:3000/${response.data.bigPath}`;
       } catch (error) {
@@ -184,9 +183,6 @@ export default {
       selectedSubcategories.value = selectedSubcategories.value.filter(item => item !== subcategory);
     };
 
-    watch(content, (newContent) => {
-      console.log('Content changed:', newContent);
-    });
 
     // Extract webpageId from the route params and fetch categories on mount
     onMounted(() => {

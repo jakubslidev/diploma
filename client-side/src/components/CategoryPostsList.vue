@@ -4,7 +4,11 @@
       <br>
       <br>
       <br>
-      <div class="row align-items-start">
+      <div v-if="loading">
+        <p>LOADING</p>
+      </div>
+      <div v-else>
+        <div class="row align-items-start">
         <div class="col-lg-4" v-for="(post) in displayedPosts" :key="post._id">
           <div class="card card-small">
             <div class="card-background">
@@ -18,6 +22,7 @@
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   </template>
@@ -33,11 +38,30 @@
       const posts = ref([]);
       const route = useRoute();
       const categoryId = ref('');
-  
+      const loading = ref(true);
+      const webpageStatus = ref('');
+      
+    const checkWebpageStatus = async () => {
+      
+      try {
+        const response = await axios.get(`http://localhost:3000/webpages/${route.params.webpageId}/status`);
+        webpageStatus.value = response.data.status;
+
+        if (webpageStatus.value === 'inactive') {
+          // Redirect to the maintenance message component
+          window.location.href = (`/maintenanceMessage`);
+        }
+        loading.value = false;
+      } catch (error) {
+        console.error('Error fetching webpage status:', error);
+      }
+    };
+
+
+
       const fetchData = async (webpageId, categoryId) => {
   try {
     const response = await axios.get(`http://localhost:3000/posts/view/webpage/${webpageId}/withoutauth`);
-    console.log('Response:', response.data);
 
     // Filter posts based on category ObjectId
     posts.value = response.data.filter(post => {
@@ -49,7 +73,6 @@
       return isMatchingCategory;
     });
 
-    console.log('Filtered Posts:', posts.value);
   } catch (error) {
     console.error('Error fetching posts:', error.message);
   }
@@ -58,6 +81,7 @@
 
   
       onMounted(() => {
+        checkWebpageStatus();
         const webpageId = route.params.webpageId;
         const lastParam = route.params.categoryId.split('/').pop();
         categoryId.value = lastParam;

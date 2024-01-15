@@ -55,7 +55,7 @@
     <li v-for="(post, index) in paginatePosts" :key="post._id" class="list-group-item" :class="{ 'bg-light': index % 2 !== 0 }">
       <div class="d-flex justify-content-between align-items-center">
         <input type="checkbox" class="me-2" v-model="post.selected" @change="handleCheckboxChange(post)" />
-        <router-link :to="'/post/' + post._id">{{ post.title }} | {{ post.status }}</router-link>
+        <router-link :to=" '/' +$route.params.webpageId + '/post/' + post._id">{{ post.title }} | {{ post.status }}</router-link>
         <div class="edit-link">
           <router-link :to="{ name: 'EditPost', params: { postId: post._id }}" class="btn btn-primary">Edit</router-link>
         </div>
@@ -98,7 +98,6 @@ export default {
       },
     });
     posts.value = response.data.map((post) => ({ ...post, selected: false }));
-    console.log(posts);
   } catch (error) {
     console.error('Error fetching posts:', error.message);
   }
@@ -177,8 +176,6 @@ export default {
 
     onMounted(() => {
       const webpageId = route.params.webpageId;
-      console.log('webpageId onMounted:', webpageId);
-
       if (webpageId) {
         fetchData(webpageId);
       }
@@ -186,7 +183,6 @@ export default {
 
     watchEffect(() => {
       const webpageId = route.params.webpageId;
-      console.log('webpageId watchEffect:', webpageId);
 
       if (webpageId) {
         fetchData(webpageId);

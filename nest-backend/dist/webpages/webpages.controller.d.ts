@@ -30,4 +30,9 @@ export declare class WebpagesController {
         trendingPosts: BackendPost[];
         mainPost: BackendPost | null;
     }>;
+    changeStatus(webpageId: string, status: string, webpageTitle: string, req: any): Promise<Webpage>;
+    deleteWebpage(webpageId: string, req: any): Promise<void>;
+    getWebpageStatus(webpageId: string): Promise<{
+        status: string;
+    }>;
 }

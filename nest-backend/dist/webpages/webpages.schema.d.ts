@@ -9,6 +9,7 @@ export declare const WebpageSchema: mongoose.Schema<any, mongoose.Model<any, any
     trendingPosts: mongoose.Types.ObjectId[];
     title?: string;
     content?: string;
+    status?: string;
     mainPost?: mongoose.Types.ObjectId;
 }, mongoose.Document<unknown, {}, {
     users: {
@@ -20,6 +21,7 @@ export declare const WebpageSchema: mongoose.Schema<any, mongoose.Model<any, any
     trendingPosts: mongoose.Types.ObjectId[];
     title?: string;
     content?: string;
+    status?: string;
     mainPost?: mongoose.Types.ObjectId;
 }> & {
     users: {
@@ -31,6 +33,7 @@ export declare const WebpageSchema: mongoose.Schema<any, mongoose.Model<any, any
     trendingPosts: mongoose.Types.ObjectId[];
     title?: string;
     content?: string;
+    status?: string;
     mainPost?: mongoose.Types.ObjectId;
 } & {
     _id: mongoose.Types.ObjectId;
@@ -46,4 +49,5 @@ export interface Webpage extends mongoose.Document {
     posts: mongoose.Types.ObjectId[];
     trendingPosts: mongoose.Types.ObjectId[];
     mainPost: mongoose.Types.ObjectId;
+    status: string;
 }

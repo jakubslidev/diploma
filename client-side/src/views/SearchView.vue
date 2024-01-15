@@ -1,5 +1,5 @@
 <template>
-    <viewNavbar/>
+      <viewNavbar/>
     <div class="container text-center">
       <!-- Search Bar -->
       <br>
@@ -37,7 +37,7 @@
   </template>
   
   <script>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
 import viewNavbar from '@/components/viewNavbar.vue';
@@ -52,6 +52,27 @@ export default {
     const isLoading = ref(false);
     const route = useRoute();
     const pageId = route.params.webpageId;
+    const loading = ref(true);
+    const webpageStatus = ref('');
+
+    onMounted(async () => {
+      checkWebpageStatus();
+    });
+
+    const checkWebpageStatus = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/webpages/${route.params.webpageId}/status`);
+        webpageStatus.value = response.data.status;
+
+        if (webpageStatus.value === 'inactive') {
+          // Redirect to the maintenance message component
+          window.location.href = (`/maintenanceMessage`);
+        }
+        loading.value = false;
+      } catch (error) {
+        console.error('Error fetching webpage status:', error);
+      }
+    };
 
     const performSearch = async () => {
       isLoading.value = true;

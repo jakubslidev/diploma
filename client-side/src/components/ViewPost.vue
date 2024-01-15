@@ -1,7 +1,11 @@
 <!-- ViewPost.vue -->
 <template>
-  <div class="container">
-    <div class="row">
+    <div v-if="loading">
+      <p>LOADING</p>
+    </div>
+    <div v-else>
+      <div class="container">
+      <div class="row">
       <!-- Main Content Area -->
       <div class="col-md-8">
         <div v-if="post" class="post-content">
@@ -50,13 +54,6 @@
         <!-- Sidebar for Posts from Same Category -->
         <div class="sidebar-category-posts">
           <h3>Posts from This Category</h3>
-          <!-- <ul class="list-unstyled">
-            <li v-for="categoryPost in categoryPosts" :key="categoryPost._id">
-              <router-link :to="'/' + $route.params.webpageId + '/post/' + categoryPost._id" >
-                <p>{{ categoryPost.title }}</p>
-              </router-link>
-            </li>
-          </ul> -->
           <ul class="list-unstyled">
   <li v-for="categoryPost in categoryPosts" :key="categoryPost._id" @click="navigateToPost($route.params.webpageId, categoryPost._id)">
     {{ categoryPost.title }}
@@ -97,6 +94,8 @@
       </div>
     </div>
   </div>
+    </div>
+    
 </template>
 
 
@@ -119,12 +118,29 @@ export default {
     const commentToReport = ref({}); // To hold the comment data that is to be reported
     const newestPosts = ref([]);
     const categoryPosts = ref([]);
+    const loading = ref(true);
+    const webpageStatus = ref('');
 
 
     const navigateToPost = (webpageId, postId) => {
      window.location.href = (`/${webpageId}/post/${postId}`);
     };
 
+
+    const checkWebpageStatus = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/webpages/${route.params.webpageId}/status`);
+        webpageStatus.value = response.data.status;
+
+        if (webpageStatus.value === 'inactive') {
+          // Redirect to the maintenance message component
+          window.location.href = (`/maintenanceMessage`);
+        }
+        loading.value = false;
+      } catch (error) {
+        console.error('Error fetching webpage status:', error);
+      }
+    };
 
 
     const fetchNewestPosts = async (webpageId) => {
@@ -205,6 +221,7 @@ export default {
     };
 
     onMounted(async () => {
+      checkWebpageStatus();
       const postId = route.params.id;
       const response = await axios.get(`http://localhost:3000/posts/${postId}`);
       post.value = response.data;

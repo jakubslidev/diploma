@@ -30,6 +30,13 @@ export class PostsService {
     return this.postModel.find({ webpage: new Types.ObjectId(webpageId), status: 'Active' }).exec();
   }
 
+  async findAllActiveForWebpageLazy(webpageId: string, skip: number, limit: number): Promise<Post[]> {
+    return this.postModel.find({ webpage: new Types.ObjectId(webpageId), status: 'Active' })
+      .skip(skip)
+      .limit(limit)
+      .exec();
+  }
+
   async findAllActiveForWebpageLimited(webpageId: string): Promise<Post[]> {
     return this.postModel.find({ webpage: new Types.ObjectId(webpageId), status: 'Active' })
       .sort({ createdAt: -1 }) // -1 means descending order
