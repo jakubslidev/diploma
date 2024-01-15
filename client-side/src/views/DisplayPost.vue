@@ -9,10 +9,10 @@
   <script>
   // @ is an alias to /src
   import ViewPost from '@/components/ViewPost.vue'
-import viewNavbar from '@/components/viewNavbar.vue';
-import { ref, onMounted } from 'vue';
-    import axios from 'axios';
-    import { useRoute } from 'vue-router';
+  import viewNavbar from '@/components/viewNavbar.vue';
+  import { ref, onMounted } from 'vue';
+  import axios from 'axios';
+  import { useRoute } from 'vue-router';
   
   export default {
     name: 'DisplayPost',
