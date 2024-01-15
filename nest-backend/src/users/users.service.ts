@@ -35,6 +35,8 @@ export class UsersService {
       salt: salt,
     });
 
+
+
     return newUser.save();
   }
 

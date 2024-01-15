@@ -63,6 +63,7 @@
           });
 
             const accessToken = response.data.accessToken;
+            console.log("RESPONSE DATA" + response.data.value);
             console.log(accessToken);
             cookies.set('access_token', accessToken, '4h');
             console.log('Registration successful!');

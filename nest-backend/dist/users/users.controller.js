@@ -23,11 +23,14 @@ let UsersController = class UsersController {
     }
     async register(userData) {
         const existingUser = await this.usersService.findByEmail(userData.email);
-        console.log(existingUser);
+        console.log("existingUser" + existingUser);
         if (existingUser) {
             throw new common_1.HttpException('User already exists', common_1.HttpStatus.BAD_REQUEST);
         }
-        return this.usersService.create(userData);
+        const newUser = await this.usersService.create(userData);
+        const accessToken = this.usersService.generateAccessToken(newUser);
+        console.log("ACCESS TOKEN" + accessToken);
+        return { user: newUser, accessToken };
     }
     async login(loginData, req) {
         try {

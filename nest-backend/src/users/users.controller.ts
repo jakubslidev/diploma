@@ -28,7 +28,7 @@ export class UsersController {
   @Post('register')
   async register(@Body() userData: any): Promise<any> {
     const existingUser = await this.usersService.findByEmail(userData.email);
-    console.log(existingUser);
+    console.log("existingUser" + existingUser);
 
     // const captchaResponse = await this.verifyRecaptcha(userData.captchaToken);
     // if (!captchaResponse.success) {
@@ -38,7 +38,10 @@ export class UsersController {
       throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
     }
 
-    return this.usersService.create(userData);
+    const newUser = await this.usersService.create(userData);
+    const accessToken = this.usersService.generateAccessToken(newUser);
+    console.log("ACCESS TOKEN" + accessToken);
+    return { user: newUser, accessToken };
   }
 
   @Post('login')
