@@ -77,6 +77,15 @@ let PostsController = class PostsController {
     getPostsBySubcategory(webpageId, categoryId, subcategory) {
         return this.postsService.findPostsBySubcategory(webpageId, categoryId, subcategory);
     }
+    incrementViewCount(id) {
+        return this.postsService.incrementViewCount(id);
+    }
+    incrementLikeCount(postId) {
+        return this.postsService.incrementLikeCount(postId);
+    }
+    incrementDislikeCount(postId) {
+        return this.postsService.incrementDislikeCount(postId);
+    }
 };
 __decorate([
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt2')),
@@ -200,6 +209,27 @@ __decorate([
     __metadata("design:paramtypes", [String, String, String]),
     __metadata("design:returntype", Promise)
 ], PostsController.prototype, "getPostsBySubcategory", null);
+__decorate([
+    (0, common_1.Patch)(':id/incrementView'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], PostsController.prototype, "incrementViewCount", null);
+__decorate([
+    (0, common_1.Patch)(':id/incrementLike'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], PostsController.prototype, "incrementLikeCount", null);
+__decorate([
+    (0, common_1.Patch)(':id/incrementDislike'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], PostsController.prototype, "incrementDislikeCount", null);
 PostsController = __decorate([
     (0, common_1.Controller)('posts'),
     __metadata("design:paramtypes", [posts_service_1.PostsService,

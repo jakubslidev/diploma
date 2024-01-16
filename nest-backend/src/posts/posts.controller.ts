@@ -115,4 +115,19 @@ export class PostsController {
     return this.postsService.findPostsBySubcategory(webpageId, categoryId, subcategory);
   }
 
+  @Patch(':id/incrementView')
+  incrementViewCount(@Param('id') id: string) {
+    return this.postsService.incrementViewCount(id);
+  }
+
+  @Patch(':id/incrementLike')
+  incrementLikeCount(@Param('id') postId: string) {
+    return this.postsService.incrementLikeCount(postId);
+  }
+
+  @Patch(':id/incrementDislike')
+  incrementDislikeCount(@Param('id') postId: string) {
+    return this.postsService.incrementDislikeCount(postId);
+  }
+
 }

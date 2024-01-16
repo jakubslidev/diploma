@@ -63,6 +63,18 @@ __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
 ], Post.prototype, "categoryColor", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: 0 }),
+    __metadata("design:type", Number)
+], Post.prototype, "viewCount", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: 0 }),
+    __metadata("design:type", Number)
+], Post.prototype, "likeCount", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: 0 }),
+    __metadata("design:type", Number)
+], Post.prototype, "dislikeCount", void 0);
 Post = __decorate([
     (0, mongoose_1.Schema)()
 ], Post);

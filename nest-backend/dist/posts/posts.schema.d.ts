@@ -13,6 +13,9 @@ export declare class Post extends Document {
     thumbnailSmall: string;
     titleColor: string;
     categoryColor: string;
+    viewCount: number;
+    likeCount: number;
+    dislikeCount: number;
 }
 export declare const PostSchema: mongoose.Schema<Post, mongoose.Model<Post, any, any, any, Document<unknown, any, Post> & Post & {
     _id: mongoose.Types.ObjectId;

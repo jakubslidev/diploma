@@ -103,6 +103,15 @@ let PostsService = class PostsService {
             status: 'Active',
         }).exec();
     }
+    async incrementViewCount(postId) {
+        return this.postModel.findByIdAndUpdate(postId, { $inc: { viewCount: 1 } }, { new: true }).exec();
+    }
+    async incrementLikeCount(postId) {
+        return this.postModel.findByIdAndUpdate(postId, { $inc: { likeCount: 1 } }, { new: true }).exec();
+    }
+    async incrementDislikeCount(postId) {
+        return this.postModel.findByIdAndUpdate(postId, { $inc: { dislikeCount: 1 } }, { new: true }).exec();
+    }
 };
 PostsService = __decorate([
     (0, common_1.Injectable)(),

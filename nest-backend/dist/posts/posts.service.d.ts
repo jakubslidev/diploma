@@ -19,4 +19,7 @@ export declare class PostsService {
     findNewestPosts(webpageId: string): Promise<Post[]>;
     findPostsByCategory(categoryId: string, webpageId: string): Promise<Post[]>;
     findPostsBySubcategory(webpageId: string, categoryId: string, subcategory: string): Promise<Post[]>;
+    incrementViewCount(postId: string): Promise<Post>;
+    incrementLikeCount(postId: string): Promise<Post>;
+    incrementDislikeCount(postId: string): Promise<Post>;
 }

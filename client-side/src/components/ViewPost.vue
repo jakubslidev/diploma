@@ -9,9 +9,24 @@
       <!-- Main Content Area -->
       <div class="col-md-8">
         <div v-if="post" class="post-content">
-          <h2>{{ post.title }}</h2>
-          <div class="post-details" v-html="post.content"></div>
-          <p><strong>{{ post.categoryName }}</strong></p>
+          <h2>Title: {{ post.title }}</h2>
+          <p><strong>Category: {{ post.categoryName }}</strong></p>    
+          <div class="post-details" v-html="post.content" style="text-align: left;">
+          </div>      
+      <button
+    :class="['btn', isLiked ? 'btn-success' : 'btn-outline-secondary', 'animate-button']"
+    @click="handleLike(post._id)"
+  >
+    <i class="fa fa-thumbs-up" aria-hidden="true"></i> Like
+  </button>
+  
+  <button
+    :class="['btn', isDisliked ? 'btn-danger' : 'btn-outline-secondary', 'animate-button']"
+    @click="handleDislike(post._id)"
+  >
+    <i class="fa fa-thumbs-down" aria-hidden="true"></i> Dislike
+  </button>
+
 
 
 
@@ -27,7 +42,6 @@
           Report
         </button>
       </div>
-
       <h3>Leave a Comment</h3>
       <form @submit.prevent="submitComment">
         <div class="mb-3">
@@ -100,10 +114,11 @@
 
 
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed, reactive } from 'vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
 import { Modal } from 'bootstrap';
+import { useCookies } from 'vue3-cookies';
 
 export default {
   setup() {
@@ -112,14 +127,73 @@ export default {
     const comments = ref([]);
     const newComment = ref('');
     const selectedCommentId = ref(null);
-    const reportModal = ref(null); // To hold the reference to the bootstrap modal instance
-    const reportReason = ref(''); // To hold the selected report reason
-    const additionalInfo = ref(''); // To hold any additional information for the report
-    const commentToReport = ref({}); // To hold the comment data that is to be reported
+    const reportModal = ref(null);
+    const reportReason = ref(''); 
+    const additionalInfo = ref(''); 
+    const commentToReport = ref({}); 
     const newestPosts = ref([]);
     const categoryPosts = ref([]);
     const loading = ref(true);
     const webpageStatus = ref('');
+    const {cookies} = useCookies();
+
+
+    const likedPosts = reactive(cookies.get('likedPosts') ? cookies.get('likedPosts').split(',') : []);
+    const dislikedPosts = reactive(cookies.get('dislikedPosts') ? cookies.get('dislikedPosts').split(',') : []);
+    const isLiked = computed(() => likedPosts.includes(post.value._id));
+    const isDisliked = computed(() => dislikedPosts.includes(post.value._id));
+
+    const updateCookies = () => {
+      cookies.set('likedPosts', likedPosts.join(','));
+      cookies.set('dislikedPosts', dislikedPosts.join(','));
+    };
+
+
+    const handleLike = async (postId) => {
+  const indexLiked = likedPosts.indexOf(postId);
+  const indexDisliked = dislikedPosts.indexOf(postId);
+
+  if (indexLiked > -1) {
+    // Post is already liked, remove like
+    likedPosts.splice(indexLiked, 1);
+  } else {
+    // Add like, remove dislike if it exists
+    if (indexDisliked > -1) {
+      dislikedPosts.splice(indexDisliked, 1);
+    }
+    likedPosts.push(postId);
+  }
+  updateCookies();
+
+  try {
+    await axios.patch(`http://localhost:3000/posts/${postId}/incrementLike`);
+  } catch (error) {
+    console.error('Error incrementing like count:', error.message);
+  }
+}
+
+const handleDislike = async (postId) => {
+  const indexDisliked = dislikedPosts.indexOf(postId);
+  const indexLiked = likedPosts.indexOf(postId);
+
+  if (indexDisliked > -1) {
+    // Post is already disliked, remove dislike
+    dislikedPosts.splice(indexDisliked, 1);
+  } else {
+    // Add dislike, remove like if it exists
+    if (indexLiked > -1) {
+      likedPosts.splice(indexLiked, 1);
+    }
+    dislikedPosts.push(postId);
+  }
+  updateCookies();
+
+  try {
+    await axios.patch(`http://localhost:3000/posts/${postId}/incrementDislike`);
+  } catch (error) {
+    console.error('Error incrementing dislike count:', error.message);
+  }
+};
 
 
     const navigateToPost = (webpageId, postId) => {
@@ -133,7 +207,6 @@ export default {
         webpageStatus.value = response.data.status;
 
         if (webpageStatus.value === 'inactive') {
-          // Redirect to the maintenance message component
           window.location.href = (`/maintenanceMessage`);
         }
         loading.value = false;
@@ -182,7 +255,7 @@ export default {
           webpageId: route.params.webpageId
         });
         newComment.value = '';
-        await fetchComments(route.params.id); // Refresh comments
+        await fetchComments(route.params.id);
       } catch (error) {
         console.error('Error submitting comment:', error.message);
       }
@@ -190,53 +263,105 @@ export default {
 
 
       const openReportModal = (comment) => {
-        // Save the comment data to the state variable
         commentToReport.value = comment;
-        // Reset the form fields
         reportReason.value = '';
         additionalInfo.value = '';
-        // Show the modal
         reportModal.value.show();
       };
 
       const submitReport = async () => {
-      // Use post.value._id directly since it's already available in the scope
       if (!reportReason.value) {
         alert('Please select a reason for the report.');
         return;
       }
       try {
-        // Send the report to the backend
         await axios.post(`http://localhost:3000/comments/${post.value._id}/report`, {
           commentId: commentToReport.value._id,
           reason: reportReason.value,
           additionalInfo: additionalInfo.value,
         });
-        // Close the modal after submitting the report
         reportModal.value.hide();
-        // Optional: Add a success message or any other post-report actions
       } catch (error) {
         console.error('Error submitting report:', error.message);
       }
     };
+
+
+
+
+//     const handleLike = async (postId) => {
+//   // Get the cookie value, which is a string of postIds separated by commas
+//   let likedPostsString = cookies.get('likedPosts');
+//   // Convert the string to an array
+//   let likedPosts = likedPostsString ? likedPostsString.split(',') : [];
+
+//   let dislikedPostsString = cookies.get('dislikedPosts');
+//       let dislikedPosts = dislikedPostsString ? dislikedPostsString.split(',') : [];
+//       if (dislikedPosts.includes(postId)) {
+//         dislikedPosts = dislikedPosts.filter(id => id !== postId);
+//         cookies.set('dislikedPosts', dislikedPosts.join(','));
+//       }
+
+//   if (!likedPosts.includes(postId)) {
+//     // Add the new postId to the array
+//     likedPosts.push(postId);
+//     // Convert the array back to a string and save it in the cookie
+//     cookies.set('likedPosts', likedPosts.join(','));
+    
+//     try {
+//       await axios.patch(`http://localhost:3000/posts/${postId}/incrementLike`);
+//       // Handle success if needed
+//     } catch (error) {
+//       console.error('Error incrementing like count:', error.message);
+//     }
+//   }
+// };
+// const handleDislike = async (postId) => {
+//   // Get the cookie value, which is a string of postIds separated by commas
+//   let dislikedPostsString = cookies.get('dislikedPosts');
+//   // Convert the string to an array
+//   let dislikedPosts = dislikedPostsString ? dislikedPostsString.split(',') : [];
+
+//   let likedPostsString = cookies.get('likedPosts');
+//       let likedPosts = likedPostsString ? likedPostsString.split(',') : [];
+//       if (likedPosts.includes(postId)) {
+//         likedPosts = likedPosts.filter(id => id !== postId);
+//         cookies.set('likedPosts', likedPosts.join(','));
+//       }
+
+//   if (!dislikedPosts.includes(postId)) {
+//     // Add the new postId to the array
+//     dislikedPosts.push(postId);
+//     // Convert the array back to a string and save it in the cookie
+//     cookies.set('dislikedPosts', dislikedPosts.join(','));
+    
+//     try {
+//       await axios.patch(`http://localhost:3000/posts/${postId}/incrementDislike`);
+//       // Handle success if needed
+//     } catch (error) {
+//       console.error('Error incrementing dislike count:', error.message);
+//     }
+//   }
+// };
 
     onMounted(async () => {
       checkWebpageStatus();
       const postId = route.params.id;
       const response = await axios.get(`http://localhost:3000/posts/${postId}`);
       post.value = response.data;
-      await fetchComments(postId); // Fetch comments for the post
+      await fetchComments(postId); 
 
       reportModal.value = new Modal(document.getElementById('reportModal'), {
       keyboard: false,
       });
 
-      const webpageId = route.params.webpageId; // Assuming webpageId is a route parameter
+      const webpageId = route.params.webpageId; 
       await fetchNewestPosts(webpageId);
       console.log(post.value);
       if (post.value && post.value.category) {
         await fetchCategoryPosts(webpageId, post.value.category);
       }
+      await axios.patch(`http://localhost:3000/posts/${postId}/incrementView`);
     });
 
     return {
@@ -247,6 +372,10 @@ export default {
       additionalInfo,
       newestPosts,
       categoryPosts,
+      isLiked,
+      isDisliked,
+      handleLike,
+      handleDislike,
       navigateToPost,
       submitReport,
       submitComment,
@@ -258,17 +387,22 @@ export default {
 </script>
 
 <style scoped>
+
+
+.post-details{
+  border-bottom: 1px solid black;
+}
 .post-content {
-  max-width: 800px; /* Adjust width as needed */
+  max-width: 800px; 
   margin-left: 50px;
-  padding-left: 15px; /* Adjust padding as needed */
+  padding-left: 15px; 
   margin-bottom: 2rem;
 }
 
 .comments-section {
-  max-width: 800px; /* Adjust to match post content width */
+  max-width: 800px;
   margin-left: 0;
-  padding-left: 15px; /* Adjust padding to align with the post content */
+  padding-left: 15px; 
   margin-top: 2rem;
 }
 
@@ -278,6 +412,15 @@ export default {
   border: 1px solid #dee2e6;
   border-radius: 0.25rem;
   background-color: #fff;
+}
+
+.animate-button {
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Active state */
+.btn-success, .btn-danger {
+  color: white !important; /* Ensure text color is white */
 }
 
 .sidebar-newest-posts h3,

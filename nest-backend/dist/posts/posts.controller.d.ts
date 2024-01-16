@@ -21,4 +21,7 @@ export declare class PostsController {
     deletePost(id: string): Promise<void>;
     search(webpageId: string, query: string): Promise<PostModel[]>;
     getPostsBySubcategory(webpageId: string, categoryId: string, subcategory: string): Promise<PostModel[]>;
+    incrementViewCount(id: string): Promise<PostModel>;
+    incrementLikeCount(postId: string): Promise<PostModel>;
+    incrementDislikeCount(postId: string): Promise<PostModel>;
 }

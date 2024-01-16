@@ -40,6 +40,16 @@ export class Post extends Document {
 
   @Prop()
   categoryColor: string;
+
+  @Prop({ default: 0 })
+  viewCount: number;
+
+  @Prop({ default: 0 })
+  likeCount: number;
+
+  @Prop({ default: 0 })
+  dislikeCount: number;
+  
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post);

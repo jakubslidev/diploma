@@ -120,4 +120,27 @@ export class PostsService {
     }).exec();
   }
 
+  async incrementViewCount(postId: string): Promise<Post> {
+    return this.postModel.findByIdAndUpdate(
+      postId,
+      { $inc: { viewCount: 1 } },
+      { new: true }
+    ).exec();
+  }
+
+  async incrementLikeCount(postId: string): Promise<Post> {
+    return this.postModel.findByIdAndUpdate(
+      postId,
+      { $inc: { likeCount: 1 } },
+      { new: true }
+    ).exec();
+  }
+
+  async incrementDislikeCount(postId: string): Promise<Post> {
+    return this.postModel.findByIdAndUpdate(
+      postId,
+      { $inc: { dislikeCount: 1 } },
+      { new: true }
+    ).exec();
+  }
 }
