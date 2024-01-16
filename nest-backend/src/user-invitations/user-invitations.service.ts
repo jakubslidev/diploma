@@ -90,47 +90,6 @@ export class UserInvitationsService {
     };
   }
   
-
-
-
-
-  // async acceptInvitation(invitationId: string, userId: string): Promise<{ invitation: UserInvitation, accessToken: string }> {
-  //   const invitation = await this.invitationModel.findById(invitationId);
-  //   if (!invitation || invitation.invitee.toString() !== userId || invitation.status !== 'pending') {
-  //     throw new UnauthorizedException('Invalid or already processed invitation');
-  //   }
-  
-  //   // Update the User document
-  //   const user = await this.usersService.findById(userId);
-  //   if (!user) throw new UnauthorizedException('User not found');
-  //   console.log("ID STRONY"+ invitation.webpageId.toString());
-  //   console.log("ROLA" + invitation.role)
-  //   user.roles.push[invitation.webpageId.toString()] = invitation.role;
-  //   console.log("ROLE" + user.roles);
-  //   await user.save();
-  //   console.log("USER" + user);
-  
-  //   // Update the Webpage document
-  //   const webpage = await this.webpagesService.findById(invitation.webpageId);
-  //   if (!webpage) throw new UnauthorizedException('Webpage not found');
-  
-  //   webpage.users.push({ user: new Types.ObjectId(userId), role: invitation.role, email: user.email });
-  //   await webpage.save();
-  
-  //   // Update the invitation status
-  //   invitation.status = 'accepted';
-  //   await invitation.save();
-  
-  //   // Generate new access token with updated roles
-  //   const accessToken = this.usersService.generateAccessToken(user);
-  
-  //   // Return both the updated invitation and the access token
-  //   return {
-  //     invitation,
-  //     accessToken
-  //   };
-  // }
-
   async declineInvitation(invitationId: string, userId: string): Promise<UserInvitation> {
     const invitation = await this.invitationModel.findById(invitationId);
     if (!invitation || invitation.invitee.toString() !== userId) throw new UnauthorizedException('Invitation not found or unauthorized');

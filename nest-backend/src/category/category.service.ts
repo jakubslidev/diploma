@@ -23,7 +23,7 @@ export class CategoryService {
   async createCategory(categoryData: Partial<Category>, webpageId: string): Promise<Category> {
     const createdCategory = new this.categoryModel({
       ...categoryData,
-      webpage: webpageId, // Set the webpage reference
+      webpage: webpageId,
     });
     console.log(createdCategory);
     return createdCategory.save();

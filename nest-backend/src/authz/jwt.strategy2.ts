@@ -11,8 +11,8 @@ export class JwtStrategy2 extends PassportStrategy(Strategy, 'jwt2') {
     constructor(private readonly webpagesService: WebpagesService) {
       super({
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-        secretOrKey: 'secret-key', // Change this to your actual JWT secret
-        algorithms: ['HS256'], // Change this to your actual algorithm
+        secretOrKey: 'secret-key', 
+        algorithms: ['HS256'], 
       });
     }
 

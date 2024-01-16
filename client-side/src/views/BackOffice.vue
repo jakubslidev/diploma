@@ -48,7 +48,6 @@
             target="_blank"
             >Display Page</router-link>
 
-          <!-- ... other buttons ... -->
         </div>
       </div>
       <!-- Button to toggle the sidebar (visible on mobile only) -->
@@ -118,7 +117,6 @@ export default {
       currentView.value = viewName;
     };
 
-    // Fetch user role on component mount
     const fetchRole = async () => {
       try {
         const response = await axios.get(`http://localhost:3000/webpages/${route.params.webpageId}/role`, {
@@ -157,38 +155,38 @@ export default {
 </script>
 
 <style>
-/* Custom styles if needed */
+
 .sidebar {
   padding-top: 1rem;
 }
 
-/* Ensure the toggle button is visible above the offcanvas */
+
 .navbar-toggler.position-fixed {
-  z-index: 1050; /* Bootstrap offcanvas z-index is 1045 */
+  z-index: 1050; 
 }
 
-/* Sidebar styles to match the provided design */
+
 .bg-dark {
-  background-color: #343a40 !important; /* Bootstrap dark background */
+  background-color: #343a40 !important; 
 }
 
 .btn-primary {
-  background-color: #007bff; /* Bootstrap primary button color */
-  border: none; /* Remove border for full width button style */
+  background-color: #007bff; 
+  border: none; 
 }
 
 .btn-secondary {
-  background-color: #6c757d; /* Bootstrap secondary button color */
+  background-color: #6c757d; 
 }
 
-/* Style adjustments for main content */
+
 main {
-  padding-top: 56px; /* Adjust top padding to avoid overlap with the fixed navbar */
+  padding-top: 56px; 
 }
 
 @media (min-width: 768px) {
   main {
-    padding-left: 25%; /* Adjust for sidebar width */
+    padding-left: 25%; 
   }
 }
 

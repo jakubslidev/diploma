@@ -17,11 +17,8 @@ export class WebpagesController {
   @UseGuards(AuthGuard('jwt2'))
   @Post()
   async create(@Body() webpageData: any, @Req() req): Promise<{savedWebpage: Webpage, accessToken: string}> {
-    // The user object is available from the request after passing through the AuthGuard
     const user = req.user; // This will contain the payload from the JWT token
-  
-    // Call the service method to create the webpage, including the user as an admin
-    // Make sure to return the result of this call
+
     return this.webpagesService.create(webpageData, user);
   }
 
@@ -109,13 +106,12 @@ export class WebpagesController {
   async changeStatus(
     @Param('webpageId') webpageId: string, 
     @Body('status') status: string, 
-    @Body('title') webpageTitle: string, // Use @Body() for webpageTitle
+    @Body('title') webpageTitle: string, 
     @Req() req
   ): Promise<Webpage> {
     const userId = req.user._id;
     const jwtRoles = req.user.roles;
   
-    // Validate if the user is an admin
     const role = await this.webpageValidationService.validateWebpageId(webpageId, userId, jwtRoles);
     if (role !== 'Admin') {
       throw new UnauthorizedException('Only admins can change webpage status');

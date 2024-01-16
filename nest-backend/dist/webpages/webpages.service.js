@@ -116,11 +116,7 @@ let WebpagesService = class WebpagesService {
         }
         const trendingPostsIds = webpage.trendingPosts.map(post => post._id.toString());
         const mainPostId = webpage.mainPost ? webpage.mainPost._id.toString() : null;
-        console.log(trendingPostsIds);
-        console.log(mainPostId);
         const mainPost = mainPostId ? await this.postService.findOne(mainPostId) : null;
-        console.log("mainPOST" + mainPost);
-        console.log(this.postService.findPostsByIds(trendingPostsIds));
         const trendingPosts = await this.postService.findPostsByIds(trendingPostsIds);
         return {
             trendingPosts,

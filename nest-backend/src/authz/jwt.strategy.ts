@@ -21,23 +21,16 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     console.log("PARAMS: " + req.query);
     const { _id: userID } = payload;
     console.log(payload);
-    // Extract webpageID from the request parameters
     
-    //const webpageID = req.params.webpageId;
     const webpageID = req.query.webpageId;
-    console.log('WebpageID:', webpageID); // Log the webpageID
+    console.log('WebpageID:', webpageID); 
 
-    // If webpageID is provided, validate it
     if (webpageID) {
-      // Fetch the webpage with the given webpageID
       const webpage = await this.webpagesService.findOne(webpageID.toString());
 
-      // Check if webpage exists
       if (!webpage) {
         throw new UnauthorizedException('Webpage not found');
       }
-
-      // Check if the userID is found in the users array of the webpage
       const userIsInWebpage = webpage.users.some(user => user.user.toString() === userID);
 
       if (!userIsInWebpage) {

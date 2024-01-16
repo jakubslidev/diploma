@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema  as MongooseSchema} from 'mongoose';
-import { Webpage } from '../webpages/webpages.schema'; // Import the Webpage schema
+import { Webpage } from '../webpages/webpages.schema';
 
 @Schema()
 export class Category extends Document {

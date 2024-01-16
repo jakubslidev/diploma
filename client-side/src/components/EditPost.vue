@@ -7,36 +7,54 @@
       <input type="file" id="thumbnail" @change="uploadThumbnail" accept="image/jpeg, image/png">
       <img v-if="postData.thumbnailSmall" :src="postData.thumbnailSmall" alt="Thumbnail preview" />
     </div>
-    <br><br><br>
+
     <form @submit.prevent="handleSubmit" class="form-grid">
-      <label for="title">Title:</label>
-      <input v-model="title" type="text" id="title" required><br>
-      <label for="content">Content:</label>
-      <div>
+      <div class="form-group">
+        <label for="title">Title:</label>
+        <input v-model="title" type="text" id="title" required>
+      </div>
+
+      <div class="form-group">
+        <label for="content">Content:</label>
         <TextEditor v-model="content" />
-        <div class="content">
-          <h3>Content</h3>
-          <pre><code>{{ content }}</code></pre>
+      </div>
+
+      <div class="category-section">
+        <div class="form-group">
+          <label for="newCategory">New Category:</label>
+          <input v-model="newCategory" type="text" id="newCategory" placeholder="Enter new category name">
+          <button @click="addNewCategory">Add</button>
+        </div>
+
+        <div class="form-group">
+          <label for="newSubcategory">New Subcategory:</label>
+          <input v-model="newSubcategory" type="text" id="newSubcategory" placeholder="Enter new subcategory name">
+        </div>
+
+        <div class="form-group">
+          <label for="parentCategory">Parent Category:</label>
+          <select v-model="parentCategory">
+            <option v-for="category in categories" :key="category._id" :value="category._id">{{ category.name }}</option>
+          </select>
+          <button @click="addNewSubcategory">Add Subcategory</button>
         </div>
       </div>
 
-      <label for="category">Category:</label>
-      <select v-model="selectedCategory" @change="fetchSubcategories">
-        <option v-for="category in categories" :key="category._id" :value="category._id">{{ category.name }}</option>
-      </select><br>
+      <div class="selection-section">
+        <div class="form-group">
+          <label for="category">Category:</label>
+          <select v-model="selectedCategory" @change="fetchSubcategories">
+            <option v-for="category in categories" :key="category._id" :value="category._id">{{ category.name }}</option>
+          </select>
+        </div>
 
-      <label for="subcategory">Subcategory:</label>
-      <select v-model="selectedSubcategory" @change="addSubcategory">
-        <option v-for="subcategory in subcategories" :key="subcategory">{{ subcategory }}</option>
-      </select><br>
-
-      <label>Selected Categories:</label>
-      <ul>
-        <li v-for="category in selectedCategories" :key="category">
-          {{ category }}
-          <span @click="removeCategory(category)">[X]</span>
-        </li>
-      </ul>
+        <div class="form-group">
+          <label for="subcategory">Subcategory:</label>
+          <select v-model="selectedSubcategory" @change="addSubcategory">
+            <option v-for="subcategory in subcategories" :key="subcategory">{{ subcategory }}</option>
+          </select>
+        </div>
+      </div>
 
       <label>Selected Subcategories:</label>
       <ul>
@@ -46,13 +64,19 @@
         </li>
       </ul>
 
-      <label for="titleColor">Title Color:</label>
-      <input type="color" v-model="postData.titleColor" id="titleColor"><br>
+      <div class="color-selection">
+        <div class="form-group">
+          <label for="titleColor">Title Color:</label>
+          <input type="color" v-model="postData.titleColor" id="titleColor">
+        </div>
 
-      <label for="categoryColor">Category Color:</label>
-      <input type="color" v-model="postData.categoryColor" id="categoryColor"><br>
+        <div class="form-group">
+          <label for="categoryColor">Category Color:</label>
+          <input type="color" v-model="postData.categoryColor" id="categoryColor">
+        </div>
+      </div>
 
-      <button type="submit">Update Post</button>
+      <button type="submit" class="submit-button">Update Post</button>
     </form>
   </div>
 </template>
@@ -73,19 +97,58 @@
       const content = ref('');
       const selectedCategory = ref('');
       const selectedSubcategory = ref('');
-      const selectedSubcategories = ref([]); // Holds the selected subcategories IDs
-      const categories = ref([]); // All categories
-      const subcategories = ref([]); // Subcategories of the selected category
+      const selectedSubcategories = ref([]); 
+      const categories = ref([]); 
+      const subcategories = ref([]); 
       const route = useRoute();
       const { cookies } = useCookies(['access_token']);
       const accessToken = cookies.get('access_token');
       const webpageId = ref('');
       const thumbnailPathBig = ref('');
       const thumbnailPathSmall = ref('');
-      const titleColor = ref('#ffffff'); // Default white
-      const categoryColor = ref('#ffffff'); // Default white
+      const titleColor = ref('#ffffff'); 
+      const categoryColor = ref('#ffffff');
       let selectedCategoryObj = null;
       const postData = ref({});
+      const newCategory = ref('');
+    const newSubcategory = ref('');
+    const parentCategory = ref('');
+
+
+    const addNewCategory = async () => {
+        if (!newCategory.value) {
+            alert('Please enter a category name.');
+            return;
+        }
+        // Add logic to post the new category to the server
+        try {
+            await axios.post(`http://localhost:3000/categories?webpageId=${webpageId.value}`, {
+                name: newCategory.value,
+            });
+            newCategory.value = '';
+            fetchCategories(); // Refresh the category list
+        } catch (error) {
+            console.error('Error adding new category:', error);
+        }
+    };
+
+    const addNewSubcategory = async () => {
+        if (!newSubcategory.value || !parentCategory.value) {
+            alert('Please enter a subcategory name and select a parent category.');
+            return;
+        }
+        // Add logic to post the new subcategory to the server
+        try {
+            await axios.post(`http://localhost:3000/categories/${parentCategory.value}/subcategory`, {
+                name: newSubcategory.value,
+            });
+            newSubcategory.value = '';
+            fetchCategories(); // Refresh the category and subcategory list
+        } catch (error) {
+            console.error('Error adding new subcategory:', error);
+        }
+    };
+
   
       const fetchPost = async (postId) => {
       try {
@@ -183,7 +246,7 @@
             }
           );
           alert('Post updated successfully!');
-          console.log(titleColor);
+          window.location.href = (`/office/${route.params.webpageId}`);
         } catch (error) {
           console.error('Error updating post:', error.message);
         }
@@ -207,6 +270,11 @@
         selectedSubcategories,
         selectedCategoryObj,
         postData,
+        newCategory,
+        newSubcategory,
+        parentCategory,
+        addNewSubcategory,
+        addNewCategory,
         uploadThumbnail,
         handleSubmit,
         fetchSubcategories,
@@ -219,46 +287,54 @@
 
 <style scoped>
 .form-card {
-  background: white;
+  max-width: 1200px;
+  margin: auto;
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-  margin-bottom: 20px;
+  border: 1px solid #eee;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-.form-grid label, .form-grid input, .form-grid select {
-  margin-bottom: 10px;
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input[type="text"], select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 
 button {
-  background-color: #0055ff;
+  background-color: #007bff;
   color: white;
+  padding: 8px 15px;
   border: none;
-  padding: 10px 20px;
-  border-radius: 20px;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s;
 }
 
 button:hover {
-  background-color: #003399;
+  background-color: #0056b3;
 }
 
-.category-tag {
-  display: inline-block;
-  background: #e0e0e0;
-  border-radius: 20px;
-  padding: 5px 10px;
-  margin-right: 5px;
-  cursor: pointer;
+.thumbnail-upload img {
+  max-width: 100px;
+  margin-top: 10px;
 }
 
-.tag-remove {
-  margin-left: 10px;
-  color: red;
-  cursor: pointer;
+.submit-button {
+  background-color: #28a745;
 }
 
+.submit-button:hover {
+  background-color: #218838;
+}
 </style>
 
   

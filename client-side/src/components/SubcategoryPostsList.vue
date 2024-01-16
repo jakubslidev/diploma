@@ -40,7 +40,6 @@
         webpageStatus.value = response.data.status;
 
         if (webpageStatus.value === 'inactive') {
-          // Redirect to the maintenance message component
           window.location.href = (`/maintenanceMessage`);
         }
         loading.value = false;
@@ -50,14 +49,13 @@
     };
     
       const fetchData = async () => {
-        const categoryId = route.params.categoryId; // Extract the categoryId from the route params
-        const subcategory = route.params.subcategory; // Extract the subcategory from the route params
+        const categoryId = route.params.categoryId; 
+        const subcategory = route.params.subcategory;
         
         console.log(categoryId);
         console.log(subcategory);
 
         try {
-          // Adjust the URL to match the new endpoint structure
           const response = await axios.get(`http://localhost:3000/posts/${route.params.webpageId}/${categoryId}/${subcategory}`);
           posts.value = response.data;
           console.log("RESPONSE" + response.data);
@@ -67,13 +65,11 @@
         }
       };
   
-      // Fetch data when the component is mounted
 
       onMounted(() => {
         checkWebpageStatus();
         fetchData();
       });
-      // Re-fetch data when route parameters change
       watch(() => [route.params.webpageId, route.params.categoryId, route.params.subcategory], fetchData, { immediate: true });
   
       const displayedPosts = computed(() => posts.value);

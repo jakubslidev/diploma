@@ -46,9 +46,8 @@ import MainNavbar from '@/components/mainNavbar.vue';
         },
       });
       const newAccessToken = response.data.accessToken;
-      // Update the cookie with the new access token
       cookies.set('access_token', newAccessToken, '4h');
-      await fetchInvitations(); // Refresh the list after accepting
+      await fetchInvitations();
     } catch (error) {
       console.error('Error accepting invitation:', error);
     }
@@ -61,7 +60,7 @@ import MainNavbar from '@/components/mainNavbar.vue';
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      await fetchInvitations(); // Refresh the list after declining
+      await fetchInvitations();
     } catch (error) {
       console.error('Error declining invitation:', error);
     }

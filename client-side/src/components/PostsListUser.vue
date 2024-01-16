@@ -86,7 +86,6 @@ export default {
     const accessToken = cookies.get('access_token');
 
     const postId = computed(() => {
-      // Extract postId from the URL
       return route.params.postId;
     });
 
@@ -105,7 +104,6 @@ export default {
 
 
     const toggleSelectAll = () => {
-      // Toggle individual checkboxes
       posts.value.forEach((post) => {
         post.selected = !post.selected;
         updateSelectedPosts(post);
@@ -118,7 +116,7 @@ export default {
 
       const postsOnPage = visiblePosts.value.slice(startIndex, endIndex);
       postsOnPage.forEach((post) => {
-        post.selected = !post.selected; // Toggle selection
+        post.selected = !post.selected;
         updateSelectedPosts(post);
       });
     };
@@ -127,30 +125,25 @@ export default {
       try {
         const postIds = selectedPosts.value.map((post) => post._id);
 
-        // Perform the selected action
         if (selectedAction.value === 'delete') {
           await Promise.all(postIds.map((postId) => axios.delete(`http://localhost:3000/posts/${postId}/deleteSelected`)));
           
-          // Clear selected posts after successful deletion
           selectedPosts.value = [];
         } else if (selectedAction.value === 'disable' || selectedAction.value === 'enable') {
           const status = selectedAction.value === 'disable' ? 'Draft' : 'Active';
           await Promise.all(postIds.map((postId) => axios.patch(`http://localhost:3000/posts/${postId}/updateStatus`, { status })));
         }
 
-        // Fetch the updated posts
         await fetchData(route.params.webpageId);
       } catch (error) {
         console.error('Error confirming action:', error.message);
       }
     };
 
-    // Dynamic filtering based on search text
     const visiblePosts = computed(() =>
       posts.value.filter((post) => post.title.toLowerCase().includes(searchText.value.toLowerCase()))
     );
 
-    // Computed property to paginate visible posts
     const paginatePosts = computed(() => {
       const startIndex = currentPage.value * itemsPerPage;
       const endIndex = startIndex + itemsPerPage;
@@ -162,7 +155,6 @@ export default {
     };
 
     const updateSelectedPosts = (post) => {
-      // Update selectedPosts based on the state of individual checkboxes
       if (post.selected) {
         selectedPosts.value.push(post);
       } else {

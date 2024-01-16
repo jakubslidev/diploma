@@ -70,7 +70,7 @@ export default {
     const subcategoryName = ref('');
     const selectedCategory = ref('');
     const categories = ref([]);
-    const route = useRoute(); // Access the route
+    const route = useRoute();
     const showModal = ref(false);
     const itemToDelete = ref(null);
     const confirmationModal = ref(null);
@@ -85,7 +85,6 @@ export default {
         alert('Category added successfully!');
         categoryName.value = ''; // Reset the input field after successful addition
 
-        // Fetch updated list of categories
         await fetchCategories();
       } catch (error) {
         console.error(error);
@@ -149,7 +148,7 @@ const confirmSubcategoryRemoval = (categoryId, subcategoryName) => {
     keyboard: false
   });
   
-      await fetchCategories(); // Fetch categories when the component is mounted
+      await fetchCategories();
     });
 
     return {

@@ -9,7 +9,6 @@
       Heading {{ level }}
     </option>
   </select>
-  <!-- Other buttons can be added here if needed -->
   <button
   v-for="item in items"
   :key="item.title"
@@ -58,7 +57,7 @@
     data() {
       return {
         editor: null,
-        selectedHeading: 'paragraph', // Default to paragraph
+        selectedHeading: 'paragraph', 
         headingLevels: [1, 2, 3, 4, 5, 6],
         items: [
 				{
@@ -189,7 +188,7 @@
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
     input.setAttribute('accept', 'image/png, image/jpeg'); // Accept only JPEG and PNG
-    input.click(); // open file dialog
+    input.click(); 
 
     input.onchange = () => {
       const file = input.files[0];
@@ -200,13 +199,11 @@
   },
 
   async uploadImage(file) {
-  // Validate the file (check file type)
   if (!['image/jpeg', 'image/png'].includes(file.type)) {
     alert('Only JPG and PNG images are allowed.');
     return;
   }
 
-  // Prepare the file for upload (e.g., FormData)
   const formData = new FormData();
   formData.append('image', file);
 
@@ -327,7 +324,6 @@
         extensions: [
           StarterKit,
           Image,
-          // Add other necessary extensions here
         ],
         content: this.modelValue,
         onUpdate: () => {

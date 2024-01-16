@@ -33,7 +33,7 @@ export class CategoryController {
     return this.categoryService.findAll();
   }
 
-  @Get('/webpage/:webpageId') // New endpoint to retrieve categories for a specific webpage
+  @Get('/webpage/:webpageId') 
   findAllForPage(@Param('webpageId') webpageId: string) {
     return this.categoryService.findAllForPage(webpageId);
   }

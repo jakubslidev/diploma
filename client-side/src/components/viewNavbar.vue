@@ -29,7 +29,6 @@
           <li class="nav-item">
             <router-link class="nav-link" :to="'/view/' + webpageId + '/search'">Search</router-link>
           </li>
-          <!-- ... other nav items ... -->
         </ul>
       </div>
     </div>

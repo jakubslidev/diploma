@@ -42,7 +42,7 @@ export class MediaService {
       // If it is, resize it
       await image
         .resize(800, jimp.AUTO) // Resize the width to 800 and scale the height accordingly
-        .quality(80); // Set the image quality to 80%
+        .quality(80); 
       await image.writeAsync(imagePath); // Save the image
     } else {
       // If it's not larger, just copy the image to the destination without resizing

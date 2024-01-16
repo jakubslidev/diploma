@@ -28,13 +28,11 @@
           <select class="form-select" v-model="newStatus" aria-label="Select status">
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
-            <!-- Add more status options here as needed -->
           </select>
           <button class="btn btn-outline-primary" type="button" @click="changeWebpageStatus">Change Status</button>
         </div>
       </div>
   
-      <!-- Button to delete a webpage -->
       <div>
         <h3>Delete Webpage:</h3>
         <button class="btn btn-danger" @click="deleteWebpage">Delete Webpage</button>
@@ -51,8 +49,8 @@
   const accessToken = cookies.get('access_token');
   const route = useRoute();
   const webpageId = ref(route.params.webpageId);
-  const newStatus = ref('active'); // Default to 'active' or fetch current status
-  const newTitle = ref(''); // Title input
+  const newStatus = ref('active'); 
+  const newTitle = ref(''); 
   const currentTitle = ref('');
   const webpage = ref({});
   const currentStatus = ref('');
@@ -65,13 +63,12 @@
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    webpage.value = response.data; // Assign the data from the response to the webpage ref
+    webpage.value = response.data; 
     console.log(webpage.value);
     currentStatus.value = webpage.value.status;
     currentTitle.value = webpage.value.title;
   } catch (error) {
     console.error('Error fetching webpage data:', error);
-    // Handle error appropriately
   }
 };
   
@@ -88,7 +85,6 @@
       alert('Webpage status updated successfully!');
     } catch (error) {
       console.error('Error changing webpage status:', error);
-      // Handle error appropriately
     }
   };
 
@@ -109,7 +105,6 @@
     alert('Webpage title updated successfully!');
   } catch (error) {
     console.error('Error changing webpage title:', error);
-    // Handle error appropriately
   }
 };
   
@@ -122,10 +117,8 @@
           },
         });
         alert('Webpage deleted successfully!');
-        // Redirect or update UI as needed
       } catch (error) {
         console.error('Error deleting webpage:', error);
-        // Handle error appropriately
       }
     }
   };

@@ -286,64 +286,6 @@ const handleDislike = async (postId) => {
       }
     };
 
-
-
-
-//     const handleLike = async (postId) => {
-//   // Get the cookie value, which is a string of postIds separated by commas
-//   let likedPostsString = cookies.get('likedPosts');
-//   // Convert the string to an array
-//   let likedPosts = likedPostsString ? likedPostsString.split(',') : [];
-
-//   let dislikedPostsString = cookies.get('dislikedPosts');
-//       let dislikedPosts = dislikedPostsString ? dislikedPostsString.split(',') : [];
-//       if (dislikedPosts.includes(postId)) {
-//         dislikedPosts = dislikedPosts.filter(id => id !== postId);
-//         cookies.set('dislikedPosts', dislikedPosts.join(','));
-//       }
-
-//   if (!likedPosts.includes(postId)) {
-//     // Add the new postId to the array
-//     likedPosts.push(postId);
-//     // Convert the array back to a string and save it in the cookie
-//     cookies.set('likedPosts', likedPosts.join(','));
-    
-//     try {
-//       await axios.patch(`http://localhost:3000/posts/${postId}/incrementLike`);
-//       // Handle success if needed
-//     } catch (error) {
-//       console.error('Error incrementing like count:', error.message);
-//     }
-//   }
-// };
-// const handleDislike = async (postId) => {
-//   // Get the cookie value, which is a string of postIds separated by commas
-//   let dislikedPostsString = cookies.get('dislikedPosts');
-//   // Convert the string to an array
-//   let dislikedPosts = dislikedPostsString ? dislikedPostsString.split(',') : [];
-
-//   let likedPostsString = cookies.get('likedPosts');
-//       let likedPosts = likedPostsString ? likedPostsString.split(',') : [];
-//       if (likedPosts.includes(postId)) {
-//         likedPosts = likedPosts.filter(id => id !== postId);
-//         cookies.set('likedPosts', likedPosts.join(','));
-//       }
-
-//   if (!dislikedPosts.includes(postId)) {
-//     // Add the new postId to the array
-//     dislikedPosts.push(postId);
-//     // Convert the array back to a string and save it in the cookie
-//     cookies.set('dislikedPosts', dislikedPosts.join(','));
-    
-//     try {
-//       await axios.patch(`http://localhost:3000/posts/${postId}/incrementDislike`);
-//       // Handle success if needed
-//     } catch (error) {
-//       console.error('Error incrementing dislike count:', error.message);
-//     }
-//   }
-// };
-
     onMounted(async () => {
       checkWebpageStatus();
       const postId = route.params.id;

@@ -38,7 +38,7 @@ import { useRoute } from 'vue-router';
 const { cookies } = useCookies(['access_token']);
 const accessToken = cookies.get('access_token');
 const email = ref('');
-const role = ref('editor'); // Default role or make it dynamic as needed
+const role = ref('editor'); 
 const route = useRoute();
 const webpageId = ref(route.params.webpageId);
 const userRole = ref(null);
@@ -55,7 +55,7 @@ const fetchRole = async () => {
     userRole.value = response.data.role;
   } catch (error) {
     console.error('Error fetching user role:', error);
-    // Handle unauthorized error or redirect as needed
+   
   }
 };
 
@@ -69,7 +69,7 @@ const fetchUsers = async () => {
     users.value = response.data;
   } catch (error) {
     console.error('Error fetching users:', error);
-    // Handle error appropriately
+    
   }
 };
 
@@ -84,7 +84,7 @@ const fetchWebpageName = async () => {
     console.log("RESPONSE" + response.data.title);
   } catch (error) {
     console.error('Error fetching webpage name:', error);
-    // Handle the error appropriately
+    
   }
 };
 
@@ -142,7 +142,6 @@ onMounted(() => {
 
 
 <style scoped>
-/* ... existing styles ... */
 
 .remove-user {
   cursor: pointer;

@@ -16,6 +16,5 @@ export interface BackendPost extends Document {
   thumbnailSmall: string;
   titleColor: string;
   categoryColor: string;
-  // Add other properties as needed
 }
 

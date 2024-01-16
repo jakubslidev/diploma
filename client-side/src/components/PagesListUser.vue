@@ -74,12 +74,12 @@ export default {
     });
 
 
-    pages.value.push(response.data.savedWebpage); // Make sure to push the right object if response.data is an object containing savedWebpage
+    pages.value.push(response.data.savedWebpage); 
     console.log(response.data.accessToken);
-    // If the response contains a new accessToken, update the existing one
+
     cookies.remove('access_token');
     cookies.set('access_token', response.data.accessToken);
-    // Push the new page into the array and reset the state
+
     showCreateInput.value = false;
     newPageTitle.value = '';
   } catch (error) {
@@ -93,12 +93,11 @@ export default {
     };
 
     const getInitial = (role) => {
-      // Check if role is defined and is a string before accessing the first character
       return role && typeof role === 'string' ? role[0].toUpperCase() : '';
     };
 
     const redirectToNewPage = () => {
-      router.push('/new-page'); // Replace '/new-page' with your route for creating a new page
+      router.push('/new-page');
     };
 
     return {

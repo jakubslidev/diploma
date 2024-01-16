@@ -10,8 +10,8 @@ import { WebpagesModule } from '../webpages/webpages.module'; // Import Webpages
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
-    UsersModule, // Add UsersModule to the imports array
-    WebpagesModule, // Add WebpagesModule to the imports array
+    UsersModule, 
+    WebpagesModule, 
   ],
   providers: [JwtStrategy, JwtStrategy2],
   exports: [PassportModule],

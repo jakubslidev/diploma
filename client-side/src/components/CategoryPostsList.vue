@@ -1,6 +1,6 @@
 <template>
     <div class="container text-center">
-      <!-- Subsequent Rows (Converted to Cards) -->
+      <!-- Subsequent Rows -->
       <br>
       <br>
       <br>
@@ -48,7 +48,6 @@
         webpageStatus.value = response.data.status;
 
         if (webpageStatus.value === 'inactive') {
-          // Redirect to the maintenance message component
           window.location.href = (`/maintenanceMessage`);
         }
         loading.value = false;
@@ -63,11 +62,9 @@
   try {
     const response = await axios.get(`http://localhost:3000/posts/view/webpage/${webpageId}/withoutauth`);
 
-    // Filter posts based on category ObjectId
     posts.value = response.data.filter(post => {
       const postCategoryId = post.category;
 
-      // Add a filter condition
       const isMatchingCategory = postCategoryId === categoryId._value;
 
       return isMatchingCategory;

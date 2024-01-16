@@ -61,7 +61,7 @@
   export default {
     setup() {
       const allPosts = ref([]);
-      const trendingPosts = ref([]); // Include trending posts directly from the endpoint
+      const trendingPosts = ref([]); 
       const mainPostId = ref({});
       const route = useRoute();
       const { cookies } = useCookies(['access_token']);
@@ -76,7 +76,6 @@
           });
           allPosts.value = response.data;
           
-          // Fetch trending posts from the trending posts endpoint
           const trendingResponse = await axios.get(`http://localhost:3000/webpages/${route.params.webpageId}/posts`, {
             headers: {
               Authorization: `Bearer ${accessToken}`,

@@ -160,17 +160,11 @@ export class WebpagesService {
     const trendingPostsIds = webpage.trendingPosts.map(post => post._id.toString());
     const mainPostId = webpage.mainPost ? webpage.mainPost._id.toString() : null;
     
-    console.log(trendingPostsIds);
-    console.log(mainPostId);
-
     const mainPost: Post | null = mainPostId ? await this.postService.findOne(mainPostId) : null;
-    console.log("mainPOST" + mainPost);
-    console.log(this.postService.findPostsByIds(trendingPostsIds));
 
     // Use the PostService to retrieve posts by their IDs with the specified fields
     const trendingPosts: Post[] = await this.postService.findPostsByIds(trendingPostsIds);
     
-  
     return {
       trendingPosts,
       mainPost
@@ -178,7 +172,6 @@ export class WebpagesService {
 }
 
 
-// Function to change the status of a webpage
 async changeWebpageStatus(webpageId: string, newStatus: string, newTitle: string, userId: string): Promise<Webpage> {
  // Update the status of the webpage
  return this.webpageModel.findByIdAndUpdate(
@@ -189,7 +182,6 @@ async changeWebpageStatus(webpageId: string, newStatus: string, newTitle: string
 }
 
 
-// Function to delete a webpage
 async deleteWebpage(webpageId: string, userId: string): Promise<void> {
   // Delete the webpage
   await this.webpageModel.findByIdAndDelete(webpageId).exec();

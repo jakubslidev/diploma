@@ -86,8 +86,8 @@ import { useRoute } from 'vue-router';
 export default {
 setup() {
     const allPosts = ref([]);
-    const trendingPosts = ref([]); // Include trending posts directly from the endpoint
-    const mainPost = ref({}); // Main post
+    const trendingPosts = ref([]); 
+    const mainPost = ref({}); 
     const route = useRoute();
     const limitedPosts = ref([]);
     const webpageStatus = ref('');
@@ -99,7 +99,6 @@ setup() {
         webpageStatus.value = response.data.status;
 
         if (webpageStatus.value === 'inactive') {
-          // Redirect to the maintenance message component
           window.location.href = (`/maintenanceMessage`);
         }
         loading.value = false;
@@ -110,7 +109,6 @@ setup() {
 
     const fetchData = async () => {
       try {
-        // Fetch trending posts from the trending posts endpoint
         const trendingResponse = await axios.get(`http://localhost:3000/webpages/${route.params.webpageId}/posts/noauth`);
         trendingPosts.value = trendingResponse.data.trendingPosts;
         mainPost.value = trendingResponse.data.mainPost;
@@ -163,8 +161,8 @@ const handleScroll = () => {
 
     const fetchDataLimited = async (webpageId) => {
       try {
-        const response = await axios.get(`http://localhost:3000/posts/view/webpage/${webpageId}/limited`); // Adjust the URL to your new endpoint
-        limitedPosts.value = response.data; // Assuming the endpoint already sorts and limits the posts
+        const response = await axios.get(`http://localhost:3000/posts/view/webpage/${webpageId}/limited`); 
+        limitedPosts.value = response.data;
       } catch (error) {
         console.error('Error fetching limited posts:', error.message);
       }
