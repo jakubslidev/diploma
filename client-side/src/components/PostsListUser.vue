@@ -21,7 +21,7 @@
         <button class="btn btn-primary" @click="toggleSelectAll">
           {{ isAllSelected ? 'Unselect All' : 'Select All' }}
         </button>
-        <button class="btn btn-primary" @click="selectAllOnPage">Select All on Page</button>
+        <button class="btn btn-primary" @click="selectAllOnPage" style="margin-left: 5px;">Select All on Page</button>
       </div>
       <div>
         <!-- Search Bar -->

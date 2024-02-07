@@ -11,9 +11,9 @@
         <div v-if="post" class="post-content">
           <h2>Title: {{ post.title }}</h2>
           <p><strong>Category: {{ post.categoryName }}</strong></p>    
-          <div class="post-details" v-html="post.content" style="text-align: left;">
-          </div>      
-      <button
+          <div class="post-details" v-html="post.content" style="text-align: left;"></div>   
+          <div class="buttons" style="margin-top: 25px;">
+            <button
     :class="['btn', isLiked ? 'btn-success' : 'btn-outline-secondary', 'animate-button']"
     @click="handleLike(post._id)"
   >
@@ -26,12 +26,17 @@
   >
     <i class="fa fa-thumbs-down" aria-hidden="true"></i> Dislike
   </button>
-
-
-
+          </div>  
 
           <!-- Comment Section -->
     <div class="comments-section">
+      <h3>Leave a Comment</h3>
+      <form @submit.prevent="submitComment">
+        <div class="mb-3">
+          <textarea class="form-control" v-model="newComment" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
       <h3>Comments</h3>
       <div class="comment" v-for="comment in comments" :key="comment._id">
         <div class="comment-text">
@@ -42,13 +47,6 @@
           Report
         </button>
       </div>
-      <h3>Leave a Comment</h3>
-      <form @submit.prevent="submitComment">
-        <div class="mb-3">
-          <textarea class="form-control" v-model="newComment" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
     </div>
   </div>
     </div>

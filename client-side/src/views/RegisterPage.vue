@@ -9,9 +9,9 @@
           <input type="password" v-model="password" placeholder="Password" required />
           <input type="password" v-model="confirmPassword" placeholder="Confirm Password" required />
           <div class="terms">
-            <input type="checkbox" v-model="agreeToTerms" id="terms">
-            <label for="terms">I agree to the <a href="/terms">terms and conditions</a>.</label>
-          </div>
+  <input type="checkbox" v-model="agreeToTerms" id="terms" class="terms-checkbox">
+  <label for="terms" class="terms-label">I agree to the <a href="/terms">terms and conditions</a>.</label>
+</div>
           <button type="submit" class="register-button" :disabled="!canRegister">Register</button>
         </form>
       </div>
@@ -88,6 +88,8 @@
   </script>
   
   <style scoped>
+
+  
 .register-container {
   display: flex;
   justify-content: center;

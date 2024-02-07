@@ -193,26 +193,31 @@ export default {
     color: #007bff; /* Highlight color on hover, change as desired */
   }
 
+  .search-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem; /* You can adjust this as needed for your design */
+}
+
 .search-container input[type="text"] {
-  width: 70%;
+  flex-grow: 1; /* Allows the input to grow and fill the available space */
   padding: 1rem;
   font-size: 1.5rem;
   border: 2px solid #ddd;
-  border-radius: 20px;
-  margin-right: -1px; /* Aligns the button with the input field */
+  border-radius: 20px 0 0 20px; /* Rounded corners on the left side */
+  border-right: none; /* Removes the right border where the button meets the input */
 }
-
 .search-container button {
   padding: 1rem 1.5rem;
   font-size: 1.5rem;
   background-color: #007bff;
   color: white;
   border: none;
-  border-radius: 0 20px 20px 0;
+  border-radius: 0 20px 20px 0; /* Rounded corners on the right side */
   cursor: pointer;
   transition: background-color 0.2s;
 }
-
 .search-container button:hover {
   background-color: #0056b3;
 }

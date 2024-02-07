@@ -6,6 +6,9 @@
         <h2 class="login-title">Login</h2>
         <input type="email" v-model="email" placeholder="Email" required />
         <input type="password" v-model="password" placeholder="Password" required />
+        <a href="" class="forgot-password">Forgot Password?</a>
+        <br>
+        <br>
         <button type="submit" class="login-button">Login</button>
       </form>
     </div>
@@ -60,6 +63,10 @@ export default {
 
 
 <style scoped>
+
+.forgot-password{
+  text-align: right;
+}
 .login-container {
   display: flex;
   justify-content: center;
