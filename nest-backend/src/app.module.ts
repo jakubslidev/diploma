@@ -18,7 +18,7 @@ import { CommentsModule } from './comments/comments.module';
   imports: [
     MongooseModule.forRootAsync({
       useFactory: () => ({
-        uri: 'mongodb+srv://ryan:ryan@nodeapi.vmsx8pn.mongodb.net/CMS?retryWrites=true&w=majority',
+        uri: '',
         useNewUrlParser: true,
         useUnifiedTopology: true,
       }),
